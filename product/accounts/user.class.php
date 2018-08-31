@@ -8,7 +8,7 @@ class User {
 	
 	public $aError;
 	
-	public function __construct( $username, $password, $email ) {
+	public function __construct( $username, $password, $email="" ) {
 		include "config/config.php";
 		$this->con 		 = $connection;
 		$this->username  = mysqli_escape_string($this->con, $username);
@@ -18,9 +18,9 @@ class User {
 	}
 	
 	public function add( ) {
-		$queryAddUser = "INSERT INTO users (email, password, username) VALUES ('".$this->email."','".password_hash($this->password, PASSWORD_BCRYPT)."','".$this->username."');";
-		$queryCheckEmail = "SELECT email FROM users WHERE email='".$this->email."' AND deleted=0 ;";
-		$queryCheckUser  = "SELECT username FROM users WHERE username='".$this->username."' AND deleted=0;";
+		$queryAddUser     = "INSERT INTO users (email, password, username) VALUES ('".$this->email."','".password_hash($this->password, PASSWORD_BCRYPT)."','".$this->username."');";
+		$queryCheckEmail  = "SELECT email FROM users WHERE email='".$this->email."' AND deleted=0 ;";
+		$queryCheckUser   = "SELECT username FROM users WHERE username='".$this->username."' AND deleted=0;";
 		$resultCheckEmail = mysqli_query($this->con, $queryCheckEmail);
 		if (mysqli_num_rows($resultCheckEmail))
 		{   $this->aError = "That email is already registered";
@@ -37,5 +37,13 @@ class User {
 			return false;
 		}
 		return true;
+	}
+	
+	public function login( ) {
+		$query = "SELECT password FROM users WHERE username='".$this->username."';";
+		$result = mysqli_query($this->con, $query);
+		if (!mysqli_num_rows($result)) return false; //if there are no rows there is no point going furhter
+		$hashedPass = mysqli_fetch_assoc($result)["password"];
+		return password_verify($this->password, $hashedPass); //verifies the password against the hash
 	}
 }

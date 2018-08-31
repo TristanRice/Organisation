@@ -24,12 +24,13 @@ $pass1Value = "";
 $pass2Value = "";
 if (is_string($y)){
 	$errors = $y;
-	$usrValue = $_POST["username"];
-	$emailValue = $_POST["email"];
-	$pass1Value = $_POST["password"];
-	$pass2Value = $_POST["password2"];
+	if (isset($_POST["username"])) $usrValue = $_POST["username"];
+	if (isset($_POST["email"])) $emailValue = $_POST["email"];
+	if (isset($_POST["password"])) $pass1Value = $_POST["password"];
+	if (isset($_POST["password2"])) $pass2Value = $_POST["password2"];
 	
-} else {
+} else 
+{   session_start( );	
 	$_SESSION["username"] = $_POST["username"];
 	header("Location: index.php");
 }
