@@ -8,7 +8,7 @@ class User {
 	
 	public $aError;
 	
-	public function __construct( $username, $password, $email="" ) {
+	public function __construct( $username, $password="", $email="" ) {
 		include "config/config.php";
 		$this->con 		 = $connection;
 		$this->username  = mysqli_escape_string($this->con, $username);
