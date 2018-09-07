@@ -5,7 +5,7 @@ interface ToDoListInterFace {
 	public function remove( $todolistId );
 }
 
-class todolist implements ToDoListInterFace {
+class Todolist implements ToDoListInterFace {
 	
 	private $userID;
 	private $connection;
