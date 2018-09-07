@@ -7,8 +7,8 @@ interface ToDoListInterFace {
 
 class Todolist implements ToDoListInterFace {
 
-	private $userID;
-	private $connection;
+	private $userId;
+	private $con;
 
 	public $aError;
 
