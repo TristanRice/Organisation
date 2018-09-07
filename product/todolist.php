@@ -13,15 +13,15 @@ $Todolist->add("aaa", "aaa");
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8" />
-		<title>Todolists</title>
+		<?php include dirname(__DIR__)."/product/includes/head.inc.php"; ?>
 	</head>
 	<body>
+		<?php include dirname(__DIR__)."/product/includes/page-top.inc.php"; ?>
 		<?php if (isset($errors)) { ?>
 			<div class="alert alert-danger"><p><?php echo $errors; ?></p></div>
 		<?php } ?>
 		<?php if (!$Todolists || sizeof($Todolists) <= 10) { ?>
-			
+
 		<?php } else if (sizeof($Todolists) > 10) { ?>
 			<div class="alert alert-danger"><p>You cannot have more than 10 timetables</p></div>
 		<?php } ?>
