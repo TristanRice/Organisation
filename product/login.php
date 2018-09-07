@@ -13,6 +13,7 @@ function validateUser( ) {
 $username = "";
 $password = "";
 $validated = validateUser( );
+print_r($_SESSION);
 if (!is_string($validated) && $validated)
 //if the details that the user entered were correct, start a session and redirect
 {	$_SESSION["username"] = $_POST["username"];

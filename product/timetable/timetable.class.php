@@ -1,13 +1,11 @@
 <?php
-interface TimetableInterface {
+interface ToDoListInterFace {
 	public function __construct( $userId );
-	public function get( $specific = false, $timeTableId = "" );
-	public function remove( $timeTableId );
-	
-	private function getAssocFromQuery( $result );
+	public function get( $specific = false, $todolistId = "" );
+	public function remove( $todolistId );
 }
 
-class Timetable implements TimetableInterface {
+class todolist implements ToDoListInterFace {
 	
 	private $userID;
 	private $connection;
@@ -16,16 +14,16 @@ class Timetable implements TimetableInterface {
 	
 	public function __construct( $userId ) {
 		include "config/config.php";
-		$this->con    = $connection
+		$this->con    = $connection;
 		$this->userId = $userId;
 		$this->aError = "";
 	}
 	
-	public function get( $specific = false, $timeTableId = "" ) {
+	public function get( $specific = false, $todolistId = "" ) {
 		if ($specific) {   
-			$query  = "SELECT * FROM time_table WHERE userId=".$this->userId." AND id=".$timeTableId.";";
+			$query  = "SELECT * FROM todo_list WHERE userId=".$this->userId." AND id=".$todolistId.";";
 		} else {	
-			$query  = "SELECT * FROM time_table WHERE userId=".$this->userId.";";
+			$query  = "SELECT * FROM todo_list WHERE userId=".$this->userId.";";
 		}
 		$result = mysqli_query($this->con, $query);
 		if (!$result)
@@ -33,17 +31,17 @@ class Timetable implements TimetableInterface {
 			return false;
 		}
 		if (!mysqli_num_rows($result))
-		{   $this->aError = "You do not have any timetables";
+		{   $this->aError = "You do not have any todolists";
 			return false;
 		}
 		return $this->getAssocFromQuery( $result );
 	}
 	
-	public function remove( $timeTableId ) {
-		$query = "DELETE FROM time_table WHERE userId=".$this->userId." AND id=".$timeTableId.";";
+	public function remove( $todolistId ) {
+		$query = "DELETE FROM todo_list WHERE userId=".$this->userId." AND id=".$todolistId.";";
 		$result = mysqli_query($this->con, $result);
 		if (!mysqli_num_rows($result))
-		{   $this->aError= "This timetable does not exist";
+		{   $this->aError= "This todolist does not exist";
 			return false;
 		}
 		if (!$result)
@@ -53,11 +51,12 @@ class Timetable implements TimetableInterface {
 		return True;
 	}
 	
-	public function add( ) {
-		$query = "INSERT INTO time_table () VALUES ();";
+	public function add(  $due_by, $data ) {
+		$query = "INSERT INTO todo_list (user_id, started, due_by, data) VALUES (".$this->user_id.", NOW(), '".$this->due_by."', '".$this->data."');";
+		echo $query;
 		$result = mysqli_query($this->con, $query);
 		if (!$result)
-		{   $this->aError = "There was an error adding this timetable, please try again later";
+		{   $this->aError = "There was an error adding this todolist, please try again later";
 			return false;
 		}
 		return true;
