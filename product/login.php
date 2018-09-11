@@ -57,8 +57,9 @@ if (!is_string($validated) && $validated)
 					<input type="text" value="<?php echo $username; ?>" placeholder="Username" name="username" id="uname" required>
 					<label for="pswd"><b>Password</b></label>
 					<input type="password" value="<?php echo $password ?>" placeholder="password" name="password" id="pswd" required>
-					<button type="submit" name="loginSubmit">Login</button>
+					<button style="margin-bottom: 10px;" type="submit" name="loginSubmit">Login</button>
 				</form>
+				<a href="signup.php">Register here!</a>
 			</div>
 		</div>
 	</body>

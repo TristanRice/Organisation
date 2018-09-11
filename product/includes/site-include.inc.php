@@ -8,7 +8,6 @@ class Site {
 
 	public static function getIdFromUsername( $connection, $username ) {
 		$sql = "SELECT userId FROM users WHERE username='".mysqli_escape_string($connection, $username)."';";
-		echo $sql;
 		$result = mysqli_query( $connection, $sql );
 		if (!$result) return false;
 		if (!mysqli_num_rows($result)) return false; //this shouldn't hapepn but it's useful for debugging
