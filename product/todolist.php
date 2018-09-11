@@ -8,10 +8,10 @@ $Todolist = new Todolist( (int) Site::$userId ); //implements TodoListInterface
 
 $recentJobs = $Todolist->get( false, "", 0, $limit=5 );
 $html = "";
+$counter = 0;
 foreach ($recentJobs as $job)
 //make the HTML to list the jobs
-{	$counter = 0;
-	$html .= "<div class=\"card\" stlye=\"width: 100%;\">";
+{	$html .= "<div class=\"card\" stlye=\"width: 100%;\">";
 	$html .= "<div class=\"content\">";
 	$html .= "<span class=\"title\">".$job["data"]."<p style=\"float: right\" id=".(string)$counter."><i class fas fa-bars></i></p></span>";
 	$html .= "<div class=\"action\">";
