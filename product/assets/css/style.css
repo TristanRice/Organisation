@@ -21,9 +21,7 @@
 }
 
 .card {
-  display: inline-block;
   vertical-align: top;
-  width: 400px;
   position: relative;
   overflow: hidden;
   margin: 10px;

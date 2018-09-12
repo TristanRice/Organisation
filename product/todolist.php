@@ -6,19 +6,22 @@ include "config/config.php";
 Site::init( $connection );
 $Todolist = new Todolist( (int) Site::$userId ); //implements TodoListInterface
 
-$recentJobs = $Todolist->get( false, "", 0, $limit=5 );
+$recentJobs = $Todolist->get( false, "", 0, 5 );
 $html = "";
 $counter = 0;
-foreach ($recentJobs as $job) //make the HTML to list the jobs
-{	$html .= "<div class=\"card\" stlye=\"width: 100%;\">";
-	$html .= "<div class=\"content\">";
-	$html .= "<span class=\"title\">".$job["data"]."<p class=\"makePointer\" style=\"float: right;\" id=".(string)$counter."><i class=\"fas fa-trash-alt\"></i></p>";	//this has an event listener on it
-	$html .= "<div class=\"action\">";
-	$html .= "<p id=\"thejob\">".$job["due_by"]."</p>"; 
-	$html .= "</div></div></div>";
-	++$counter;
+if (sizeof($recentJobs)>0)  //make sure that the user has enough todolists to be displayed.
+{   foreach ($recentJobs as $job) //make the HTML to list the jobs
+	{	$html .= "<div class=\"card\" stlye=\"width: 100%;\">";
+		$html .= "<div class=\"content\">";
+		$html .= "<span class=\"title\">".htmlspecialchars($job["data"])."<p class=\"makePointer\" style=\"float: right;\" id=".(string)$counter."><i name=\"delete\" class=\"fas fa-trash-alt\"></i> <i name=\"edit\" class=\"fas fa-edit\"></i></p>";	//this has an event listener on it
+		$html .= "<div class=\"action\">";
+		$html .= "<p id=\"thejob\">".htmlspecialchars($job["due_by"])."</p>";
+		$html .= "</div></div></div>";
+		++$counter; //make sure to increment the ID
+	}
 }
-function checkDateFormat( $date ) //checks that the date format is YYYY-MM-DD with regex (miss me with that Date::fromFormat str8 shit)
+
+function checkDateFormat( $date ) //checks that the date format is YYYY-MM-DD with regex, miss me with that Date::fromFormat str8 shit
 //this should only return false if the user tries to make it fail.
 {   return (bool) preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$date);
 }
@@ -28,6 +31,7 @@ function validateGETData( )	//verifies that what the user entered is valid and r
 	if (empty(trim($_GET["date"])) || empty(trim($_GET["job"]))) return array(false, "Please enter all fields"); //what they entered is empty
 	if (!checkDateFormat($_GET["date"])) return array(false, "Please enter the date in the format: 'YYYY-MM-DD'"); //the date is not valid.	
 	if (strlen($_GET["job"])>=400) return array(false, "The job that you entered is too long"); //the max val for varchar in the databse is 0xb400
+	
 	return array(true, "");
 }
 
@@ -62,6 +66,10 @@ if ($validGETData[0]) //if it didn't fail
 		<?php if (isset($aSuccess)) { ?>
 			<div class="alert alert-success"><p><?php echo $aSuccess ?></p></div>
 		<?php } ?>
+		<div class="alert alert-success hidden" id="showAjaxSuccess">
+		</div>
+		<div class="alert alert-danger hidden" id="showAjaxFailure">
+		</div>
 		<div class="container">
 			<div class="row">
 				<div class="col-lg">
@@ -114,7 +122,6 @@ if ($validGETData[0]) //if it didn't fail
 				</div>
 				<div class="col-lg">
 					<div id="app">
-						<h1>Most recent jobs</h1>
 						<?php echo $html; //see above?>
 					</div>
 				</div><!--.col-lg-->
@@ -125,25 +132,53 @@ if ($validGETData[0]) //if it didn't fail
 				//add an event listener to the containing div
 				let app = document.getElementById("app");
 				//attaches an event listener to the whole div
+				allFiles = {
+					"delete" : { 
+						"url"  : "ajax/todolist/deleteTodoList.php",
+					    "data" : {
+					    	"id" : ""
+					    }
+					},
+					"edit" : {
+						"url"  : "ajax/todolist/editTodoList.php",
+						"data" : {
+
+						}
+					}
+				}
 				app.addEventListener("click", function(e){
-					try {
-						let parentNode = e.target.parentNode; //the element that the user clicks
+					try 
+					{   let parentNode = e.target.parentNode; //the element that the user clicks
 						if (e.target && parentNode.nodeName === "P" && (parentNode.id>=0 && parentNode.id <5)) {
 							//send the ajax query to delet the post. This is cleaner to do with ajax rather than a form
+							let name = e.target.getAttribute("name");
+							if (e.target.getAttribute("name")=="edit")
+							{   element = e.target.parentNode.parentNode;
+								prevVal = 
+								element.innerHTML; //first store the value of this so we can use it later.
+								element.innerHTML = ""; //then make the html an empty string
+								element.innerHTML += "<input type=\"text\" value=\""+prevVal+"\" />";
+							} else if (e.target.getAttribute("name")=="delete")
+							{   allFiles[name].data.id = parentNode.id; }
+							//ToDo, make this applicable to everything.
 							$.ajax({
-								url: "ajax/todolist/deleteTodoList.php",
+								url: allFiles[name].url, //
 								cache: false,
 								type: "GET",
-								data: {   
-									"todolistId" : parentNode.id
+								data: 
+								{   allFiles[name].data
 								},
 								success: function(html){
-									//ToDo: make a success message appaer here
+									if (html!="")
+									{   let y = document.getElementById("showAjaxFailure");
+										y.innerHTML = html;
+									} else
+									{   parentNode.parentNode.parentNode.parentNode.classList.add("hidden"); //Just add the hidden class to the div, the next time the page loads it will display new ones. 
+									}
 								},
 								fail: function(html){
 									//Todo: show an error message here
 								}
-
 							});
 						}
 					} catch (err) {
@@ -151,7 +186,6 @@ if ($validGETData[0]) //if it didn't fail
 					}
 				});
 			});
-			
 		</script>
 	</body>
 </html>

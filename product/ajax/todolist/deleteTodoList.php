@@ -19,6 +19,8 @@ $query  = "DELETE FROM todo_list WHERE user_id=$userId AND id=$listId;";
 $result = mysqli_query($connection, $query);
 if (!$result)
 {   //return 403 or something similar here, to make the ajax purposelly fail
+	echo "There was a problem deleting your todolist";
+} else {
 }
 //nothing more is needed beyond this point. If nothign more is done, then this will be a successful request, and I can show that in the 
 //success: key on the ajax frontend. 
