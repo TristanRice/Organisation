@@ -9,13 +9,12 @@ $Todolist = new Todolist( (int) Site::$userId ); //implements TodoListInterface
 $recentJobs = $Todolist->get( false, "", 0, $limit=5 );
 $html = "";
 $counter = 0;
-foreach ($recentJobs as $job)
-//make the HTML to list the jobs
+foreach ($recentJobs as $job) //make the HTML to list the jobs
 {	$html .= "<div class=\"card\" stlye=\"width: 100%;\">";
 	$html .= "<div class=\"content\">";
-	$html .= "<span class=\"title\">".$job["data"]."<p style=\"float: right\" id=".(string)$counter."><i class fas fa-bars></i></p></span>";
+	$html .= "<span class=\"title\">".$job["data"]."<p class=\"makePointer\" style=\"float: right;\" id=".(string)$counter."><i class=\"fas fa-trash-alt\"></i></p>";	//this has an event listener on it
 	$html .= "<div class=\"action\">";
-	$html .= "<p>".$job["due_by"]."</p>"; 
+	$html .= "<p id=\"thejob\">".$job["due_by"]."</p>"; 
 	$html .= "</div></div></div>";
 	++$counter;
 }
@@ -114,10 +113,45 @@ if ($validGETData[0]) //if it didn't fail
 					</div>
 				</div>
 				<div class="col-lg">
-					<h1>Most recent jobs</h1>
-					<?php echo $html; ?>
+					<div id="app">
+						<h1>Most recent jobs</h1>
+						<?php echo $html; //see above?>
+					</div>
 				</div><!--.col-lg-->
 			</div><!--.row-->
 		</div><!--.container-->
+		<script>
+			document.addEventListener('DOMContentLoaded', function(){
+				//add an event listener to the containing div
+				let app = document.getElementById("app");
+				//attaches an event listener to the whole div
+				app.addEventListener("click", function(e){
+					try {
+						let parentNode = e.target.parentNode; //the element that the user clicks
+						if (e.target && parentNode.nodeName === "P" && (parentNode.id>=0 && parentNode.id <5)) {
+							//send the ajax query to delet the post. This is cleaner to do with ajax rather than a form
+							$.ajax({
+								url: "ajax/todolist/deleteTodoList.php",
+								cache: false,
+								type: "GET",
+								data: {   
+									"todolistId" : parentNode.id
+								},
+								success: function(html){
+									//ToDo: make a success message appaer here
+								},
+								fail: function(html){
+									//Todo: show an error message here
+								}
+
+							});
+						}
+					} catch (err) {
+						//incase e.target.parentNode is undefined
+					}
+				});
+			});
+			
+		</script>
 	</body>
 </html>

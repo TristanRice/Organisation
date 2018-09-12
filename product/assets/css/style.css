@@ -2,6 +2,24 @@
   display: none;
 }
 
+.makePointer {
+
+}
+
+.makePointer:hover{
+  cursor: pointer;
+}
+.noButtonStyle {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  float: right;
+}
+
 .card {
   display: inline-block;
   vertical-align: top;
@@ -90,3 +108,15 @@
   padding: 20px;
   color: #FFF;
 }
+
+  /*
+  <div style=\"float: right;\" class=\"btn-group\">
+    <button data-toggle=\"dropdown\" class=\"noButtonStyle\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fas fa-bars\"></i></button>
+    <div class=\"dropdown-menu\">
+      <a class=\"dropdown-item\" href=\"#delete\">Delete</a>
+      <a class=\"dropdown-item\" href=\"#delete\">ef</a>
+
+    </div>
+  </div></span>";   
+
+  */

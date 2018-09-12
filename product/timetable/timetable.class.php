@@ -28,11 +28,11 @@ class Todolist implements ToDoListInterFace {
 		$result = mysqli_query($this->con, $baseQuery);
 		if (!$result)
 		{   $this->aError = "There was an error communicating with the database, please try again later";
-				return false;
+			return false;
 		}
 		if (!mysqli_num_rows($result))
 		{   $this->aError = "You do not have any todolists";
-				return false;
+			return false;
 		}
 		return $this->getAssocFromQuery( $result );
 	}
