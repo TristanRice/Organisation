@@ -132,57 +132,33 @@ if ($validGETData[0]) //if it didn't fail
 				//add an event listener to the containing div
 				let app = document.getElementById("app");
 				//attaches an event listener to the whole div
-				allFiles = {
-					"delete" : { 
-						"url"  : "ajax/todolist/deleteTodoList.php",
-					    "data" : {
-					    	"id" : ""
-					    }
-					},
-					"edit" : {
-						"url"  : "ajax/todolist/editTodoList.php",
-						"data" : {
-
-						}
-					}
+				allFiles = {};
+				function writeToArray( url, data )
+				{   allFiles["url"]  = url;
+					allFiles["data"] = data;
 				}
 				app.addEventListener("click", function(e){
-					try 
-					{   let parentNode = e.target.parentNode; //the element that the user clicks
-						if (e.target && parentNode.nodeName === "P" && (parentNode.id>=0 && parentNode.id <5)) {
-							//send the ajax query to delet the post. This is cleaner to do with ajax rather than a form
-							let name = e.target.getAttribute("name");
-							if (e.target.getAttribute("name")=="edit")
-							{   element = e.target.parentNode.parentNode;
-								prevVal = 
-								element.innerHTML; //first store the value of this so we can use it later.
-								element.innerHTML = ""; //then make the html an empty string
-								element.innerHTML += "<input type=\"text\" value=\""+prevVal+"\" />";
-							} else if (e.target.getAttribute("name")=="delete")
-							{   allFiles[name].data.id = parentNode.id; }
-							//ToDo, make this applicable to everything.
-							$.ajax({
-								url: allFiles[name].url, //
-								cache: false,
-								type: "GET",
-								data: 
-								{   allFiles[name].data
-								},
-								success: function(html){
-									if (html!="")
-									{   let y = document.getElementById("showAjaxFailure");
-										y.innerHTML = html;
-									} else
-									{   parentNode.parentNode.parentNode.parentNode.classList.add("hidden"); //Just add the hidden class to the div, the next time the page loads it will display new ones. 
-									}
-								},
-								fail: function(html){
-									//Todo: show an error message here
-								}
-							});
+					let parentNode = e.target.parentNode; //the element that the user clicks
+					if (e.target && parentNode.nodeName === "P" && (parentNode.id>=0 && parentNode.id <5)) {
+						switch (e.target.getAttribute("name")) 
+						{	case "edit"   : writeToArray("ajax/todolist/editTodoList.php", {"editing":"", "edited":"", "id":parentNode.id});
+							case "delete" : writeToArray("ajax/todolist/deleteTodoList.php", {"id":parentNode.id});
 						}
-					} catch (err) {
-						//incase e.target.parentNode is undefined
+						$.ajax({
+							url   : allFiles.url, //
+							cache : false,
+							type  : "GET",
+							data  : allFiles.data,
+							success: function(html){
+								switch (html)
+								{   case "": parentNode.parentNode.parentNode.parentNode.classList.add("hidden"); //Just add the hidden class to the div, the next time the page loads it will display new ones. 
+									defalt: //make error here
+								}
+							},
+							fail: function(html){
+								//Todo: show an error message here
+							}
+						});
 					}
 				});
 			});
