@@ -1,17 +1,30 @@
 <?php
-session_start( );
 include "../../includes/site-include.inc.php";
 include "../../config/config.php";
-
+Site::init( $connection );
 function checkDateFormat( $date ) //checks that the date format is YYYY-MM-DD with regex.
 {   return (bool) preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$date);
 }
 
-if (!array_key_exists($_SESSION["username"]))
+if (!array_key_exists("username", $_SESSION	))
 {   echo "User not logged in";
 	die( );
 }
-$tableName = "data";
-if (isset($_GET["date"]))
-{   if ($_GET["date"])) $tableName  = "due_by"; 
+print_r($_GET);
+//passed if (!isset($_GET["newDate"])) echo "hello world";
+//passed if (!isset($_GET["newData"])) echo "hello world";
+//passed if (!isset($_GET["id"])) echo "hello world";
+if (!checkDateFormat($_GET["newDate"])) echo "hello world";
+if (!isset($_GET["newDate"]) || !isset($_GET["newData"])  || !isset($_GET["id"]) || !checkDateFormat($_GET["newDate"]) || !is_numeric($_GET["id"]))
+{   echo "Invalid GET data";
+	die( );
+}
+$data  = mysqli_escape_string($connection, $_GET["newData"]);
+$date  = mysqli_escape_string($connection, $_GET["newDate"]);
+$id    = mysqli_escape_string($connection, $_GET["id"]);
+$query = "UPDATE todo_list SET data='".$data."', due_by='".$date."' WHERE user_id=".Site::$userId." AND deleted=0 AND id=".$id.";";
+$result = mysqli_query($connection, $query);
+if (!$result)
+{   echo "Could not upadte the database";
+	die( );
 }

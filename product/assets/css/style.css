@@ -9,6 +9,7 @@
 .makePointer:hover{
   cursor: pointer;
 }
+
 .noButtonStyle {
   background: none;
   color: inherit;

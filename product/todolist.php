@@ -12,7 +12,7 @@ if (sizeof($recentJobs)>0)  //make sure that the user has enough todolists to be
 {   foreach ($recentJobs as $job) //make the HTML to list the jobs
 	{	$html .= "<div class=\"card\" stlye=\"width: 100%;\">";
 		$html .= "<div class=\"content\">";
-		$html .= "<span class=\"title\">".htmlspecialchars($job["data"])."<p class=\"makePointer\" style=\"float: right;\" id=".(string)$job["id"]."><i name=\"delete\" class=\"fas fa-trash-alt\"></i> <i name=\"startEdit\" class=\"fas fa-edit\"></i></p>";	//this has an event listener on it
+		$html .= "<span class=\"title\">".htmlspecialchars($job["data"])."<p class=\"makePointer\" style=\"float: right;\" id=".(string)$job["id"]."><i name=\"delete\" class=\"fas fa-trash-alt\"></i> <i name=\"edit\" class=\"fas fa-edit\"></i> <i name=\"complete\" class=\"fas fa-check\"></i></p>";	//this has an event listener on it
 		$html .= "<div class=\"action\">";
 		$html .= "<p id=\"thejob\">".htmlspecialchars($job["due_by"])."</p>";
 		$html .= "</div></div></div>";
@@ -88,8 +88,6 @@ if ($validGETData[0]) //if it didn't fail
 						  				</div>
 						  				<script>
 						  					//if the user has javavscript enabled then load in the normal text box
-						  					let hiddenDiv = document.getElementById("unhide");
-						  					hiddenDiv.classList.remove("hidden");
 						  				</script>
 						  				<script>
 						  					$(function() {
@@ -125,88 +123,26 @@ if ($validGETData[0]) //if it didn't fail
 				</div><!--.col-lg-->
 			</div><!--.row-->
 		</div><!--.container-->
+		<script src="assets/js/sendAjaxRequest.js"></script>
+		<script src="assets/js/handleIcons.js"></script>
 		<script>
 			document.addEventListener('DOMContentLoaded', function(){
-				//add an event listener to the containing div
-				let app = document.getElementById("app");
-				//attaches an event listener to the whole div
-				allFiles = {};
-				function writeToArray( url, data )
-				{   allFiles["url"]  = url;
-					allFiles["data"] = data;
-				}
-				app.addEventListener("click", function(e){
-					parentNode = e.target.parentNode; //the element that the user clicks
-					//console.log(e.target);
-					if (e.target && parentNode.nodeName === "P") {
-						switch (e.target.getAttribute("name")) 
-						{	case "startEdit":
-								prevHTML = parentNode.parentNode.innerHTML;
-								let newString = "<input id=\"newjob\" type=\"text\">" + 
-											    prevHTML.substring(
-												prevHTML.indexOf('<p class="makePointer"'), 
-												prevHTML.indexOf('<p id="thejob">')+15) + 
-												"<input id=\"newDate\" type=\"text\"></p></div>";
-								parentNode.parentNode.innerHTML = newString;
-								app.addEventListener("keypress", function(y){
-									console.log(y);
-									switch (y.keyCode)
-									{   case 13:
-											//enter key
-											try {
-												newData = document.getElementById("newjob").value;
-												newDate = document.getElementById("newDate").value;
-											} catch (TypeError){
-												console.log("here");
-												//the user should not be able to change nothing
-												break;
-											}
-											writeToArray("ajax/todolist/editTodoList.php", {
-												"newDate" : newData,
-												"newData" : newDate,
-												"id"      : parentNode.id
-											});
-											var theString = "<span class=\"title\">"+newData +
-														prevHTML.substring(
-									     				prevHTML.indexOf('<p class="makePointer"'), 
-														prevHTML.indexOf('<p id="thejob">')+15) + "</span>" + 
-														newDate + "</p></div>";
-											parentNode.parentNode.innerHTML = theString;
-
-											console.log(theString);
-											console.log(allFiles);
-											break;
-										case 27:
-											//escape key
-											parentNode.parentNode.innerHTML = prevHTML;
-											break;
-										default: 
-											//any other key
-											break;
-									}
-								}); //
-							case "edit": 
-								writeToArray("ajax/todolist/editTodoList.php", {"newdate": "", "newdata":"", "edited":"", "id":parentNode.id});
-
-							case "delete": writeToArray("ajax/todolist/deleteTodoList.php", {"id":parentNode.id});
+				y = document.querySelectorAll(".fas");
+				for (i = 0; i<y.length; i++){
+					y[i].addEventListener("mouseenter", function(e){
+						if (e.target.getAttribute("name")=="edit"){
+							e.target.style.color = "blue";
+						} else if (e.target.getAttribute("name")=="delete"){
+							e.target.style.color = "red";
+						} else if (e.target.getAttribute("name")=="complete"){
+							e.target.style.color = "green";
 						}
-						$.ajax({
-							url   : allFiles.url, //
-							cache : false,
-							type  : "GET",
-							data  : allFiles.data,
-							success: function(html){
-								switch (html)
-								{   case "": console.log("notXD") //parentNode.parentNode.parentNode.parentNode.classList.add("hidden"); //Just add the hidden class to the div, the next time the page loads it will display new ones. 
-									defalt: console.log("xd");
-								}
-							},
-							fail: function(html){
-								//Todo: show an error message here
-							}
+						e.target.addEventListener("mouseleave", function(e){
+							e.target.style.color = "";
+						
 						});
-					}
-				});
+					});
+				}
 			});
 		</script>
 	</body>
