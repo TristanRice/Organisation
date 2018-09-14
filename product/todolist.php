@@ -7,15 +7,17 @@ Site::init( $connection );
 $Todolist = new Todolist( (int) Site::$userId ); //implements TodoListInterface
 
 $recentJobs = $Todolist->get( false, "", 0, 5 );
-$html = "";
+$html       = "";
+$counter    = 0;
 if (sizeof($recentJobs)>0)  //make sure that the user has enough todolists to be displayed.
 {   foreach ($recentJobs as $job) //make the HTML to list the jobs
 	{	$html .= "<div class=\"card\" stlye=\"width: 100%;\">";
 		$html .= "<div class=\"content\">";
-		$html .= "<span class=\"title\">".htmlspecialchars($job["data"])."<p class=\"makePointer\" style=\"float: right;\" id=".(string)$job["id"]."><i name=\"delete\" class=\"fas fa-trash-alt\"></i> <i name=\"edit\" class=\"fas fa-edit\"></i> <i name=\"complete\" class=\"fas fa-check\"></i></p>";	//this has an event listener on it
+		$html .= "<span class=\"title\">".htmlspecialchars($job["data"])."<p class=\"makePointer\" style=\"float: right;\" id=".htmlspecialchars((string)$job["id"])."><i name=\"delete\" data-toggle=\"tooltip\" class=\"fas fa-trash-alt trashcan iPointer\"></i> <i name=\"edit\" data-toggle=\"tooltip\" class=\"fas fa-edit edit iPointer\"></i> <i name=\"complete\" data-toggle=\"tooltip\" class=\"fas fa-check complete iPointer\"></i></p>";	//this has an event listener on it
 		$html .= "<div class=\"action\">";
-		$html .= "<p id=\"thejob\">".htmlspecialchars($job["due_by"])."</p>";
+		$html .= "<p id=\"thejob\">".htmlspecialchars(substr($job["due_by"], 0, 10))."</p>"; //substr to avoid showing the time
 		$html .= "</div></div></div>";
+		++$counter;
 	}
 }
 
@@ -82,7 +84,7 @@ if ($validGETData[0]) //if it didn't fail
 											<input type="text" style="width: 70%;" class="form-control" id="date" aria-describedby="dateHelp" placeholder="Enter date" disabled required>
 											<input type="hidden" name="date" id="hiddenDate" />
 											<div class="input-group-append">
-						    					<span class="input-group-text" id="basic-addon2"><i class="far fa-calendar-alt"></i></span>
+												<span class="input-group-text" id="basic-addon2"><i class="far fa-calendar-alt"></i></span>
 						  					</div>
 			  								<small id="dateHelp" class="form-text text-muted">The date that this has to be done by</small>
 						  				</div>
@@ -123,27 +125,27 @@ if ($validGETData[0]) //if it didn't fail
 				</div><!--.col-lg-->
 			</div><!--.row-->
 		</div><!--.container-->
-		<script src="assets/js/sendAjaxRequest.js"></script>
-		<script src="assets/js/handleIcons.js"></script>
+		<script src="assets/js/sendAjaxRequest.js" type="text/javascript"></script>
+		<script src="assets/js/handleIcons.js" type=""></script>
 		<script>
-			document.addEventListener('DOMContentLoaded', function(){
-				y = document.querySelectorAll(".fas");
-				for (i = 0; i<y.length; i++){
-					y[i].addEventListener("mouseenter", function(e){
-						if (e.target.getAttribute("name")=="edit"){
-							e.target.style.color = "blue";
-						} else if (e.target.getAttribute("name")=="delete"){
-							e.target.style.color = "red";
-						} else if (e.target.getAttribute("name")=="complete"){
-							e.target.style.color = "green";
-						}
-						e.target.addEventListener("mouseleave", function(e){
-							e.target.style.color = "";
-						
-						});
-					});
+			
+			$(function(){
+				let trash = document.querySelectorAll(".fa-trash-alt");
+				let check = document.querySelectorAll(".fa-check");
+				let edit  = document.querySelectorAll(".fa-edit");
+				console.log(trash);
+				for (let i = 0; i<=4; i++){
+					//there should only be 15 elements
+					console.log(trash[i]);
+					/*
+					trash[i].tooltip({"trigger":"hover", "placement":"top", "title":"delete"});
+					check[i].tooltip({"trigger":"hover", "placement":"top", "title":"complete"});
+					edit[i].tooltip ({"trigger":"hover", "placement":"top", "title":"edit"});
+					*/
 				}
 			});
 		</script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>		
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 	</body>
 </html>

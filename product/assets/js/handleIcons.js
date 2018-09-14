@@ -13,15 +13,13 @@ document.addEventListener('DOMContentLoaded', function(){
 		if (e.target && parentNode.nodeName === "P") {
 			switch (e.target.getAttribute("name")) 
 			{	case "edit":
-					prevHTML      = parentNode.parentNode.innerHTML;
-					let pIndex    = prevHTML.indexOf('<p class="makePointer"');
-					let dIndex    = prevHTML.indexOf('<p id="thejob">')+15;
+					prevHTML	  = parentNode.parentNode.innerHTML;
+					let pIndex	  = prevHTML.indexOf('<p class="makePointer"');
+					let dIndex	  = prevHTML.indexOf('<p id="thejob">')+15;
 					let dataVal   = prevHTML.substring(0, pIndex);
-					let dateVal   = prevHTML.substring(dIndex, prevHTML.length-10)
+					let dateVal   = prevHTML.substring(dIndex, prevHTML.length-6)
 					let newString = "<input id=\"newjob\" value=\""+dataVal+"\" type=\"text\">" + 
-								    prevHTML.substring(
-									pIndex, 
-									prevHTML.indexOf('<p id="thejob">')+15) + 
+									prevHTML.substring(pIndex, dIndex) + 
 									"<input id=\"newDate\" value=\""+dateVal+"\" type=\"text\"></p></div>";
 					if (!showing)
 					{	parentNode.parentNode.innerHTML = newString; }
@@ -37,39 +35,50 @@ document.addEventListener('DOMContentLoaded', function(){
 									//the user should not be able to change nothing
 									break;
 								}
+								/*
 								writeToArray("ajax/todolist/editTodoList.php", {
 									"newData" : newData,
 									"newDate" : newDate,
-									"id"      : e.target.parentNode.id
+									"id"	  : e.target.parentNode.id
 								});
+								*/
 								var theString = "<span class=\"title\">"+newData +
 											prevHTML.substring(
-									     	prevHTML.indexOf('<p class="makePointer"'), 
+											prevHTML.indexOf('<p class="makePointer"'), 
 											prevHTML.indexOf('<p id="thejob">')+15) + "</span>" + 
 											newDate + "</p></div>";
 								parentNode.parentNode.innerHTML = theString;
-								sendAjaxRequest(allFiles);
+								sendAjaxRequest({
+											"url"  : "ajax/todolist/editTodoList.php", 
+											"data" : {
+												"newData":newData, 
+												"newDate":newDate,
+												"id"     :e.target.parentNode.id
+											}
+										}
+									);
 								showing = false;
 								break;
 							case 27:
 								//escape key
-								parentNode.parentNode.innerHTML = prevHTML;
+								parentNode.parentNode.innerHTML = "<span class=\"title\">"+prevHTML+"</span>";
 								showing = false;
 								break;
-							default: 
+							default:
 								//any other key
 								break;
 						}
-				}); //
+				});
+				break; //
 				case "delete": 
-					//e.target.parentNode.parentNode.parentNode.parentNode.classList.add("hidden");
+					//go up a ton of elements to get to the card div and then give it the hidden class.
+					e.target.parentNode.parentNode.parentNode.parentNode.classList.add("hidden"); 
 					sendAjaxRequest({"url":"ajax/todolist/deleteTodoList.php", "data":{"id":parentNode.id}});
+					break;
 				case "complete":
-					/*
 					e.target.parentNode.parentNode.parentNode.parentNode.classList.add("hidden");
-					e.target.classList.add("greenClass");
 					sendAjaxRequest({"url":"ajax/todolist/completeTodoList.php", "data":{"id":parentNode.id}});
-					*/
+					break;
 			}
 		}
 	});

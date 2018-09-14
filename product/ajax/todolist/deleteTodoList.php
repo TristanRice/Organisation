@@ -15,7 +15,7 @@ if (!array_key_exists("username", $_SESSION)) //make sure that the user is logge
 $userId = Site::getIdFromUsername( $connection, $_SESSION["username"] );
 $listId = mysqli_escape_string( $connection, $_GET["id"]);
 $userId = mysqli_escape_string( $connection, $userId );
-$query  = "DELETE FROM todo_list WHERE user_id=$userId AND id=$listId;";
+$query  = "UPDATE todo_list SET deleted=1 WHERE user_id=$userId AND id=$listId;";
 $result = mysqli_query($connection, $query);
 if (!$result)
 {   //return 403 or something similar here, to make the ajax purposelly fail

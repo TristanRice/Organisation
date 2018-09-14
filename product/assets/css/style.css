@@ -6,9 +6,19 @@
 
 }
 
-.makePointer:hover{
+.iPointer {}
+.iPointer:hover {
   cursor: pointer;
 }
+
+.trashcan {}
+.trashcan:hover { color: red; }
+
+.edit {}
+.edit:hover { color: #0F52BA; }
+
+.complete {}
+.complete:hover { color: green; }
 
 .noButtonStyle {
   background: none;
