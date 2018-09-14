@@ -10,11 +10,6 @@ if (!array_key_exists("username", $_SESSION	))
 {   echo "User not logged in";
 	die( );
 }
-print_r($_GET);
-//passed if (!isset($_GET["newDate"])) echo "hello world";
-//passed if (!isset($_GET["newData"])) echo "hello world";
-//passed if (!isset($_GET["id"])) echo "hello world";
-if (!checkDateFormat($_GET["newDate"])) echo "hello world";
 if (!isset($_GET["newDate"]) || !isset($_GET["newData"])  || !isset($_GET["id"]) || !checkDateFormat($_GET["newDate"]) || !is_numeric($_GET["id"]))
 {   echo "Invalid GET data";
 	die( );

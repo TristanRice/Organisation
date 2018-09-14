@@ -7,7 +7,7 @@ function sendAjaxRequest( json ) {
 		success: function(html){
 			switch (html) {
 				case "" : break;
-				default : console.log(html); break;
+				default : $("#showAjaxFailure").show( ); break;
 			}
 		},
 		fail: function(html){

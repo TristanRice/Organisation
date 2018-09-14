@@ -11,9 +11,16 @@ $html       = "";
 $counter    = 0;
 if (sizeof($recentJobs)>0)  //make sure that the user has enough todolists to be displayed.
 {   foreach ($recentJobs as $job) //make the HTML to list the jobs
-	{	$html .= "<div class=\"card\" stlye=\"width: 100%;\">";
+	{	$y = $counter*3;
+		$x = ($counter*3)+1;
+		$z = ($counter*3)+2;
+		$html .= "<div class=\"card\" stlye=\"width: 100%;\">";
 		$html .= "<div class=\"content\">";
-		$html .= "<span class=\"title\">".htmlspecialchars($job["data"])."<p class=\"makePointer\" style=\"float: right;\" id=".htmlspecialchars((string)$job["id"])."><i name=\"delete\" data-toggle=\"tooltip\" class=\"fas fa-trash-alt trashcan iPointer\"></i> <i name=\"edit\" data-toggle=\"tooltip\" class=\"fas fa-edit edit iPointer\"></i> <i name=\"complete\" data-toggle=\"tooltip\" class=\"fas fa-check complete iPointer\"></i></p>";	//this has an event listener on it
+		$html .= "<span class=\"title\">".htmlspecialchars($job["data"]).
+				 "<p class=\"makePointer\" style=\"float: right;\" id=".htmlspecialchars((string)$job["id"]).">
+				  <i name=\"delete\" id=$y class=\"fas fa-trash-alt trashcan iPointer\"></i> 
+				  <i name=\"edit\" id=$x class=\"fas fa-edit edit iPointer\"></i>
+				  <i name=\"complete\" id=$z class=\"fas fa-check complete iPointer\"></i></p>";	//this has an event listener on it
 		$html .= "<div class=\"action\">";
 		$html .= "<p id=\"thejob\">".htmlspecialchars(substr($job["due_by"], 0, 10))."</p>"; //substr to avoid showing the time
 		$html .= "</div></div></div>";
@@ -56,9 +63,16 @@ if ($validGETData[0]) //if it didn't fail
 		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 	</head>
 	<body>
-		<noscript>
-			<div style="background-color: red;"><h1 style="color: white;">This page works much better with javascript enabled</h1></div>
-		</noscript>
+		<script>
+			acceptedColors = [
+				"#ffbcd9" //cotton candy
+				"#c0d7ce" //minted (light)
+				"#81aeab" //minted (dark)
+				"#418688" //minted (really fucking dark)
+				"#F9FA57" //sunshine
+
+			];
+		</script>
 		<?php include dirname(__DIR__)."/product/includes/page-top.inc.php"; ?>
 		<?php if (isset($aError)) { ?>
 			<div class="alert alert-danger"><p><?php echo $aError; ?></p></div>
@@ -71,6 +85,11 @@ if ($validGETData[0]) //if it didn't fail
 		<div class="alert alert-danger hidden" id="showAjaxFailure">
 		</div>
 		<div class="container">
+			<noscript>
+				<div style="background-color: red;">
+					<h1 style="color: white;">This page works much better with javascript enabled</h1>
+				</div>
+			</noscript>
 			<div class="row">
 				<div class="col-lg">
 					<div class="card">
@@ -81,8 +100,8 @@ if ($validGETData[0]) //if it didn't fail
 									<div class="form-group">
 										<label for="date">Enter date</label>
 										<div class="input-group mb-3">
-											<input type="text" style="width: 70%;" class="form-control" id="date" aria-describedby="dateHelp" placeholder="Enter date" disabled required>
-											<input type="hidden" name="date" id="hiddenDate" />
+											<input type="text" style="width: 70%;" class="form-control" id="date" aria-describedby="dateHelp" placeholder="Enter date" disabled required />
+											<input name="date" id="hiddenDate" class="hidden"/>
 											<div class="input-group-append">
 												<span class="input-group-text" id="basic-addon2"><i class="far fa-calendar-alt"></i></span>
 						  					</div>
@@ -90,17 +109,19 @@ if ($validGETData[0]) //if it didn't fail
 						  				</div>
 						  				<script>
 						  					//if the user has javavscript enabled then load in the normal text box
+						  					$("#hiddenDate").classList.add("hidden");
+						  					$("#date").classList.remove("hidden");
 						  				</script>
 						  				<script>
 						  					$(function() {
 						  						$('span[id="basic-addon2"]').daterangepicker({
 													singleDatePicker: true,
-											    	showDropdowns: true,
-											    	minYear: 2017,
-											    	maxYear: 2100	//this should  be changed in 2099 to avoid confusing xD
+													showDropdowns: true,
+													minYear: 2017,
+													maxYear: 2100	//this should  be changed in 2099 to avoid confusing xD
 												}, function(start, end, label) {
 													$("#hiddenDate").val(start.format("YYYY-MM-DD"))
-											    	$("#date").val(start.format("YYYY-MM-DD"));
+													$("#date").val(start.format("YYYY-MM-DD"));
 											  	});
 											});
 						  				</script>
@@ -109,6 +130,14 @@ if ($validGETData[0]) //if it didn't fail
 										<label for="text">Enter text</label>
 										<input type="text" class="form-control" id="date" aria-describedby="textHelp" placeholder="Enter what you must do" name="job" required>
 										<small id="textHelp" class="form-text text-muted">This is what you have to do</small>
+									</div>
+									<div class="form-group">
+										<label for="color">Choose your color</label>
+										<input type="text" stlye="width: 70%;" class="form-control" />
+										<div class="input-group-append">
+											<span class="input-group-text"><i class="fas fa-palette"></i></span>
+										</div>
+										<small class="form-text text-muted">Choose your color</small>
 									</div>
 									<div class="form-group">
 										<button name="jobsubmit" class="btn btn-primary">Submit</button>
@@ -126,24 +155,16 @@ if ($validGETData[0]) //if it didn't fail
 			</div><!--.row-->
 		</div><!--.container-->
 		<script src="assets/js/sendAjaxRequest.js" type="text/javascript"></script>
-		<script src="assets/js/handleIcons.js" type=""></script>
-		<script>
-			
-			$(function(){
-				let trash = document.querySelectorAll(".fa-trash-alt");
-				let check = document.querySelectorAll(".fa-check");
-				let edit  = document.querySelectorAll(".fa-edit");
-				console.log(trash);
-				for (let i = 0; i<=4; i++){
-					//there should only be 15 elements
-					console.log(trash[i]);
-					/*
-					trash[i].tooltip({"trigger":"hover", "placement":"top", "title":"delete"});
-					check[i].tooltip({"trigger":"hover", "placement":"top", "title":"complete"});
-					edit[i].tooltip ({"trigger":"hover", "placement":"top", "title":"edit"});
-					*/
+		<script src="assets/js/handleIcons.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			$(function(){ 
+				let y = ["delete", "edit", "complete"];
+				for (let i = 0; i<15; i++) {
+					$("#"+i).tooltip({"trigger":"hover", "placement":"top", "title":y[i%3]});
 				}
 			});
+		</script>
+		<script type="text/javascript">
 		</script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>		
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>

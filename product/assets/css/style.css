@@ -2,9 +2,7 @@
   display: none;
 }
 
-.makePointer {
-
-}
+.makePointer {}
 
 .iPointer {}
 .iPointer:hover {
@@ -19,6 +17,11 @@
 
 .complete {}
 .complete:hover { color: green; }
+
+.noPointer {}
+.noPointer:hover {
+  cursor: context-menu;
+}
 
 .noButtonStyle {
   background: none;
