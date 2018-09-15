@@ -51,8 +51,12 @@ class Todolist implements ToDoListInterFace {
 		return True;
 	}
 
-	public function add(  $due_by, $data ) {
-		$query = "INSERT INTO todo_list (user_id, started, due_by, data) VALUES (".$this->userId.", NOW(), '".$due_by."', '".$data."');";
+	public function add(  $due_by, $data, $color, $img_location ) {
+		$due_by 	  = mysqli_escape_string($this->con, $due_by);
+		$data   	  = mysqli_escape_string($this->con, $data);
+		$img_lcoation = mysqli_escape_string($this->con, $img_location);
+		$color 		  = mysqli_escape_string($this->con, $color);
+		$query = "INSERT INTO todo_list (user_id, started, due_by, data, color, img_location) VALUES (".$this->userId.", NOW(), '".$due_by."', '".$data."', '".$color."', '".$img_location."');";
 		$result = mysqli_query($this->con, $query);
 		if (!$result)
 		{   $this->aError = "There was an error adding this todolist, please try again later";

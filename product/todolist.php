@@ -8,24 +8,35 @@ $Todolist = new Todolist( (int) Site::$userId ); //implements TodoListInterface
 
 $recentJobs = $Todolist->get( false, "", 0, 5 );
 $html       = "";
-$counter    = 0;
+$counter    =  0;
 if (sizeof($recentJobs)>0)  //make sure that the user has enough todolists to be displayed.
 {   foreach ($recentJobs as $job) //make the HTML to list the jobs
-	{	$y = $counter*3;
-		$x = ($counter*3)+1;
-		$z = ($counter*3)+2;
-		$html .= "<div class=\"card\" stlye=\"width: 100%;\">";
+	{	$y = $counter*4;
+		$x = ($counter*4)-1;
+		$z = ($counter*4)-2;
+		$a = ($counter*4)-3;
+		$html .= "<div class=\"cardBorder card\" style=\"border-color: ".$job["color"].";\">";
 		$html .= "<div class=\"content\">";
-		$html .= "<span class=\"title\">".htmlspecialchars($job["data"]).
+		$html .= "<span class=\"title\">".htmlspecialchars(substr($job["due_by"], 0, 10)).
 				 "<p class=\"makePointer\" style=\"float: right;\" id=".htmlspecialchars((string)$job["id"]).">
-				  <i name=\"delete\" id=$y class=\"fas fa-trash-alt trashcan iPointer\"></i> 
-				  <i name=\"edit\" id=$x class=\"fas fa-edit edit iPointer\"></i>
-				  <i name=\"complete\" id=$z class=\"fas fa-check complete iPointer\"></i></p>";	//this has an event listener on it
+				  <i name=\"delete\" id=$y class=\"fas fa-trash-alt theIcon trashcan iPointer\"></i>
+				  <i name=\"edit\" id=$x class=\"fas fa-edit theIcon edit iPointer\"></i>
+				  <i name=\"complete\" id=$z class=\"fas fa-check theIcon complete iPointer\"></i>
+				  <i onclick=window.location.href=\"".$job["img_location"]."\" name=\"attachment\" id=$a class=\"fas fa-paperclip theIcon attachment iPointer\"></i></p>";	//this has an event listener on it
 		$html .= "<div class=\"action\">";
-		$html .= "<p id=\"thejob\">".htmlspecialchars(substr($job["due_by"], 0, 10))."</p>"; //substr to avoid showing the time
+		$html .= "<p id=\"thejob\">".htmlspecialchars($job["data"])."</p>"; //substr to avoid showing the time
 		$html .= "</div></div></div>";
-		++$counter;
+		--$counter;
 	}
+}
+
+function randomString()
+{   $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $randstring = '';
+    for ($i = 0; $i < 10; $i++) {
+        $randstring .= $characters[rand(0, strlen($characters)-1)];
+    }
+    return $randstring;
 }
 
 function checkDateFormat( $date ) //checks that the date format is YYYY-MM-DD with regex, miss me with that Date::fromFormat str8 shit
@@ -33,23 +44,59 @@ function checkDateFormat( $date ) //checks that the date format is YYYY-MM-DD wi
 {   return (bool) preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/",$date);
 }
 
+function checkValidHexColor( $hex ) 
+{   return (bool) preg_match("/^[#]{1}([0-9A-Za-z]){6}$/", $hex);
+}
+
 function validateGETData( )	//verifies that what the user entered is valid and ready to be put into the databse
-{	if (!isset($_GET["date"]) || !isset($_GET["job"]) || !isset($_GET["jobsubmit"])) return array(false, "");
-	if (empty(trim($_GET["date"])) || empty(trim($_GET["job"]))) return array(false, "Please enter all fields"); //what they entered is empty
-	if (!checkDateFormat($_GET["date"])) return array(false, "Please enter the date in the format: 'YYYY-MM-DD'"); //the date is not valid.	
-	if (strlen($_GET["job"])>=400) return array(false, "The job that you entered is too long"); //the max val for varchar in the databse is 0xb400
-	
+{	global $filename;
+	$filename = "";
+	$allowed_files = array(IMAGETYPE_PNG, IMAGETYPE_GIF, IMAGETYPE_JPEG);
+	if (!isset($_POST["date"]) || !isset($_POST["job"]) || !isset($_POST["jobsubmit"]) || !isset($_POST["jobColor"])){
+		return array(false, "");
+	}
+	if (empty(trim($_POST["date"])) || empty(trim($_POST["job"])) || empty(trim($_POST["jobColor"]))){ 
+		return array(false, "Please enter all fields"); //what they entered is empty
+	}
+	if (!checkDateFormat($_POST["date"])) {
+		return array(false, "Please enter the date in the format: 'YYYY-MM-DD'"); //the date is not valid.	
+	}
+	if (strlen($_POST["job"])>=400) {
+		return array(false, "The job that you entered is too long"); //the max val for varchar in the databse is 0xb400
+	}
+	if (!checkValidHexColor($_POST["jobColor"])) {
+		return array(false, "You did not enter a valid color");
+	}
+	if ($_FILES["uploadTheFile"]["error"]!==4) 
+	{	if ($_FILES["uploadTheFile"]["error"]!==UPLOAD_ERR_OK) {
+			return array(false, "File upload failed");
+		}
+		$info = getimagesize($_FILES["uploadTheFile"]["tmp_name"]);
+		if (!$info || !in_array($info[2], $allowed_files)) {
+			return array(false, "Only png files allowed"); //if the type cannot be determined then just give them the normal error cus they're probably just doing some fucky shit
+		}	
+		if ($_FILES["uploadTheFile"]["size"] > 500000) {
+			return array(false, "file too big");
+		}
+		while (file_exists($filename) || empty($filename)) {
+			$filename = "uploads/images/".randomString( ).".png"; //make sure that another file with the same name doesn't exist;
+		}
+		if (!move_uploaded_file($_FILES["uploadTheFile"]["tmp_name"], $filename)) {
+			return array(false, "file upload failed");
+		}
+	}
 	return array(true, "");
 }
 
 $validGETData = validateGETData( ); //validGETData( ) returns an array of (succeeded, error)
 if ($validGETData[0]) //if it didn't fail
-{   $Todolist->add($_GET["date"], $_GET["job"]); //add it to the database
+{   $Todolist->add($_POST["date"], $_POST["job"], $_POST["jobColor"], $filename); //add it to the database
 	$aSuccess = "Your item was added"; //tell the user that it succeeded
+	echo "<script> if ( window.history.replaceState ) { window.history.replaceState( null, null, window.location.href ); } </script>"; 
+	//this is a trivial solution, but works for now.
 } else //if it did fail.
 {   if (!empty($validGETData[1])) $aError = $validGETData[1]; //make sure that the error isn't just something that the user might get if they just loaded the page normally
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,18 +108,16 @@ if ($validGETData[0]) //if it didn't fail
 		<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+		<link rel="stylesheet" type="text/css" href="assets/css/spectrum.css" />
+		<script type="text/javascript" src="assets/js/spectrum.js"></script>
+		<script type="text/javascript" src="assets/js/colors.js"></script>
+		<style>
+			* {	cursor: context-menu; }
+			input { cursor: auto; }
+			.sp-thumb-inner:hover { cursor: pointer; }
+		</style>
 	</head>
 	<body>
-		<script>
-			acceptedColors = [
-				"#ffbcd9" //cotton candy
-				"#c0d7ce" //minted (light)
-				"#81aeab" //minted (dark)
-				"#418688" //minted (really fucking dark)
-				"#F9FA57" //sunshine
-
-			];
-		</script>
 		<?php include dirname(__DIR__)."/product/includes/page-top.inc.php"; ?>
 		<?php if (isset($aError)) { ?>
 			<div class="alert alert-danger"><p><?php echo $aError; ?></p></div>
@@ -96,22 +141,18 @@ if ($validGETData[0]) //if it didn't fail
 						<div class="content">
 							<span class="title">Add to your todo list</span>
 							<div class="action">
-								<form action="todolist.php" method="GET">
+								<form action="todolist.php" enctype="multipart/form-data" method="POST">
 									<div class="form-group">
 										<label for="date">Enter date</label>
 										<div class="input-group mb-3">
 											<input type="text" style="width: 70%;" class="form-control" id="date" aria-describedby="dateHelp" placeholder="Enter date" disabled required />
 											<input name="date" id="hiddenDate" class="hidden"/>
 											<div class="input-group-append">
-												<span class="input-group-text" id="basic-addon2"><i class="far fa-calendar-alt"></i></span>
+												<span class="input-group-text iPointer" id="basic-addon2"><i class="far fa-calendar-alt iPointer"></i></span>
 						  					</div>
-			  								<small id="dateHelp" class="form-text text-muted">The date that this has to be done by</small>
+			  								<small id="dateHelp" class="form-text text-muted">The date that this has to be done by <p style="color: red; display: inline-block;">Required</p></small>
 						  				</div>
-						  				<script>
-						  					//if the user has javavscript enabled then load in the normal text box
-						  					$("#hiddenDate").classList.add("hidden");
-						  					$("#date").classList.remove("hidden");
-						  				</script>
+						  				<script type="text/javascript"></script>
 						  				<script>
 						  					$(function() {
 						  						$('span[id="basic-addon2"]').daterangepicker({
@@ -129,16 +170,59 @@ if ($validGETData[0]) //if it didn't fail
 									<div class="form-group">
 										<label for="text">Enter text</label>
 										<input type="text" class="form-control" id="date" aria-describedby="textHelp" placeholder="Enter what you must do" name="job" required>
-										<small id="textHelp" class="form-text text-muted">This is what you have to do</small>
+										<small id="textHelp" class="form-text text-muted">This is what you have to do <p style="color: red; display: inline-block;">Required</p></small>
 									</div>
 									<div class="form-group">
-										<label for="color">Choose your color</label>
-										<input type="text" stlye="width: 70%;" class="form-control" />
-										<div class="input-group-append">
-											<span class="input-group-text"><i class="fas fa-palette"></i></span>
+										<label for="color" id="chooseColor">Choose your color <div id="showActualColor" class="showColor"></div></label>
+										<div class="input-group mb-3">
+											<input type="text" style="width: 70%;" class="form-control" id="shownInp" aria-describedby="colorHelp" placeholder="Choose color" disabled required />
+											<input type="hidden" value="" id="hideInp" name="jobColor" required />
+											<div class="input-group-append">
+												<span id="showPallete" class="input-group-text iPointer"><i class="fas fa-palette iPointer"></i></span>
+											</div>
+											<small id="colorHelp" class="form-text text-muted">Choose your color <p style="color: red; display: inline-block">Required</p></small>
 										</div>
-										<small class="form-text text-muted">Choose your color</small>
 									</div>
+									<script type="text/javascript">
+										function showColorName( color ) {
+											let upperCaseHex = color.toHexString( ).toUpperCase( );
+											$("#showActualColor").css("background-color", upperCaseHex);
+											$("#shownInp").val(masterList[upperCaseHex]);
+											$("#hideInp").val(upperCaseHex);
+										}
+										$("#showPallete").spectrum({
+											showPaletteOnly: true,
+											allowEmpty: false,
+											cancelText: "Cancel",
+											hideAfterPaletteSelect: true,
+											change: function(color) {
+												showColorName(color);
+											},
+											palette: [allColors1, allColors2, allColors3, allColors4] //ToDo, un-hardcode this.
+										});
+									</script>
+									<div class="form-group">
+										<label for="file" id="chooseFile">Choose an image</label>
+										<div class="input-group mb-3">
+											<input type="text" style="width: 70%;" class="form-control" id="disabledFile" aria-describedby="fileHelp" placeholder="Choose file" disabled required />
+											<input type="file" class="hidden" name="uploadTheFile" id="fileUpload" onchange="changeValue(this);" />
+											<div class="input-group-append">
+												<span class="input-group-text iPointer" id="clickFile"><i class="fas fa-paperclip iPointer"></i></span>
+											</div>
+											<small id="fileHelp" class="form-text text-muted">Choose your file <p style="display: inline-block; color: rgb(1, 255, 112);">Optional</p></small>
+										</div>
+									</div>
+									<script>
+										function changeValue( myFile ) {
+											$("#disabledFile").val(myFile.files[0].name);
+											console.log(myFile.files[0]);
+										}
+										$(function(){
+											$("#clickFile").click(function(){
+												$("#fileUpload").click();
+											});
+										});
+									</script>
 									<div class="form-group">
 										<button name="jobsubmit" class="btn btn-primary">Submit</button>
 									</div>
@@ -149,7 +233,7 @@ if ($validGETData[0]) //if it didn't fail
 				</div>
 				<div class="col-lg">
 					<div id="app">
-						<?php echo $html; //see above?>
+						<?php echo $html;//see above?>
 					</div>
 				</div><!--.col-lg-->
 			</div><!--.row-->
@@ -158,9 +242,9 @@ if ($validGETData[0]) //if it didn't fail
 		<script src="assets/js/handleIcons.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			$(function(){ 
-				let y = ["delete", "edit", "complete"];
-				for (let i = 0; i<15; i++) {
-					$("#"+i).tooltip({"trigger":"hover", "placement":"top", "title":y[i%3]});
+				let numberOfFiles = document.querySelectorAll(".theIcon");
+				for (let i = 0; i>numberOfFiles.length-(numberOfFiles.length*2); i--) {
+					$("#"+i).tooltip({"trigger":"hover", "placement":"top", "title":$("#"+i).attr("name")});
 				}
 			});
 		</script>

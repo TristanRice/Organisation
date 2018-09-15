@@ -4,10 +4,15 @@
 
 .makePointer {}
 
+.theIcon {}
+
 .iPointer {}
 .iPointer:hover {
   cursor: pointer;
 }
+
+.attachment {}
+.attachment:hover { color: purple;}
 
 .trashcan {}
 .trashcan:hover { color: red; }
@@ -21,6 +26,18 @@
 .noPointer {}
 .noPointer:hover {
   cursor: context-menu;
+}
+
+.cardBorder {
+  border-style: solid;
+  border-width: 2px;
+}
+
+.showColor {
+  width: 50px;
+  height: 15px;
+  display: inline-block;
+  background-color: white;
 }
 
 .noButtonStyle {
