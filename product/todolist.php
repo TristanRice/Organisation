@@ -6,30 +6,6 @@ include "config/config.php";
 Site::init( $connection );
 $Todolist = new Todolist( (int) Site::$userId ); //implements TodoListInterface
 
-$recentJobs = $Todolist->get( false, "", 0, 5 );
-$html       = "";
-$counter    =  0;
-if (sizeof($recentJobs)>0)  //make sure that the user has enough todolists to be displayed.
-{   foreach ($recentJobs as $job) //make the HTML to list the jobs
-	{	$y = $counter*4;
-		$x = ($counter*4)-1;
-		$z = ($counter*4)-2;
-		$a = ($counter*4)-3;
-		$html .= "<div class=\"cardBorder card\" style=\"border-color: ".$job["color"].";\">";
-		$html .= "<div class=\"content\">";
-		$html .= "<span class=\"title\">".htmlspecialchars(substr($job["due_by"], 0, 10)).
-				 "<p class=\"makePointer\" style=\"float: right;\" id=".htmlspecialchars((string)$job["id"]).">
-				  <i name=\"delete\" id=$y class=\"fas fa-trash-alt theIcon trashcan iPointer\"></i>
-				  <i name=\"edit\" id=$x class=\"fas fa-edit theIcon edit iPointer\"></i>
-				  <i name=\"complete\" id=$z class=\"fas fa-check theIcon complete iPointer\"></i>
-				  <i onclick=window.location.href=\"".$job["img_location"]."\" name=\"attachment\" id=$a class=\"fas fa-paperclip theIcon attachment iPointer\"></i></p>";	//this has an event listener on it
-		$html .= "<div class=\"action\">";
-		$html .= "<p id=\"thejob\">".htmlspecialchars($job["data"])."</p>"; //substr to avoid showing the time
-		$html .= "</div></div></div>";
-		--$counter;
-	}
-}
-
 function randomString()
 {   $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $randstring = '';
@@ -45,13 +21,12 @@ function checkDateFormat( $date ) //checks that the date format is YYYY-MM-DD wi
 }
 
 function checkValidHexColor( $hex ) 
-{   return (bool) preg_match("/^[#]{1}([0-9A-Za-z]){6}$/", $hex);
+{   return (bool) preg_match("/^[#][0-9A-Za-z]{6}$/", $hex);
 }
 
 function validateGETData( )	//verifies that what the user entered is valid and ready to be put into the databse
 {	global $filename;
-	$filename = "";
-	$allowed_files = array(IMAGETYPE_PNG, IMAGETYPE_GIF, IMAGETYPE_JPEG);
+	$filename = ""; //if they didn't upload a file then the path should just be left as an empty string
 	if (!isset($_POST["date"]) || !isset($_POST["job"]) || !isset($_POST["jobsubmit"]) || !isset($_POST["jobColor"])){
 		return array(false, "");
 	}
@@ -72,8 +47,8 @@ function validateGETData( )	//verifies that what the user entered is valid and r
 			return array(false, "File upload failed");
 		}
 		$info = getimagesize($_FILES["uploadTheFile"]["tmp_name"]);
-		if (!$info || !in_array($info[2], $allowed_files)) {
-			return array(false, "Only png files allowed"); //if the type cannot be determined then just give them the normal error cus they're probably just doing some fucky shit
+		if (!$info || $info[2]!==IMAGETYPE_PNG) {
+			return array(false, "Only png files allowed files allowed"); //if the type cannot be determined then just give them the normal error cus they're probably just doing some fucky shit
 		}	
 		if ($_FILES["uploadTheFile"]["size"] > 500000) {
 			return array(false, "file too big");
@@ -96,6 +71,31 @@ if ($validGETData[0]) //if it didn't fail
 	//this is a trivial solution, but works for now.
 } else //if it did fail.
 {   if (!empty($validGETData[1])) $aError = $validGETData[1]; //make sure that the error isn't just something that the user might get if they just loaded the page normally
+}
+
+$recentJobs = $Todolist->get( false, "", 0, 5 );
+$html       = "";
+$counter    =  0;
+if ($recentJobs)  //make sure that the user has enough todolists to be displayed.
+{   foreach ($recentJobs as $job) //make the HTML to list the jobs
+	{	$y = $counter*4;
+		$x = ($counter*4)-1;
+		$z = ($counter*4)-2;
+		$a = ($counter*4)-3;
+		//<div style=\"display: inline-block; float: right;\" data-toggle=\"tooltip\" title=\"<img src='".$job["img_location"]."' />\">
+		$html .= "<div class=\"cardBorder card\" style=\"border-color: ".$job["color"].";\">";
+		$html .= "<div class=\"content\">";
+		$html .= "<span class=\"title\">".htmlspecialchars(substr($job["due_by"], 0, 10)).
+				 "<p class=\"makePointer\" style=\"float: right;\" id=".htmlspecialchars((string)$job["id"]).">
+				  <i name=\"delete\" id=$y class=\"fas fa-trash-alt theIcon trashcan iPointer\"></i>
+				  <i name=\"edit\" id=$x class=\"fas fa-edit theIcon edit iPointer\"></i>
+				  <i name=\"complete\" id=$z class=\"fas fa-check theIcon complete iPointer\"></i>
+				  <i onclick=window.location.href=\"".$job["img_location"]."\" name=\"attachment\" id=$a class=\"fas fa-paperclip theIcon attachment iPointer\"></i></p>";	//this has an event listener on it
+		$html .= "<div class=\"action\">";
+		$html .= "<p id=\"thejob\">".htmlspecialchars($job["data"])."</p>"; //substr to avoid showing the time
+		$html .= "</div></div></div>";
+		--$counter;
+	}
 }
 ?>
 <!DOCTYPE html>
@@ -169,7 +169,7 @@ if ($validGETData[0]) //if it didn't fail
 									</div>
 									<div class="form-group">
 										<label for="text">Enter text</label>
-										<input type="text" class="form-control" id="date" aria-describedby="textHelp" placeholder="Enter what you must do" name="job" required>
+										<input type="text" class="form-control" id="doJob" aria-describedby="textHelp" placeholder="Enter what you must do" name="job" required>
 										<small id="textHelp" class="form-text text-muted">This is what you have to do <p style="color: red; display: inline-block;">Required</p></small>
 									</div>
 									<div class="form-group">
@@ -198,7 +198,7 @@ if ($validGETData[0]) //if it didn't fail
 											change: function(color) {
 												showColorName(color);
 											},
-											palette: [allColors1, allColors2, allColors3, allColors4] //ToDo, un-hardcode this.
+											palette: [allColors1, allColors2, allColors3, allColors4, allColors5] //ToDo, un-hardcode this.
 										});
 									</script>
 									<div class="form-group">
@@ -243,9 +243,10 @@ if ($validGETData[0]) //if it didn't fail
 		<script type="text/javascript">
 			$(function(){ 
 				let numberOfFiles = document.querySelectorAll(".theIcon");
-				for (let i = 0; i>numberOfFiles.length-(numberOfFiles.length*2); i--) {
+				for (let i = 0; i>numberOfFiles.length-(numberOfFiles.length*2); --i) { //decrementing loop to avoid colision with IDs is GENIUs
 					$("#"+i).tooltip({"trigger":"hover", "placement":"top", "title":$("#"+i).attr("name")});
 				}
+				$("#doJob").tooltip({"trigger":"focus", "placement":"top", "title":"Must be less than 400 characters"});
 			});
 		</script>
 		<script type="text/javascript">

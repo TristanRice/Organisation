@@ -21,10 +21,16 @@ class Todolist implements ToDoListInterFace {
 
 	public function get( $specific = false, $todolistId = "", $days=0, $limit=-1 ) {
 		$baseQuery = "SELECT * FROM todo_list WHERE user_id=".$this->userId." AND deleted=0 AND completed=0";
-		if ($specific)   $baseQuery .= " AND id=".$todolistId;
-		if ((bool)$days) $baseQuery .= " AND DATEDIFF(NOW(), due_by)<=1";
-		if ($limit>0)    $baseQuery .= " ORDER BY due_by DESC LIMIT ".(string)$limit;
-		                 $baseQuery .= ";";
+		if ($specific) {
+			$baseQuery .= " AND id=".$todolistId;
+		}
+		if ((bool)$days) {
+			$baseQuery .= " AND DATEDIFF(NOW(), due_by)<=1";
+		}
+		if ($limit>0) {
+			$baseQuery .= " ORDER BY due_by DESC LIMIT ".(string)$limit;
+		}
+		$baseQuery .= ";";
 		$result = mysqli_query($this->con, $baseQuery);
 		if (!$result)
 		{   $this->aError = "There was an error communicating with the database, please try again later";

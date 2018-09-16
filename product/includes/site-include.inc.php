@@ -24,4 +24,17 @@ class Site {
 		if (!$userId) $errors[] = "There was an error, please try again later";
 		Site::$userId = $userId;
 	}
+
+	public static function getUsernameById( $connection, $id ) {
+		$sql = "SELECT username FROM users WHERE username='".mysqli_escape_string($connection, $username)."';";
+		$result = mysqli_query($connection, $sql);
+		if (!$result) {
+			return false;
+		}
+		$assoc = mysqli_fetch_assoc( $result );
+		if (!(bool) sizeof($assoc)) {
+			return false;
+		}
+		return $assoc["username"];
+	}
 }

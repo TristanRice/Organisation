@@ -9,7 +9,7 @@ allColors2 = [
 "#7FDBFF", //Aqua
 "#FF4136", //Red
 "#85144b", //Maroon
-"#001f3f", //Navy
+"#002060", //Navy
 "#0074D9"  //Blue
 ];
 allColors3 = [
@@ -26,6 +26,11 @@ allColors4 = [
 "#DDDDDD", //Silver
 "#FFFFFF"  //No Color
 ];
+allColors5 = [
+"#C00000", //dark red
+"#FFC000", //light orange
+"#0070C0", //Dark blue
+];
 masterList = {
 "#FFBCD9":"Cotton Candy",
 "#C0D7CE":"Light minted",
@@ -35,7 +40,7 @@ masterList = {
 "#7FDBFF":"Aqua",
 "#FF4136":"Red",
 "#85144B":"Maroon",
-"#001F3F":"Navy",
+"#002060":"Navy",
 "#0074D9":"Blue",
 "#39CCCC":"Teal",
 "#3D9970":"Olive",
@@ -46,5 +51,8 @@ masterList = {
 "#111111":"Black",
 "#AAAAAA":"Gray",
 "#DDDDDD":"Silver",
+"#C00000":"Dark Red",
+"#FFC000":"Light orange", 
+"#0070C0":"Dark blue",
 "#FFFFFF":"No Color"
 }
