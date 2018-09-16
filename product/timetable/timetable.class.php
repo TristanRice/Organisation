@@ -1,79 +1,40 @@
 <?php
-interface ToDoListInterFace {
-	public function __construct( $userId );
-	public function get( $specific = false, $todolistId = "" );
-	public function remove( $todolistId );
+
+interface TimetableInterface {
+	public function __construct( );
 }
 
-class Todolist implements ToDoListInterFace {
+class Timetable {
 
 	private $userId;
 	private $con;
+	private $tableName;
 
-	public $aError;
-
-	public function __construct( $userId ) {
+	public function __construct( $userID ) {
 		include "config/config.php";
-		$this->con    = $connection;
-		$this->userId = $userId;
-		$this->aError = "";
+		$this->con = $connection;
+		$this->userId = $userID;
+		$this->tableName = "time_table";
 	}
 
-	public function get( $specific = false, $todolistId = "", $days=0, $limit=-1 ) {
-		$baseQuery = "SELECT * FROM todo_list WHERE user_id=".$this->userId." AND deleted=0 AND completed=0";
-		if ($specific) {
-			$baseQuery .= " AND id=".$todolistId;
+	public function getAll( $limit=-1 ) {
+		$baseQuery = "SELECT subject, day, time, userID FROM ".$this->tableName." WHERE  userID=".$this->userId;
+		if ($limit>=0) {
+			$baseQuery .= " LIMIT ".$limit;
 		}
-		if ((bool)$days) {
-			$baseQuery .= " AND DATEDIFF(NOW(), due_by)<=1";
-		}
-		if ($limit>0) {
-			$baseQuery .= " ORDER BY due_by DESC LIMIT ".(string)$limit;
-		}
-		$baseQuery .= ";";
+		$baseQuery .= " AND DELETED=0;";
 		$result = mysqli_query($this->con, $baseQuery);
-		if (!$result)
-		{   $this->aError = "There was an error communicating with the database, please try again later";
-			return false;
-		}
-		if (!mysqli_num_rows($result))
-		{   $this->aError = "You do not have any todolists";
+		if (!$result) {
 			return false;
 		}
 		return $this->getAssocFromQuery( $result );
 	}
 
-	public function remove( $todolistId ) {
-		$query = "DELETE FROM todo_list WHERE user_id=".$this->userId." AND id=".$todolistId.";";
-		$result = mysqli_query($this->con, $result);
-		if (!mysqli_num_rows($result))
-		{   $this->aError= "This todolist does not exist";
-			return false;
-		}
-		if (!$result)
-		{   $this->aError = "Could not delete this table, plaese try again later";
-			return false;
-		}
-		return True;
-	}
-
-	public function add(  $due_by, $data, $color, $img_location ) {
-		$due_by 	  = mysqli_escape_string($this->con, $due_by);
-		$data   	  = mysqli_escape_string($this->con, $data);
-		$img_lcoation = mysqli_escape_string($this->con, $img_location);
-		$color 		  = mysqli_escape_string($this->con, $color);
-		$query = "INSERT INTO todo_list (user_id, started, due_by, data, color, img_location) VALUES (".$this->userId.", NOW(), '".$due_by."', '".$data."', '".$color."', '".$img_location."');";
-		$result = mysqli_query($this->con, $query);
-		if (!$result)
-		{   $this->aError = "There was an error adding this todolist, please try again later";
-			return false;
-		}
-		return true;
-	}
-
 	private function getAssocFromQuery( $result ) {
-		$assoc = array( );
-		while ($row = mysqli_fetch_assoc( $result )) array_push( $assoc, $row );
-		return $assoc;
+		$array = array( );
+		while ($row = mysqli_fetch_assoc($result)) {
+			array_push($array, $row);
+		}
+		return $array;
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-include "timetable/timetable.class.php";
+include "todolist/todolist.class.php";
 include "includes/site-include.inc.php";
 include "config/config.php";
 
