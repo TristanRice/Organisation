@@ -14,8 +14,19 @@ class App{
 			container.addEventListener("drop",App.drop);
 		}
 	}
+	static componentToHex(c) {
+	    var hex = c.toString(16);
+   		return hex.length == 1 ? "0" + hex : hex;
+	}	
+
+	static rgbToHex(r, g, b) {
+    	return "#" + App.componentToHex(r) + App.componentToHex(g) + App.componentToHex(b);
+	}
+
 	static dragstart(e){
-		e.dataTransfer.setData("text",JSON.stringify({"class":this.classList[2], "subjectName":this.innerHTML}));
+		//e.dataTransfer.setData("text",JSON.stringify({"class":this.classList[2], "subjectName":this.innerHTML}));
+		console.log(this.style.getPropertyValue("background"));
+		e.dataTransfer.setData("text", JSON.stringify({"color":this.style.getPropertyValue("background"), "subjectName":this.innerHTML}));
 	}
 	static dragend(e){
 		this.className+=" "+e.target.classList[2];
@@ -32,15 +43,24 @@ class App{
 	}
 	static drop(e){
 		let the=JSON.parse(e.dataTransfer.getData("text"));
-		this.className=this.className.substr(0,30)+" "+the["class"];
+		console.log(the["color"]);
+		let color = the["color"].substr(4, the["color"].length-5);
+		let colors__ = color.split(",");
+		let hex = App.rgbToHex(parseInt(colors__[0]), parseInt(colors__[1]), parseInt(colors__[2]));
+		console.log(hex);
+		this.className = this.className.substr(0,30);
+		this.style.background = hex;
+		//this.className=this.className.substr(0,30)+" "+the["class"];
+		if (this.innerHTML!=="") {
+			sendAjaxRequest({
+				"url":"ajax/timetable/deleteTimeTable.php",
+				"data":{"timeID":this.id, "dayID":this.parentNode.id}
+			});
+		}
 		this.innerHTML=the["subjectName"];
 		sendAjaxRequest({
 			"url":"ajax/timetable/submitTimeTable.php",
-			"data":{
-				"timeID":this.id,
-				"dayID":this.parentNode.id,
-				"subject":the["subjectName"]
-			}
+			"data":{ "timeID":this.id, "dayID":this.parentNode.id, "subject":the["subjectName"]}
 		});
 	}
 }

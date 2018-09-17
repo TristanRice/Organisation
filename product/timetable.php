@@ -57,8 +57,8 @@ of the array to match $i and $j
 		<?php include "includes/page-top.inc.min.php"; ?>
 		<header>
 			<div id="container">
-				<div class="boxy holdertopDivHour class1" id="draggable" draggable="true">Mathematics</div>
-				<div class="boxy holdertopDivHour class3" id="draggable1" draggable="true">Spanish</div></div></header>
+				<div style="background: #3498db;" class="boxy holdertopDivHour" id="draggable" draggable="true">Mathematics</div>
+				<div style="background: #e74c3c;" class="boxy holdertopDivHour" id="draggable1" draggable="true">Spanish</div></div></header>
 		<section class="timetable">
 			<ol class="timings"><li><time datetime="08:00">0800</time></li><li>0900</li><li>1000</li><li>1100</li><li>1200</li><li>1300</li><li>1400</li><li>1500</li><li>1600</li><li>1700</li></ol><ol class="week"><?php echo $html ?></ol></section>
 		<script type="text/javascript" src="assets/js/sendAjaxRequest.js"></script>
