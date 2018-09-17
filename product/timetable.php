@@ -1,42 +1,53 @@
-<?
+<?php
 include "timetable/timetable.class.php";
 include "includes/site-include.inc.php";
 include "config/config.php";
 Site::init( $connection );
 
-set_error_handler('exceptions_error_handler');
-
-function exceptions_error_handler($severity, $message, $filename, $lineno) {
-  if (error_reporting() == 0) {
-    return;
-  }
-  if (error_reporting() & $severity) {
-    throw new ErrorException($message, 0, $severity, $filename, $lineno);
-  }
-}
-
 $days = array("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun");
 $html = "";
 $TimeTable = new TimeTable(Site::$userId);
 $subjects = $TimeTable->getAll( );
+usort($subjects, function($a, $b) { //make sure taht the array is sorted properly
+	$c = $a["day"] - $b["day"];
+	$c.= $a["time"] - $b["time"];
+	return $c;
+});
+$duplicate1 = array( );
+$newSubj = array( );
+foreach ($subjects as $subject){ //make sure that there are no duplicates.
+	if (!empty($duplicate1) && $duplicate1==array($subject["day"],$subject["time"])){
+		continue;
+	}
+	$newSubj[] = $subject;
+	$duplicate1 = array($subject["day"], $subject["time"]);
+}
+$subjects = $newSubj;
 $counter1 = 0;
-print_r($subjects);
 for ($i = 0; $i<7; $i++) {
 	$html .= "<li class=\"day\" id=\"".(int)($i+1)."\"><span class=\"name\">".$days[$i]."</span>";
 	$counter = 0;
 	for ($j = 8; $j<24; $j++) {
 		$inner = "";
 		if (array_key_exists($counter1, $subjects)) {
-			if ($subjects[$counter1]["day"]==$i && $subjects[$counter1]["time"]==($j-8)) {
+			if ($subjects[$counter1]["day"]==($i+1) && $subjects[$counter1]["time"]==($j-8)) {
+				$inner .= "<p style='color: black;'>".$subjects[$counter1]["subject"]."</p>";
 				++$counter1;
-				$inner.=$subjects[$counter1]["subject"];
 			}
 		}
-		$html .= "<div id=\"".$counter."\" class=\"boxbox hour hour__".str_pad($j,2,'0',STR_PAD_LEFT)." hour--two\">$inner</div>";
+		$html .= "<div id=\"".$counter."\" class=\"boxbox hour hour__".str_pad($j,2,'0',STR_PAD_LEFT)." hour--two\">$inner</div>"; //using strpad for 08 and 09
 		++$counter;
 	}
 	$html .= "</li>";
 }
+
+/*How the above works
+Since I didn't want to loop through the subjects array every iteration of the loop, I simply used a system whereby
+a counter would be incrememnted everytime there was a new timetable entry. Basically, everytime that a new div for the 
+tiemtable is added to the html, if the day and time of the timetable entry for the database match the $i and $j of each loop,
+then it will add the subject text into the new div, and then increment the counter to start waiting on the next index 
+of the array to match $i and $j
+*/
 ?>
 <!DOCTYPE html>
 <html lang="en">
