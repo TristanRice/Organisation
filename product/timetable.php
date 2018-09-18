@@ -29,13 +29,15 @@ for ($i = 0; $i<7; $i++) {
 	$counter = 0;
 	for ($j = 8; $j<24; $j++) {
 		$inner = "";
+		$background = "#FFFFFF";
 		if (array_key_exists($counter1, $subjects)) {
 			if ($subjects[$counter1]["day"]==($i+1) && $subjects[$counter1]["time"]==($j-8)) {
+				$background = $subjects[$counter1]["color"];
 				$inner .= "<p style='color: black;'>".$subjects[$counter1]["subject"]."</p>";
 				++$counter1;
 			}
 		}
-		$html .= "<div id=\"".$counter."\" class=\"boxbox hour hour__".str_pad($j,2,'0',STR_PAD_LEFT)." hour--two\">$inner</div>"; //using strpad for 08 and 09
+		$html .= "<div style=\"background: ".$background."\" id=\"".$counter."\" class=\"boxbox hour hour__".str_pad($j,2,'0',STR_PAD_LEFT)." hour--two\">$inner</div>"; //using strpad for 08 and 09
 		++$counter;
 	}
 	$html .= "</li>";
@@ -57,7 +59,7 @@ of the array to match $i and $j
 		<?php include "includes/page-top.inc.min.php"; ?>
 		<header>
 			<div id="container">
-				<div style="background: #3498db;" class="boxy holdertopDivHour" id="draggable" draggable="true">Mathematics</div>
+				<div style="background: #3498db;" class="boxy holdertopDivHour" id="draggable" draggable="true">Maths</div>
 				<div style="background: #e74c3c;" class="boxy holdertopDivHour" id="draggable1" draggable="true">Spanish</div></div></header>
 		<section class="timetable">
 			<ol class="timings"><li><time datetime="08:00">0800</time></li><li>0900</li><li>1000</li><li>1100</li><li>1200</li><li>1300</li><li>1400</li><li>1500</li><li>1600</li><li>1700</li></ol><ol class="week"><?php echo $html ?></ol></section>

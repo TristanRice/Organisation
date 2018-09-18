@@ -29,6 +29,7 @@ class App{
 		e.dataTransfer.setData("text", JSON.stringify({"color":this.style.getPropertyValue("background"), "subjectName":this.innerHTML}));
 	}
 	static dragend(e){
+		e.preventDefault( );
 		this.className+=" "+e.target.classList[2];
 	}
 	static dragover(e){
@@ -42,12 +43,12 @@ class App{
 		this.classList.remove("hoveredClass");
 	}
 	static drop(e){
+		e.preventDefault( );
 		let the=JSON.parse(e.dataTransfer.getData("text"));
 		console.log(the["color"]);
 		let color = the["color"].substr(4, the["color"].length-5);
 		let colors__ = color.split(",");
 		let hex = App.rgbToHex(parseInt(colors__[0]), parseInt(colors__[1]), parseInt(colors__[2]));
-		console.log(hex);
 		this.className = this.className.substr(0,30);
 		this.style.background = hex;
 		//this.className=this.className.substr(0,30)+" "+the["class"];
@@ -60,7 +61,7 @@ class App{
 		this.innerHTML=the["subjectName"];
 		sendAjaxRequest({
 			"url":"ajax/timetable/submitTimeTable.php",
-			"data":{ "timeID":this.id, "dayID":this.parentNode.id, "subject":the["subjectName"]}
+			"data":{ "timeID":this.id, "dayID":this.parentNode.id, "subject":the["subjectName"], "color":hex}
 		});
 	}
 }

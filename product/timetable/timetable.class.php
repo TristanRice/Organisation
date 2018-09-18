@@ -18,7 +18,7 @@ class Timetable {
 	}
 
 	public function getAll( $limit=-1 ) {
-		$baseQuery = "SELECT subject, day, time, userID FROM ".$this->tableName." WHERE  userID=".$this->userId;
+		$baseQuery = "SELECT subject, day, time, userID, color FROM ".$this->tableName." WHERE  userID=".$this->userId;
 		if ($limit>=0) {
 			$baseQuery .= " LIMIT ".$limit;
 		}
