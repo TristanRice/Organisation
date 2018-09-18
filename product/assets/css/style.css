@@ -169,7 +169,6 @@
   margin-left: 10px;
   margin-top: 5px;
   font-size: 1.25em;
-  text-decoration: underline;
 }
 
 .messageContent {
@@ -193,14 +192,21 @@
   left: 0;
 }
 
-  /*
-  <div style=\"float: right;\" class=\"btn-group\">
-    <button data-toggle=\"dropdown\" class=\"noButtonStyle\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fas fa-bars\"></i></button>
-    <div class=\"dropdown-menu\">
-      <a class=\"dropdown-item\" href=\"#delete\">Delete</a>
-      <a class=\"dropdown-item\" href=\"#delete\">ef</a>
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 2s linear infinite;
+  margin: 0 auto;
+}
 
-    </div>
-  </div></span>";   
-
-  */
+@keyframes spin {
+  0% { 
+    transform: rotate(0deg); 
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

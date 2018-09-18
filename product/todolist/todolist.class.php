@@ -12,25 +12,37 @@ class Todolist implements ToDoListInterFace {
 
 	public $aError;
 
-	public function __construct( $userId ) {
-		include "config/config.php";
-		$this->con    = $connection;
+	public function __construct( $userId, $connection="" ) {
+		$this->con = $connection;
+		if (empty($connection)) {
+			include "config/config.php";
+			$this->con    = $connection;
+		}
 		$this->userId = $userId;
 		$this->aError = "";
 	}
 
-	public function get( $specific = false, $todolistId = "", $days=0, $limit=-1 ) {
-		$baseQuery = "SELECT * FROM todo_list WHERE user_id=".$this->userId." AND deleted=0 AND completed=0";
+	public function get( $specific = false, $todolistId = "", $days=0, $limit=-1, $color="", $getCompleted=false ) {
+		$baseQuery = "SELECT img_location, color, completed, FROM todo_list WHERE user_id=".$this->userId." AND deleted=0";
+		if (! $getCompleted) {
+			$baseQuery .= " AND completed=0";
+		}
 		if ($specific) {
 			$baseQuery .= " AND id=".$todolistId;
 		}
 		if ((bool)$days) {
-			$baseQuery .= " AND DATEDIFF(NOW(), due_by)<=1";
+		
+			$baseQuery .= " AND DATEDIFF(NOW(), due_by)<=$days";
+		}
+		echo $color;
+		if (!empty($color)) {
+			$baseQuery .= " AND color=$color";
 		}
 		if ($limit>0) {
 			$baseQuery .= " ORDER BY due_by DESC LIMIT ".(string)$limit;
 		}
 		$baseQuery .= ";";
+		echo $baseQuery;
 		$result = mysqli_query($this->con, $baseQuery);
 		if (!$result)
 		{   $this->aError = "There was an error communicating with the database, please try again later";
