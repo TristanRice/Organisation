@@ -141,6 +141,7 @@ if ($recentJobs)  //make sure that the user has enough todolists to be displayed
 						<div class="content">
 							<span class="title">Add to your todo list</span>
 							<div class="action">
+							</form> <!--DON'T remove this </form>-->
 								<form action="todolist.php" enctype="multipart/form-data" method="POST">
 									<div class="form-group">
 										<label for="date">Enter date</label>

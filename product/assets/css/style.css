@@ -210,3 +210,7 @@
     transform: rotate(360deg);
   }
 }
+
+.pause_spinner {
+  animation-play-state: paused;
+}

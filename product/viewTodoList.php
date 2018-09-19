@@ -22,7 +22,7 @@
 				<h1 style="color: red;">This page works much better with javascript</h1>
 			</div>
 		</noscript>
-		<div class="card">
+		<div id="filterTheOptions" class="card" style="height: 15%;">
 			<div class="content">
 				<span class="title">
 					Options
@@ -35,25 +35,57 @@
 							<div class="input-group-append" id="dateTooltip">
 								<span class="input-group-text iPointer" id="basic-addon2"><i class="far fa-calendar-alt iPointer"></i></span>
 							</div>
-							&nbsp;
-							<input placeholder="Color" type="text" class="form-control" id="shownInp" disabled>
+							&nbsp;&nbsp;&nbsp;
+							<input placeholder="color" type="text" class="form-control" id="shownInp" disabled>
 							<input class="hidden" value="" id="hideInp"/>
 							<div class="input-group-append">
 								<span class="input-group-text iPointer" id="showPallete"><i class="fas fa-palette iPointer"></i></span>
 							</div>
 						</div>
-						<button onclick="reloadWithChanges()" id="filterbutton" class="form-control btn btn-primary">Filter</button>
+						<div class="input-group mb-3">
+							<div style="width: 100%;" class="row">
+								<div class="col-11">
+									<button onclick="reloadWithChanges()" id="filterbutton" class="form-control btn btn-primary">Filter</button>
+								</div>
+								<div class="col-1">
+									<button class="btn btn-primary form-control" id="advancedOptions"><i class="fas fa-arrow-alt-circle-down" id="adArrow"></i></button>
+								</div>
+							</div>
+						</div>
+						<div id="moreOptions" class="input-group hidden">
+							<input type="text">
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div id="adsd" class="hidden">
+		<div id="loading" class="hidden">
 			<div class="loader">
 			</div>
 		</div>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("#advancedOptions").click(function(){
+					let moreOptionsClassList = document.getElementById("moreOptions").classList;
+					let moreOptionsButton    = document.getElementById("advancedOptions");
+					if (moreOptionsClassList.contains("hidden")){
+						$("#filterTheOptions").animate({height: "40%"});
+						moreOptionsClassList.remove("hidden"); //the optiosn shoudl show up after
+						moreOptionsButton.innerHTML = "<i class=\"fas fa-arrow-alt-circle-up\"></i>";
+					} else {
+						moreOptionsClassList.add("hidden"); //the options should dissapear before
+						$("#filterTheOptions").animate({height: "20%"});
+						moreOptionsButton.innerHTML = "<i class=\"fas fa-arrow-alt-circle-down\"></i>";
+					}
+					return false;
+				});
+			});
+		</script>
 		<script type="text/javascript">
 			$("#filterbutton").click(function(){
-				document.getElementById("adsd").classList.remove("hidden"); //start the loader
+				loadingClassList = document.getElementById("loading").classList;
+				loadingClassList.remove("hidden"); //start the loader
 				$.ajax({
 					url   : "/ajax/todolist/getSpecificTodoLists.php",
 					cache : false,
@@ -63,14 +95,14 @@
 						"color": $("#adsaasdasd").val( )
 					},
 					success: function(html){
-						document.getElementById("adsd").classList.add("hidden");
+						loadingClassList.add("hidden");
 						switch(html){
 							case "": break; //if it fails
 							default: break; //on success
 						}
 					},
 					fail: function(html){
-						//Todo: show an error message here
+						loadingClassList.add("hidden");
 					}
 				});
 	   			return false;
@@ -117,6 +149,7 @@
 				$("#showPallete").tooltip ({"trigger":"hover","title":"Choose color"});
 				$("#filterbutton").tooltip({"trigger":"hover", "title":"Filter jobs"});
 				$("#dateTooltip").tooltip ({"trigger":"hover", "title":"Choose date"});
+				$("#advancedOptions").tooltip({"trigger":"hover", "title":"Show advanced options"});
 			});
 		</script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>		

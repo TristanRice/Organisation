@@ -23,7 +23,7 @@ class Todolist implements ToDoListInterFace {
 	}
 
 	public function get( $specific = false, $todolistId = "", $days=0, $limit=-1, $color="", $getCompleted=false ) {
-		$baseQuery = "SELECT img_location, color, completed, FROM todo_list WHERE user_id=".$this->userId." AND deleted=0";
+		$baseQuery = "SELECT * FROM todo_list WHERE user_id=".$this->userId." AND deleted=0";
 		if (! $getCompleted) {
 			$baseQuery .= " AND completed=0";
 		}
@@ -34,7 +34,6 @@ class Todolist implements ToDoListInterFace {
 		
 			$baseQuery .= " AND DATEDIFF(NOW(), due_by)<=$days";
 		}
-		echo $color;
 		if (!empty($color)) {
 			$baseQuery .= " AND color=$color";
 		}
@@ -42,7 +41,6 @@ class Todolist implements ToDoListInterFace {
 			$baseQuery .= " ORDER BY due_by DESC LIMIT ".(string)$limit;
 		}
 		$baseQuery .= ";";
-		echo $baseQuery;
 		$result = mysqli_query($this->con, $baseQuery);
 		if (!$result)
 		{   $this->aError = "There was an error communicating with the database, please try again later";
@@ -75,6 +73,7 @@ class Todolist implements ToDoListInterFace {
 		$img_lcoation = mysqli_escape_string($this->con, $img_location);
 		$color 		  = mysqli_escape_string($this->con, $color);
 		$query = "INSERT INTO todo_list (user_id, started, due_by, data, color, img_location) VALUES (".$this->userId.", NOW(), '".$due_by."', '".$data."', '".$color."', '".$img_location."');";
+		echo $query;
 		$result = mysqli_query($this->con, $query);
 		if (!$result)
 		{   $this->aError = "There was an error adding this todolist, please try again later";
