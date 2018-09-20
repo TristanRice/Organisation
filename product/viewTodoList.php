@@ -102,6 +102,9 @@ if ($jobs) {
 			<div class="loader">
 			</div>
 		</div>
+		<div id="showAjaxFailError" class="hidden alert alert-danger">
+			<p>Failed to retrieve information</p>
+		</div>
 		<div id="content">
 			<?php echo $html; ?>
 		</div>	
@@ -179,8 +182,9 @@ if ($jobs) {
 				});
 			});
 		</script>
+		<!--
 		<script src="assets/js/sendAjaxRequest.js" type="text/javascript"></script>
-		<script src="assets/js/handleIcons.js" type="text/javascript"></script>
+		<script src="assets/js/handleIcons.js" type="text/javascript"></script>-->
 		<script type="text/javascript">
 			$("#filterbutton").click(function(){
 				loadingClassList = document.getElementById("loading").classList;
@@ -188,19 +192,25 @@ if ($jobs) {
 				contentDiv.innerHTML = "";
 				loadingClassList.remove("hidden"); //start the loader
 				$.ajax({
-					url   : "/ajax/todolist/getSpecificTodoLists.php",
+					url   : "/Organisation/product/ajax/todolist/getSpecificTodoLists.php",
 					cache : false,
 					type  : "GET",
 					data  : {
-						"date":$("#hiddenDate").val( ),
+						"date" :$("#hiddenDate").val( ),
 						"color": $("#hideInp").val( )
 					},
 					success: function(html){
-						loadingClassList.add("hidden");
+						console.log(html);
 						switch(html){
-							case "":  console.log(html); //if it fails
-							default: break; //on success
+							case "": 
+								console.log("failed");
+								document.getElementById("showAjaxFailError").classList.remove("hidden");
+								break;
+							default:
+
+								break;
 						}
+						loadingClassList.add("hidden");
 					},
 					fail: function(html){
 						loadingClassList.add("hidden");

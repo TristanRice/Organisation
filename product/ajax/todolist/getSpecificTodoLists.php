@@ -12,9 +12,13 @@ if (!isset($_GET["date"]) || !isset($_GET["color"])) {
 	echo "";
 	die( );
 }
-print_r($_GET);
-$days = time( ) - strtotime($_GET["date"]);
-$date = mysqli_escape_string($connection, $_GET["date"]);
-$col  = "#".mysqli_escape_string($connection, $_GET["color"]); //havcing a # in the URL query makes me wana kms when dealiung with it so IU'll just lkeave it out
-echo $col;
-echo json_encode($Todolist->get(false, "", $days, $limit=-1, $color=$col, true));
+//print_r($_GET);
+$days 	  = time( ) - strtotime($_GET["date"]);
+$datediff = round($days/86400);
+$datediff = mysqli_escape_string($connection, $datediff);
+$date 	  = mysqli_escape_string($connection, $_GET["date"]);
+$col  	  = "#".mysqli_escape_string($connection, $_GET["color"]); 
+$items = $Todolist->get(false, "", $datediff, $limit=-1, $color=strtoupper($col), true);
+if ($items) {
+	echo json_encode($items);
+}

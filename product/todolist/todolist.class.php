@@ -32,10 +32,10 @@ class Todolist implements ToDoListInterFace {
 		}
 		if ((bool)$days) {
 		
-			$baseQuery .= " AND DATEDIFF(NOW(), due_by)<=$days";
+			$baseQuery .= " AND DATEDIFF(NOW(), due_by)>=$days";
 		}
 		if (!empty($color)) {
-			$baseQuery .= " AND color=$color";
+			$baseQuery .= " AND color='$color'";
 		}
 		if ($limit>0) {
 			$baseQuery .= " ORDER BY due_by DESC LIMIT ".(string)$limit;
