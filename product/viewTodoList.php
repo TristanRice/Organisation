@@ -1,5 +1,44 @@
 <?php
+include "todolist/todolist.class.php";
+include "includes/site-include.inc.php";
+include "config/config.php";
 
+Site::init( $connection );
+$Todolist = new Todolist((int) Site::$userId);
+
+$jobs = $Todolist->get(false, "", 0, 10);
+$html = "";
+$counter1 = 0;
+$counter2 = 0;
+if ($jobs) {
+
+	foreach ($jobs as $job) {
+		$y = $counter2*4;
+		$x = ($counter2*4)-1;
+		$z = ($counter2*4)-2;
+		$a = ($counter2*4)-3;
+		if ((bool)$counter1%2) {
+			$html .= "<div class=\"row\">";
+		}
+		$html .= "<div class=\"col-md-6\">"; 
+		$html .= "<div class=\"noShadow cardBorder card\" style=\"border-color: ".htmlspecialchars($job["color"]).";\">";
+		$html .= "<div class=\"content\">"; 
+		$html .= "<span class=\"title\">".htmlspecialchars(substr($job["due_by"], 0, 10))."
+				  <p class=\"makePointer\" style=\"float: right;\" id=".htmlspecialchars((string)$job["id"]).">
+				  <i name=\"delete\" id=$y class=\"fas fa-trash-alt theIcon trashcan iPointer\"></i>
+				  <i name=\"complete\" id=$z class=\"fas fa-check theIcon complete iPointer\"></i>
+				  <i name=\"attachment\" onclick=window.location.href=\"".$job["img_location"]."\" name=\"attachment\" id=$x class=\"fas fa-paperclip theIcon attachment iPointer\"></i>
+				  </p></span>";
+		$html .= "<div class=\"action\">"; 
+		$html .= "<p>".htmlspecialchars($job["data"])."</p>";
+		$html .= "</div></div></div></div>";	
+		if (!(bool)$counter1%2) {
+			$html .= "</div>"; //another div close to close the first row
+		}
+		++$counter1;
+		--$counter2;
+	}
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,7 +58,7 @@
 		<?php include dirname(__DIR__)."/product/includes/page-top.inc.php"; ?>
 		<noscript>
 			<div style="background: red;">
-				<h1 style="color: red;">This page works much better with javascript</h1>
+				<h1 style="color: white;">This page works much better with javascript</h1>
 			</div>
 		</noscript>
 		<div id="filterTheOptions" class="card" style="height: 15%;">
@@ -45,7 +84,7 @@
 						<div class="input-group mb-3">
 							<div style="width: 100%;" class="row">
 								<div class="col-11">
-									<button onclick="reloadWithChanges()" id="filterbutton" class="form-control btn btn-primary">Filter</button>
+									<button id="filterbutton" class="form-control btn btn-primary">Filter</button>
 								</div>
 								<div class="col-1">
 									<button class="btn btn-primary form-control" id="advancedOptions"><i class="fas fa-arrow-alt-circle-down" id="adArrow"></i></button>
@@ -63,14 +102,72 @@
 			<div class="loader">
 			</div>
 		</div>
+		<div id="content">
+			<?php echo $html; ?>
+		</div>	
+		<!--
+		<div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="noShadow card">
+						<div class="content">
+							<span class="title">test</span>
+							<div class="action">
+								<p>adsasdasd</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="noShadow card">
+						<div class="content">
+							<span class="title">test</span>
+							<div class="action">
+								<p>asdasds</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="noShadow card">
+						<div class="content">
+							<span class="title">asdsda</span>
+							<div class="action">
+								<p>asdadsd</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="noShadow card">
+						<div class="content">
+							<span class="title">asdasd</span>
+							<div class="action">
+								<p>adasa</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>-->
 
+		<script type="text/javascript">
+			$(function(){
+				let numberOfFiles = document.querySelectorAll(".theIcon");
+				for (let i = 0; i>numberOfFiles.length-(numberOfFiles.length*2); --i) {
+					$("#"+i).tooltip({"trigger":"hover", "placement":"top", "title":$("#"+i).attr("name")});
+				}
+			});
+		</script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 				$("#advancedOptions").click(function(){
 					let moreOptionsClassList = document.getElementById("moreOptions").classList;
 					let moreOptionsButton    = document.getElementById("advancedOptions");
 					if (moreOptionsClassList.contains("hidden")){
-						$("#filterTheOptions").animate({height: "40%"});
+						$("#filterTheOptions").animate({height: "40%"},"slow");
 						moreOptionsClassList.remove("hidden"); //the optiosn shoudl show up after
 						moreOptionsButton.innerHTML = "<i class=\"fas fa-arrow-alt-circle-up\"></i>";
 					} else {
@@ -82,22 +179,26 @@
 				});
 			});
 		</script>
+		<script src="assets/js/sendAjaxRequest.js" type="text/javascript"></script>
+		<script src="assets/js/handleIcons.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			$("#filterbutton").click(function(){
 				loadingClassList = document.getElementById("loading").classList;
+				contentDiv = document.getElementById("content");
+				contentDiv.innerHTML = "";
 				loadingClassList.remove("hidden"); //start the loader
 				$.ajax({
 					url   : "/ajax/todolist/getSpecificTodoLists.php",
 					cache : false,
 					type  : "GET",
 					data  : {
-						"date":$("#adada").val( ),
-						"color": $("#adsaasdasd").val( )
+						"date":$("#hiddenDate").val( ),
+						"color": $("#hideInp").val( )
 					},
 					success: function(html){
 						loadingClassList.add("hidden");
 						switch(html){
-							case "": break; //if it fails
+							case "":  console.log(html); //if it fails
 							default: break; //on success
 						}
 					},
@@ -105,6 +206,7 @@
 						loadingClassList.add("hidden");
 					}
 				});
+				console.log("here");
 	   			return false;
 			});
 		</script>

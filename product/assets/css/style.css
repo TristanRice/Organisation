@@ -1,3 +1,11 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #F5F5F5;
+}
+
 .hidden {
   display: none;
 }
@@ -62,6 +70,12 @@
   -moz-box-shadow: 0.3em 0.3em 1em 0  rgba(91,91,91,0.3);
   box-shadow: 0.3em 0.3em 1em 0 rgba(91,91,91,0.3);
   border-radius: 2px;
+}
+
+.noShadow {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
 }
 
 .card .fab {
@@ -193,8 +207,8 @@
 }
 
 .loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
+  border: 16px solid lightgrey; /* Light grey */
+  border-top: 16px solid #4aa8e8; /* Blue */
   border-radius: 50%;
   width: 60px;
   height: 60px;
@@ -213,4 +227,9 @@
 
 .pause_spinner {
   animation-play-state: paused;
+}
+
+#filterTheOptions {
+
+  transition: 3s;
 }
