@@ -103,59 +103,11 @@ if ($jobs) {
 			</div>
 		</div>
 		<div id="showAjaxFailError" class="hidden alert alert-danger">
-			<p>Failed to retrieve information</p>
+			<p>Failed to retrieve information, please try again later</p>
 		</div>
 		<div id="content">
 			<?php echo $html; ?>
 		</div>	
-		<!--
-		<div>
-			<div class="row">
-				<div class="col-md-6">
-					<div class="noShadow card">
-						<div class="content">
-							<span class="title">test</span>
-							<div class="action">
-								<p>adsasdasd</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="noShadow card">
-						<div class="content">
-							<span class="title">test</span>
-							<div class="action">
-								<p>asdasds</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-6">
-					<div class="noShadow card">
-						<div class="content">
-							<span class="title">asdsda</span>
-							<div class="action">
-								<p>asdadsd</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="noShadow card">
-						<div class="content">
-							<span class="title">asdasd</span>
-							<div class="action">
-								<p>adasa</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>-->
-
 		<script type="text/javascript">
 			$(function(){
 				let numberOfFiles = document.querySelectorAll(".theIcon");
@@ -186,13 +138,18 @@ if ($jobs) {
 		<script src="assets/js/sendAjaxRequest.js" type="text/javascript"></script>
 		<script src="assets/js/handleIcons.js" type="text/javascript"></script>-->
 		<script type="text/javascript">
+			
+		</script>
+		<script type="text/javascript">
 			$("#filterbutton").click(function(){
 				loadingClassList = document.getElementById("loading").classList;
 				contentDiv = document.getElementById("content");
+				ajaxErorr = document.getElementById("showAjaxFailError").classList;
+				ajaxErorr.add("hidden");
 				contentDiv.innerHTML = "";
 				loadingClassList.remove("hidden"); //start the loader
 				$.ajax({
-					url   : "/Organisation/product/ajax/todolist/getSpecificTodoLists.php",
+					url   : "ajax/todolist/getSpecificTodoLists.php",
 					cache : false,
 					type  : "GET",
 					data  : {
@@ -204,7 +161,7 @@ if ($jobs) {
 						switch(html){
 							case "": 
 								console.log("failed");
-								document.getElementById("showAjaxFailError").classList.remove("hidden");
+								ajaxErorr.remove("hidden");
 								break;
 							default:
 
@@ -213,7 +170,9 @@ if ($jobs) {
 						loadingClassList.add("hidden");
 					},
 					fail: function(html){
+						console.log("In fail function");
 						loadingClassList.add("hidden");
+						ajaxErorr.remove("hidden");
 					}
 				});
 				console.log("here");
