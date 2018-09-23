@@ -3,6 +3,7 @@ interface ToDoListInterFace {
 	public function __construct( $userId );
 	public function get( $specific = false, $todolistId = "" );
 	public function remove( $todolistId );
+	public function add(  $due_by, $data, $color, $img_location );
 }
 
 class Todolist implements ToDoListInterFace {
@@ -22,8 +23,27 @@ class Todolist implements ToDoListInterFace {
 		$this->aError = "";
 	}
 
+	public function restore( $id ) {
+
+		$query = "UPDATE todo_list SET deleted=0 WHERE id=".$id.";";
+		$result = mysqli_query( $this->con, $query );
+
+		if ( !$result ) {
+			$this->aError = "There was an error restoring this, please try aghain later";
+			return false;
+		}
+		echo $query;
+		return true;
+	}
+
 	public function get( $specific = false, $todolistId = "", $days=0, $limit=-1, $color="", $getCompleted=false ) {
-		$baseQuery = "SELECT * FROM todo_list WHERE user_id=".$this->userId." AND deleted=0";
+		
+		$baseQuery  = "SELECT * FROM todo_list WHERE user_id=".$this->userId." AND deleted=0";
+		$todoListId = mysqli_escape_string($this->con, $todolistId);
+		$color      = mysqli_escape_string($this->con, $color);
+		$days       = mysqli_escape_string($this->con, $days);
+
+		//make the query based on the function parameters
 		if (! $getCompleted) {
 			$baseQuery .= " AND completed=0";
 		}
@@ -31,7 +51,6 @@ class Todolist implements ToDoListInterFace {
 			$baseQuery .= " AND id=".$todolistId;
 		}
 		if ((bool)$days) {
-		
 			$baseQuery .= " AND DATEDIFF(NOW(), due_by)>=$days";
 		}
 		if (!empty($color)) {
@@ -41,7 +60,9 @@ class Todolist implements ToDoListInterFace {
 			$baseQuery .= " ORDER BY due_by DESC LIMIT ".(string)$limit;
 		}
 		$baseQuery .= ";";
+
 		$result = mysqli_query($this->con, $baseQuery);
+		
 		if (!$result)
 		{   $this->aError = "There was an error communicating with the database, please try again later";
 			return false;
@@ -50,12 +71,16 @@ class Todolist implements ToDoListInterFace {
 		{   $this->aError = "You do not have any todolists";
 			return false;
 		}
+		
 		return $this->getAssocFromQuery( $result );
 	}
 
 	public function remove( $todolistId ) {
+
 		$query = "DELETE FROM todo_list WHERE user_id=".$this->userId." AND id=".$todolistId.";";
+
 		$result = mysqli_query($this->con, $result);
+		
 		if (!mysqli_num_rows($result))
 		{   $this->aError= "This todolist does not exist";
 			return false;

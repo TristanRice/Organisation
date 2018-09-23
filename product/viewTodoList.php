@@ -20,6 +20,7 @@ if ($jobs) {
 		if ((bool)$counter1%2) {
 			$html .= "<div class=\"row\">";
 		}
+		//no need to worry about coloring completed here. 
 		$html .= "<div class=\"col-md-6\">"; 
 		$html .= "<div class=\"noShadow cardBorder card\" style=\"border-color: ".htmlspecialchars($job["color"]).";\">";
 		$html .= "<div class=\"content\">"; 
@@ -53,6 +54,10 @@ if ($jobs) {
 		<link rel="stylesheet" type="text/css" href="assets/css/spectrum.css" />
 		<script type="text/javascript" src="assets/js/spectrum.js"></script>
 		<script type="text/javascript" src="assets/js/colors.js"></script>
+		<style>
+			.btn-group-toggle .btn.btn-secondary.active { background: green; }
+			.btn-group-toggle .btn.btn-secondary { background: red; }
+		</style>
 	</head>
 	<body>
 		<?php include dirname(__DIR__)."/product/includes/page-top.inc.php"; ?>
@@ -74,12 +79,7 @@ if ($jobs) {
 							<div class="input-group-append" id="dateTooltip">
 								<span class="input-group-text iPointer" id="basic-addon2"><i class="far fa-calendar-alt iPointer"></i></span>
 							</div>
-							&nbsp;&nbsp;&nbsp;
-							<input placeholder="color" type="text" class="form-control" id="shownInp" disabled>
-							<input class="hidden" value="" id="hideInp"/>
-							<div class="input-group-append">
-								<span class="input-group-text iPointer" id="showPallete"><i class="fas fa-palette iPointer"></i></span>
-							</div>
+							
 						</div>
 						<div class="input-group mb-3">
 							<div style="width: 100%;" class="row">
@@ -92,7 +92,26 @@ if ($jobs) {
 							</div>
 						</div>
 						<div id="moreOptions" class="input-group hidden">
-							<input type="text">
+							<div class="form-group">
+								<div class="input-group mb-3">
+									<input placeholder="color" type="text" class="form-control" id="shownInp" disabled>
+									<input class="hidden" value="" id="hideInp"/>
+									<div class="input-group-append">
+										<span class="input-group-text iPointer" id="showPallete"><i class="fas fa-palette iPointer"></i></span>
+									</div>
+									&nbsp;
+									<div class="btn-group-toggle" data-toggle="buttons">
+									  <label class="btn btn-secondary" style="border: none;">
+									    <input type="checkbox" id="checked" checked autocomplete="off"> Show completed
+									  </label>
+									</div>
+									<div class="btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-secondary" style="border: none;">
+											<input type="checkbox" id="checked2" checked autocmoplete="off">Show deleted
+										</label>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -107,7 +126,7 @@ if ($jobs) {
 		</div>
 		<div id="content">
 			<?php echo $html; ?>
-		</div>	
+		</div>
 		<script type="text/javascript">
 			$(function(){
 				let numberOfFiles = document.querySelectorAll(".theIcon");
@@ -148,23 +167,26 @@ if ($jobs) {
 				ajaxErorr.add("hidden");
 				contentDiv.innerHTML = "";
 				loadingClassList.remove("hidden"); //start the loader
+				let showCompleted = $("#checked").is(":checked") || false;
+				let showDeleted   = $("#checked2").is(":checked") || false;
 				$.ajax({
 					url   : "ajax/todolist/getSpecificTodoLists.php",
 					cache : false,
 					type  : "GET",
 					data  : {
-						"date" :$("#hiddenDate").val( ),
-						"color": $("#hideInp").val( )
+						"date" : "2018-09-18", //$("#hiddenDate").val( ),
+						"color": "7fdbff", //$("#hideInp").val( )
+						"completed": showCompleted
 					},
 					success: function(html){
-						console.log(html);
+						//console.log(html);
 						switch(html){
 							case "": 
 								console.log("failed");
 								ajaxErorr.remove("hidden");
 								break;
 							default:
-
+								document.getElementById("content").innerHTML = html;
 								break;
 						}
 						loadingClassList.add("hidden");
