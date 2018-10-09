@@ -102,7 +102,7 @@ if ($jobs) {
 									&nbsp;
 									<div class="btn-group-toggle" data-toggle="buttons">
 									  <label class="btn btn-secondary" style="border: none;">
-									    <input type="checkbox" id="checked" checked autocomplete="off"> Show completed
+										<input type="checkbox" id="checked" checked autocomplete="off"> Show completed
 									  </label>
 									</div>
 									<div class="btn-group-toggle" data-toggle="buttons">

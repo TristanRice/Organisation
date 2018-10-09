@@ -57,7 +57,7 @@ class Todolist implements ToDoListInterFace {
 			$baseQuery .= " AND color='$color'";
 		}
 		if ($limit>0) {
-			$baseQuery .= " ORDER BY due_by DESC LIMIT ".(string)$limit;
+			$baseQuery .= " ORDER BY due_by ASC LIMIT ".(string)$limit;
 		}
 		$baseQuery .= ";";
 
