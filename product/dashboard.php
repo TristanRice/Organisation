@@ -2,11 +2,13 @@
 <html lang="en">
 	<head>
 		<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+		<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 		<!--<link rel="stylesheet" href="assets/css/style.css" />-->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+		<link rel="stylesheet" href="test.css">
 		<style>
 
 			* {
@@ -119,21 +121,55 @@
 				display: flex;
 				flex-wrap: wrap;
 				flex-flow: row wrap;
+				justify-content: space-around;
 			}
 
 			.cardClass {
 				margin-top: 5px;
-				width: 50%;
-				height: 15%;
+				flex: 1 0 40%;
+				height: 150px;
 			}
 
 			.cardClass:hover {
 				cursor: pointer;
 			}
+
+			.carClass:nth-child(odd) {
+				margin-left: 5px;
+			}
+
+			.animateDiv {
+    			-webkit-transition: all 0.5s ease;
+    			-moz-transition: all 0.5s ease;
+   			 	-o-transition: all 0.5s ease;
+    			transition: all 0.5s ease;
+			}
 		</style>
 		<title>Dashboard</title>
 	</head>
 	<body>
+		
+<div class="cover" onclick="toggleSidenav();"></div>
+<div class="hamburger" id="hamburger" onclick="toggleSidenav();">
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+<nav class="sidenav">
+  <div class="logo">
+    <img src="http://lorempixel.com/128/128/animals/"/>
+  </div>
+  <div class="links">
+    <a class="active" href="">Home</a>
+    <a href="#">Portfolio</a>
+    <a href="#">Blog</a>
+    <a href="#">Contact</a>
+  </div>
+  <footer>
+    <p>the nudging sidenav</p>
+  </footer>
+</nav>
+
 		<div class="container-fluid">
 			<div class="row" style="height: 100%;">
 				<div class="col-md-6">
@@ -146,10 +182,6 @@
 						<div class="col-md-12">
 							<input class="daterangepicker-field" id="daterangepicker-field" />
 							<script type="text/javascript">
-								$("#daterangepicker-field").datepicker({
-								    format: 'mm/dd/yyyy',
-    								startDate: '-3d'
-    								//ToDo: decide how to lay this out.								})
 							</script>
 						</div>
 					</div>
@@ -170,7 +202,8 @@
 							<a href="#" class="card-link">testerino</a>
 						</div>
 					</div>
-					<div id="cardContainer" class="cardContainer">
+					<div id="cardContainer" class="cardContainer animateDiv">
+						
 						<div class="card bg-light cardClass">
 							<div class="card-body">
 								<h4 class="card-title">
@@ -192,6 +225,14 @@
 								</h4>
 							</div>
 						</div>
+						<div class="card bg-light cardClass">
+							<div class="card-body">
+								<h4 class="card-title">
+									Card Title Here
+								</h4>
+							</div>
+						</div>
+						
 						<!--EXAMPLE_CARD
 						<div class="card bg-light" style="margin-top: 5px; ">
 							<div class="card-body">
@@ -223,15 +264,15 @@
 		<script type="text/javascript">
 			$("#icon_1_list").tooltip({"trigger":"hover", "title":"Grid layout"});
 			$("#icon_1_list").click(function(){
+				$(this).switchClass("cardContainer", "", 1000, "easeInOutQuad");
 			});
 		</script>
 		<script type="text/javascript">
 			$("#icon_1_hamburger").tooltip({"trigger":"hover", "title":"List layout"});
 			$("#icon_1_hamburger").click(function(){
-				document.getElementById("loader").classList.remove("hidden");
-				document.getElementById("cardContainer").classList.add("hidden");
-				document.getElementById("loadingLine").innerHTML = getRandomLoadingLine( );
+				$(this).switchClass("", "cardContainer", 1000, "easeInOutQuad")
 			});
 		</script>
+
 	</body>
 </html>
