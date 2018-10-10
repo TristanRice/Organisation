@@ -4,7 +4,9 @@
 		<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 		<script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-		<!--<link rel="stylesheet" href="assets/css/style.css" />-->
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
@@ -25,11 +27,11 @@
 			}
 
 			.row1{
-			    background-color: orange;
+				background-color: orange;
 			}
 
 			.row2{
-			    background-color: blue;
+				background-color: blue;
 			}
 
 			.container-fluid {
@@ -90,18 +92,18 @@
 			@keyframes sk-rotateplane {
 
   				0% { 
-    				transform: perspective(120px) rotateX(0deg) rotateY(0deg);
-    				-webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg) 
+					transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+					-webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg) 
   				}
   				
   				50% { 
-    				transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
-    				-webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg) 
+					transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+					-webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg) 
  				}
  				
  				100% { 
-    				transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-    				-webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+					transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+					-webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
   				}
 			}
 
@@ -139,10 +141,10 @@
 			}
 
 			.animateDiv {
-    			-webkit-transition: all 0.5s ease;
-    			-moz-transition: all 0.5s ease;
+				-webkit-transition: all 0.5s ease;
+				-moz-transition: all 0.5s ease;
    			 	-o-transition: all 0.5s ease;
-    			transition: all 0.5s ease;
+				transition: all 0.5s ease;
 			}
 
 			.rotate {
@@ -153,9 +155,9 @@
 
 			.rotate.down {
 				-ms-transform: rotate(180deg);
-    			-moz-transform: rotate(180deg);
-    			-webkit-transform: rotate(180deg);
-    			transform: rotate(180deg);
+				-moz-transform: rotate(180deg);
+				-webkit-transform: rotate(180deg);
+				transform: rotate(180deg);
 			}
 		</style>
 		<title>Dashboard</title>
@@ -182,7 +184,6 @@
     <p>the nudging sidenav</p>
   </footer>
 </nav>
-
 		<div class="container-fluid">
 			<div class="row" style="height: 100%;">
 				<div class="col-md-6">
@@ -210,31 +211,77 @@
 									<i id="icon_1_list" class="fas fa-th-large icon icon_other rotate"></i>
 								</span>
 							</h4>
-
-							<p class="card-text">Showing results for: </p>
-							<a id="moreOptions" href="#" class="card-link">Advanced options</a>
-							<div id="advancedOptions" class="hidden">
-								<div class="row">
-									Filter by
-									<div class="col-md-3">
-										<div class="form-group">
-											<label for="">date</label>
-											<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-											<small id="emailHelp" class="form-text text-muted">wE'lL nEvEr ShArE yOuR dAtE wItH aNyOnE eLsE
+							<div class="form-group">
+								<div class="input-group mb-3">
+									<div style="width: 100%;" class="row">
+										<div class="col-11">
+											<button id="filterbutton" class="form-control btn btn-primary">Filter</button>
+										</div>
+										<div class="col-1">
+											<button class="btn btn-primary form-control" id="advancedOptionsButton"><i class="fas fa-arrow-alt-circle-down rotate" id="adArrow"></i></button>
 										</div>
 									</div>
-									<div class="col-md-3">
-
+								</div>
+							</div>
+							<div id="advancedOptions" class="hidden">
+								<div class="form-group">
+									<div class="input-group mb-3">
+										<input type="text" class="form-control" id="date" aria-describedby="dateHelp" placeholder="To" disabled required />
+										<input type="text" class="form-control" id="date1" placeholder="From" disabled required />
+										<input type="hidden" value="" id="hiddenDate" />
+										<div class="input-group-append icon" id="dateTooltip">
+											<span class="input-group-text icon" id="basic-addon2"><i id="calender_1" class="far fa-calendar-alt icon"></i></span>
+										</div>
 									</div>
-									<div class="col-md-3">
-
+									<div class="input-group mb-3">
+										<div class="row">
+											<div class="col-md-6">
+												<div class="custom-control custom-checkbox mb-3">
+ 													<input type="checkbox" class="custom-control-input" id="customControlValidation1" required>
+													<label class="custom-control-label" for="customControlValidation1">Show Completed?</label>
+  												</div>
+											</div>
+											<div class="col-md-6">
+												<div clasS="custom-control custom-checkbox mb-3">
+													<input type="checkbox" class="custom-control-input" id="customControlValidation2" required>
+													<label class="custom-control-label" for="customControlValidation2">Show something else?</label>
+												</div>
+											</div>
+										</div>
 									</div>
+								</div>
+								<div class="form-group">
+
 								</div>
 							</div>
 						</div>
 					</div>
+					<script type="text/javascript">
+						$("#advancedOptionsButton").click(function( ) {
+							if ($("#advancedOptions").is(":animated")) return false; //if it is currently going up or down then don't do anything.
+							let speed = "medium"; //speed of hiding/showing the advanced options
+							switch ($("#advancedOptions").is(":visible")) {
+								case true  : $("#advancedOptions").hide(speed); break;
+								case false : $("#advancedOptions").show(speed); break;
+							}
+
+							$("#adArrow").toggleClass("down");
+						});
+						$("#advancedOptionsButton").tooltip({"trigger":"hover", "title":"Advanced Options"});
+						$("#filterbutton").tooltip({"trigger":"hover", "title":"Filter"});
+						$("#calender_1").tooltip({"trigger":"hover", "title": "Select Date", "placement":"bottom"});
+						//now start the daterangepicker
+						$(function( ) {
+							$("#basic-addon2").daterangepicker({
+								startDate: 1900,
+								endDate: 2100
+							}, function(start, end, label) {
+								$("#date").val(start.format("YYYY-MM-DD"));
+								$("#date1").val(end.format("YYYY-MM-DD"));
+							});
+						});
+					</script>
 					<div id="cardContainer" class="cardContainer animateDiv">
-						
 						<div class="card bg-light cardClass">
 							<div class="card-body">
 								<h4 class="card-title">
@@ -306,18 +353,17 @@
 			$("#icon_1_hamburger").click(function(){
 				if (document.getElementById("cardContainer").classList.contains("cardContainer")) {
 					$(this).toggleClass("down");
-					console.log("here");
 				}
 				$("#cardContainer").removeClass("cardContainer");
 
 			});
 		</script>
 		<script type="text/javascript">
-			$(function(){
-				$("advancedOptions").click(function(){
+			$(function( ) {
+				$("advancedOptions").click(function( ) {
 
-				})
-			})
+				});
+			});
 		</script>
 		<script type="text/javascript">
 
