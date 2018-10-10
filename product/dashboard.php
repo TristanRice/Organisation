@@ -144,6 +144,19 @@
    			 	-o-transition: all 0.5s ease;
     			transition: all 0.5s ease;
 			}
+
+			.rotate {
+				-moz-transition: all 0.25s linear;
+				-moz-transform: all 0.25s linear;
+				transition: all 0.25s linear;
+			}
+
+			.rotate.down {
+				-ms-transform: rotate(180deg);
+    			-moz-transform: rotate(180deg);
+    			-webkit-transform: rotate(180deg);
+    			transform: rotate(180deg);
+			}
 		</style>
 		<title>Dashboard</title>
 	</head>
@@ -192,14 +205,32 @@
 							<h4 class="card-title">
 								Your todo list 
 								<span style="float: right;">
-									<i id="icon_1_hamburger" class="fas fa-bars icon icon_hamburger"></i>
+									<i id="icon_1_hamburger" class="fas fa-bars icon icon_hamburger rotate"></i>
 									&nbsp;
-									<i id="icon_1_list" class="fas fa-grip-vertical icon icon_other"></i>
+									<i id="icon_1_list" class="fas fa-th-large icon icon_other rotate"></i>
 								</span>
 							</h4>
 
 							<p class="card-text">Showing results for: </p>
-							<a href="#" class="card-link">testerino</a>
+							<a id="moreOptions" href="#" class="card-link">Advanced options</a>
+							<div id="advancedOptions" class="hidden">
+								<div class="row">
+									Filter by
+									<div class="col-md-3">
+										<div class="form-group">
+											<label for="">date</label>
+											<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+											<small id="emailHelp" class="form-text text-muted">wE'lL nEvEr ShArE yOuR dAtE wItH aNyOnE eLsE
+										</div>
+									</div>
+									<div class="col-md-3">
+
+									</div>
+									<div class="col-md-3">
+
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div id="cardContainer" class="cardContainer animateDiv">
@@ -263,16 +294,33 @@
 		</script>
 		<script type="text/javascript">
 			$("#icon_1_list").tooltip({"trigger":"hover", "title":"Grid layout"});
-			$("#icon_1_list").click(function(){
-				$(this).switchClass("cardContainer", "", 1000, "easeInOutQuad");
+			$("#icon_1_list").click(function( ) {
+				if (!document.getElementById("cardContainer").classList.contains("cardContainer")) {
+					$(this).toggleClass("down");
+				}
+				$("#cardContainer").addClass("cardContainer");
 			});
 		</script>
 		<script type="text/javascript">
 			$("#icon_1_hamburger").tooltip({"trigger":"hover", "title":"List layout"});
 			$("#icon_1_hamburger").click(function(){
-				$(this).switchClass("", "cardContainer", 1000, "easeInOutQuad")
+				if (document.getElementById("cardContainer").classList.contains("cardContainer")) {
+					$(this).toggleClass("down");
+					console.log("here");
+				}
+				$("#cardContainer").removeClass("cardContainer");
+
 			});
 		</script>
+		<script type="text/javascript">
+			$(function(){
+				$("advancedOptions").click(function(){
 
+				})
+			})
+		</script>
+		<script type="text/javascript">
+
+		</script>
 	</body>
 </html>
