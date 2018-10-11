@@ -10,7 +10,6 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-		<link rel="stylesheet" href="test.css">
 		<style>
 
 			* {
@@ -159,31 +158,126 @@
 				-webkit-transform: rotate(180deg);
 				transform: rotate(180deg);
 			}
+
+			#sidebar {
+			    min-width: 250px;
+			    max-width: 250px;
+			    height: 100vh;
+			    position: fixed;
+			    top: 0;
+			    left: 0;
+			    /* top layer */
+			    z-index: 9999;
+			}
+
+			.overlay {
+			    display: none;
+			    position: fixed;
+			    /* full screen */
+			    width: 100vw;
+			    height: 100vh;
+			    /* transparent black */
+			    background: rgba(0, 0, 0, 0.7);
+			    /* middle layer, i.e. appears below the sidebar */
+			    z-index: 998;
+			    opacity: 0;
+			    /* animate the transition */
+			    transition: all 0.5s ease-in-out;
+			}
+			/* display .overlay when it has the .active class */
+			.overlay.active {
+			    display: block;
+			    opacity: 1;
+			}
+
+			#dismiss {
+			    width: 35px;
+			    height: 35px;
+			    position: absolute;
+			    /* top right corner of the sidebar */
+			    top: 10px;
+			    right: 10px;
+			}
 		</style>
 		<title>Dashboard</title>
 	</head>
 	<body>
 		
-<div class="cover" onclick="toggleSidenav();"></div>
-<div class="hamburger" id="hamburger" onclick="toggleSidenav();">
-  <div></div>
-  <div></div>
-  <div></div>
-</div>
-<nav class="sidenav">
-  <div class="logo">
-    <img src="http://lorempixel.com/128/128/animals/"/>
-  </div>
-  <div class="links">
-    <a class="active" href="">Home</a>
-    <a href="#">Portfolio</a>
-    <a href="#">Blog</a>
-    <a href="#">Contact</a>
-  </div>
-  <footer>
-    <p>the nudging sidenav</p>
-  </footer>
-</nav>
+
+		<!--sidebar-->
+		<nav id="sidebar">
+			<div id="dismiss">
+				<i class="fas fa-arrow-left"></i>
+			</div>
+				<div class="sidebar-header">
+				<h3>Sidebar header</h3>
+			</div>
+
+			<ul class="list-unstyled components">
+				<p>Heading</p>
+				<li class="active">
+					<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Home</a>
+	            	<ul class="collapse list-unstyled" id="homeSubmenu">
+	               		<li>
+	                    	<a href="#">Home 1</a>
+	                	</li>
+	                	<li>
+	                    	<a href="#">Home 2</a>
+	                	</li>
+	                	<li>
+	                    	<a href="#">Home 3</a>
+	                	</li>
+	            	</ul>
+		        </li>
+		        <li>
+		            <a href="#">About</a>
+                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false">Pages</a>
+		            <ul class="collapse list-unstyled" id="pageSubmenu">
+		                <li>
+		                    <a href="#">Page 1</a>
+		                </li>
+		                <li>
+		                    <a href="#">Page 2</a>
+		                </li>
+		                <li>
+		                    <a href="#">Page 3</a>
+		                </li>
+		            </ul>
+		        </li>
+		        <li>
+	            <a href="#">Portfolio</a>
+		        </li>
+		        <li>
+		        	<a href="#">Contact</a>
+				</li>
+			</ul>
+		</nav>
+		<button type="button" id="sidebarCollapse" class="btn btn-info">
+        	<i class="fas fa-align-left"></i>
+            <span>Toggle Sidebar</span>
+        </button>
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("#sidebar").mCustomScrollbar({
+					theme: "minimal"
+				});
+
+				$("#dismiss .overlay").click(function(){
+					$("#sidebar").removeClass("active");
+					$(".overlay").removeClass("active");
+				});
+
+				$("sidebarCollapse").click(function(){
+           			$('#sidebar').addClass('active');
+            			// fade in the overlay
+            $('.overlay').addClass('active');
+            $('.collapse.in').toggleClass('in');
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        });
+				})
+			
+		</script>
 		<div class="container-fluid">
 			<div class="row" style="height: 100%;">
 				<div class="col-md-6">
@@ -214,11 +308,11 @@
 							<div class="form-group">
 								<div class="input-group mb-3">
 									<div style="width: 100%;" class="row">
-										<div class="col-11">
+										<div class="col-10">
 											<button id="filterbutton" class="form-control btn btn-primary">Filter</button>
 										</div>
-										<div class="col-1">
-											<button class="btn btn-primary form-control" id="advancedOptionsButton"><i class="fas fa-arrow-alt-circle-down rotate" id="adArrow"></i></button>
+										<div class="col-2">
+											<button class="btn btn-primary form-control" style="width:100%;" id="advancedOptionsButton"><i class="fas fa-arrow-alt-circle-down rotate" id="adArrow"></i></button>
 										</div>
 									</div>
 								</div>
@@ -331,6 +425,7 @@
 				</div>	
 			</div>
 		</div>
+		<div class="overlay"></div>
 		<script type="text/javascript" src="assets/js/loadingLines.js"></script>
 		<script type="text/javascript">
 			function getRandomLoadingLine( ) {
