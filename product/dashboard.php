@@ -94,7 +94,7 @@
 				width: 30%;
 				height: 40px;
 				text-align: center;
-				margin: 10px auto;			
+				margin: 10px auto;
 			}
 
 			.small_card {
@@ -281,47 +281,47 @@
 	</head>
 	<body>
 		<div class="wrapper">
-			<!--sidebar-->
 			<nav id="sidebar" class="sidenav_hover_class">
-		        <div class="sidebar-header">
-		            <strong>Search</strong>
-		        </div><!--.sidebar-header-->
-		        <ul class="list-unstyled components" style="text-align: center; vertical-align: middle">
-		        	<li id="sidenav_item_5" class="sidenav_list">
-		        		<div id="showNormal">
-		        			<i id="sidenav_icon_5" class="fas fa-3x fa-search sidenav_item"></i>
-		        			<p class="sidenav_text" id="sidenav_text_5" style="opacity: 0;">&nbsp;</p>
-		        		</div>
-		        		<div id="showSearch" class="hidden">
-		        			<form class="form-inline">
-		        				<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-		        					<div class="input-group-addon"><i class="fas fa-search"></i>
-		        					<input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search">
-		        				</div>
-		        			</form>
-		        			<p class="sidenav_text" id="sidenav_text_5" style="opacity: 0;">Search</p>
-		        		</div>
-		        	</li>
-		        	<li>&nbsp;</li><li>&nbsp;</li>
-		            <li id="sidenav_item_1" class="sidenav_list" style="vertical-align: middle;">
-		                <i id="sidenav_icon_1" class="fas fa-3x fa-home sidenav_item" onclick="window.location.href='#dashboard'"></i>
-		                <p class="sidenav_text" id="sidenav_text_1" style="opacity: 0;">Home</p>
-		            </li><!--.sidenav_item_1-->
-		            <li id="sidenav_item_2" class="sidenav_list">
-		            	<i id="sidenav_icon_2" class="fas fa-3x fa-dollar-sign sidenav_item" onclick="window.location.href='#score'"></i>
-		            	<p class="sidenav_text" id="sidenav_text_2" style="opacity: 0;">Score</p>
-		            </li><!--.sidenav_item_2-->
-		            <li id="sidenav_item_3" class="sidenav_list">
-		            	<i id="sidenav_icon_3" class="fas fa-3x fa-user-alt sidenav_item" onclick="window.location.href='#profile'"></i>
-		            	<p class="sidenav_text" id="sidenav_text_3" style="opacity: 0;">Profile</p>
-		            </li><!--.sidenav_item_3-->
-		            <li id="sidenav_item_4" class="sidenav_list">
-		            	<i id="sidenav_icon_4" class="fas fa-3x fa-cogs sidenav_item" onclick="window.location.href='#settings'"></i>
-		            	<p class="sidenav_text" id="sidenav_text_4" style="opacity: 0;">Settings</p>
-		            </li><!--.sidenav_item_4-->
-		        </ul><!--.list-unstyled components-->
-		    </nav><!--.sidenav_hover_class-->
-			<!--end of sidebar-->
+				<div class="sidebar-header">
+					<strong>Search</strong>
+				</div><!--.sidebar-header-->
+				<ul class="list-unstyled components" style="text-align: center; vertical-align: middle">
+					<li id="sidenav_item_5" class="sidenav_list">
+						<div id="showNormal">
+							<i id="sidenav_icon_5" class="fas fa-3x fa-search sidenav_item"></i>
+							<p class="sidenav_text" id="sidenav_text_5" style="opacity: 0;">&nbsp;</p>
+						</div>
+						<div id="showSearch" class="hidden">
+							<form class="form-inline">
+								<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+									<div class="input-group-addon"><i class="fas fa-search"></i>
+									<input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search">
+								</div>
+							</form>
+							<p class="sidenav_text" id="sidenav_text_5" style="opacity: 0;">Search</p>
+						</div>
+					</li>
+					<li>&nbsp;</li><li>&nbsp;</li>
+					<li id="sidenav_item_1" class="sidenav_list" style="vertical-align: middle;">
+						<i id="sidenav_icon_1" class="fas fa-3x fa-home sidenav_item" onclick="window.location.href='#dashboard'"></i>
+						<p class="sidenav_text" id="sidenav_text_1" style="opacity: 0;">Home</p>
+					</li><!--.sidenav_item_1-->
+					<li id="sidenav_item_2" class="sidenav_list">
+						<i id="sidenav_icon_2" class="fas fa-3x fa-dollar-sign sidenav_item" onclick="window.location.href='#score'"></i>
+						<p class="sidenav_text" id="sidenav_text_2" style="opacity: 0;">Score</p>
+					</li><!--.sidenav_item_2-->
+					<li id="sidenav_item_3" class="sidenav_list">
+						<i id="sidenav_icon_3" class="fas fa-3x fa-user-alt sidenav_item" onclick="window.location.href='#profile'"></i>
+						<p class="sidenav_text" id="sidenav_text_3" style="opacity: 0;">Profile</p>
+					</li><!--.sidenav_item_3-->
+					<li id="sidenav_item_4" class="sidenav_list">
+						<i id="sidenav_icon_4" class="fas fa-3x fa-cogs sidenav_item" onclick="window.location.href='#settings'"></i>
+						<p class="sidenav_text" id="sidenav_text_4" style="opacity: 0;">Settings</p>
+					</li><!--.sidenav_item_4-->
+				</ul><!--.list-unstyled components-->
+			</nav><!--.sidenav_hover_class-->
+			<div id="">
+			</div><!--.overlay-->
 			<div id="restOfPage" class="container-fluid">
 				<div class="row" style="height: 100%;">
 					<div class="col-md-6">
@@ -338,7 +338,7 @@
 							</div><!--.col-md-12-->
 						</div><!--.row-->
 					</div><!--.col-md-6-->
-					<div class="col-md-6" style="overflow-y: scroll">
+					<div class="col-md-6" style="height: 100vh; overflow-y: auto;">
 						<div class="card bg-light" style="margin-top: 5px;">
 							<div class="card-body">
 								<h4 class="card-title">
@@ -363,6 +363,19 @@
 								</div><!--.form-group-->
 								<div id="advancedOptions" class="hidden">
 									<div class="form-group">
+										<div class="input-group mb-3">
+											<select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineFormCustomSelect">
+												<option selected disabled>How many items per page?</option>
+												<option value="1">5</option>
+												<option value="2">10</option>
+												<option value="3">20</option>
+											</select>
+											<label class="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">
+												<input type="checkbox" class="custom-control-input">
+												<span class="custom-control-indicator"></span>
+												<span class="custom-control-description">Remember my preference</span>
+											</label>
+										</div>
 										<div class="input-group mb-3">
 											<input type="text" class="form-control" id="date" aria-describedby="dateHelp" placeholder="To" disabled required />
 											<input type="text" class="form-control" id="date1" placeholder="From" disabled required />
@@ -447,7 +460,20 @@
 									</h4>
 								</div><!--.card-body-->
 							</div><!--.card bg-light cardClass-->
-							
+							<div class="card bg-light cardClass">
+								<div class="card-body">
+									<h4 class="card-title">
+										Card Title Here
+									</h4>
+								</div><!--.card-body-->
+							</div><!--.card bg-light cardClass-->
+							<div class="card bg-light cardClass">
+								<div class="card-body">
+									<h4 class="card-title">
+										Card Title Here
+									</h4>
+								</div><!--.card-body-->
+							</div><!--.card bg-light cardClass-->
 							<!--EXAMPLE_CARD
 							<div class="card bg-light" style="margin-top: 5px; ">
 								<div class="card-body">
@@ -471,8 +497,6 @@
 		</div><!--.wrapper-->
 		<div class="overlay"></div>
 		<script type="text/javascript">
-				//there's probably a better way to do this. 
-				//the better way to do this would be to do a loop, but for now with only 4 elemen ts this is fine.
 				$(function(){
 					all_items = document.querySelectorAll(".sidenav_list");
 					all_text_items = document.querySelectorAll(".sidenav_text");
@@ -482,7 +506,6 @@
 							sidenav_item_3: "#73f26f", sidenav_item_4: "#ff6347",
 							sidenav_item_5: "#f27b7b"
 					};
-					//these are jsut hashes now because I havent' made the other pages
 					/*
 					This adds the colored classes to each icon to make it look nice when
 					The user hovers over the sidebar. It also fades the text in cus idk 
@@ -490,7 +513,7 @@
 					*/
 					$("#sidebar").hover(function(){
 						/*First add the colors*/
-						if ($("#sidenav_item_1").is(":animated")) return false; //if its already being animated don't queue another animateion
+						//if ($("#sidenav_item_1").is(":animated")) return false; //if its already being animated don't queue another animateion
 						for (var i = 0; i<all_items.length; i++) {
 							$("#"+all_items[i].id).animate({color:all_colors[all_items[i].id]}, fade_speed);
 						}
@@ -514,16 +537,14 @@
 						document.getElementById("restOfPage").addEventListener("click", function(){
 							//add an event listener so even if it goes out of this loop then it will still register if the page is clicked
 							$("sidebar").toggleClass("active");
-							document.getElementById("sidebar").classList.remove("active");
+							document.getElementById("sidebar").classList.remove("active"); //$().removeClass didn't work for this? 
 							$("#showSearch").hide( );
 							$("#showNormal").show("medium");
 						})
 					});
 				});
 				//add toolips
-				$("#inlineFormInputGroup").tooltip({"trigger":"focus", "title":"Press enter to search"});
-				//make HREFs
-
+				$("#inlineFormInputGroup").tooltip({"trigger":"focus", "title":"Press enter to search"}); //there is no text on the search so this will be used 
 			</script>
 		<script type="text/javascript" src="assets/js/loadingLines.js"></script>
 		<script type="text/javascript">
