@@ -10,8 +10,8 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+		<script src="//cdn.jsdelivr.net/jquery.color-animation/1/mainfile"></script>
 		<style>
-
 			* {
 				margin: 0;
 			}
@@ -43,25 +43,15 @@
 	  			flex: 1;
 			}
 
-			.icon:hover {
-				cursor: pointer;
-			}
+			.icon:hover { cursor: pointer; }
 
-			.icon_other:hover {
-				color: blue;
-			}
+			.icon_other:hover { color: blue; }
 
-			.icon_hamburger:hover {
-				color: red;
-			}
+			.icon_hamburger:hover { color: red; }
 
-			.icon_paperclip:hover {
-				color: purple;
-			}
+			.icon_paperclip:hover { color: purple; }
 
-			.icon_pen:hover {
-				color: lightblue;
-			}
+			.icon_pen:hover { color: lightblue; }
 
 			.spinner {
 				width: 40px;
@@ -75,17 +65,11 @@
 
 			@-webkit-keyframes sk-rotateplane {
 
-				0% { 
-					-webkit-transform: perspective(120px) 
-				}
+				0% { -webkit-transform: perspective(120px) }
 				
-				50% { 
-					-webkit-transform: perspective(120px) rotateY(180deg) 
-				}
+				50% { -webkit-transform: perspective(120px) rotateY(180deg) }
 				
-				100% { 
-					-webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) 
-				}
+				100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
 			}
 
 			@keyframes sk-rotateplane {
@@ -131,13 +115,9 @@
 				height: 150px;
 			}
 
-			.cardClass:hover {
-				cursor: pointer;
-			}
+			.cardClass:hover { cursor: pointer; }
 
-			.carClass:nth-child(odd) {
-				margin-left: 5px;
-			}
+			.carClass:nth-child(odd) { margin-left: 5px; }
 
 			.animateDiv {
 				-webkit-transition: all 0.5s ease;
@@ -180,27 +160,19 @@
 			}
 
 			#sidebar.active {
-			    min-width: 80px;
-			    max-width: 80px;
-			    text-align: center;
+			    min-width: 300px;
+			    max-width: 300px;
 			}
 
 			#sidebar.active .sidebar-header h3,
-			#sidebar.active .CTAs {
-			    display: none;
-			}
+			#sidebar.active .CTAs { display: none; }
 
-			#sidebar.active .sidebar-header strong {
-			    display: block;
-			}
+			#sidebar.active .sidebar-header strong { display: block; }
 
-			#sidebar ul li a {
-			    text-align: left;
-			}
+			#sidebar ul li a { text-align: left; }
 
 			#sidebar.active ul li a {
 			    padding: 20px 10px;
-			    text-align: center;
 			    font-size: 0.85em;
 			}
 
@@ -211,9 +183,7 @@
 			    margin-bottom: 5px;
 			}
 
-			#sidebar.active ul ul a {
-			    padding: 10px !important;
-			}
+			#sidebar.active ul ul a { padding: 10px !important; }
 
 			#sidebar.active .dropdown-toggle::after {
 			    top: auto;
@@ -224,9 +194,7 @@
 			    transform: translateX(50%);
 			}
 
-			#sidebar .sidebar-header {
-			    padding: 20px;
-			}
+			#sidebar .sidebar-header { padding: 20px; }
 
 			#sidebar .sidebar-header strong {
 			    display: none;
@@ -253,13 +221,9 @@
 			}
 
 			#sidebar ul li.active>a,
-			a[aria-expanded="true"] {
-			    color: #fff;
-			}
+			a[aria-expanded="true"] { color: #fff; }
 
-			a[data-toggle="collapse"] {
-			    position: relative;
-			}
+			a[data-toggle="collapse"] { position: relative; }
 
 			.dropdown-toggle::after {
 			    display: block;
@@ -274,9 +238,7 @@
 			    padding-left: 30px !important;
 			}
 
-			ul.CTAs {
-			    padding: 20px;
-			}
+			ul.CTAs { padding: 20px; }
 
 			ul.CTAs a {
 			    text-align: center;
@@ -297,128 +259,70 @@
 			    color: #fff !important;
 			}
 
-			.sidenav_hover_class:hover {
-				cursor: pointer;
-			}
+			.sidenav_hover_class:hover { cursor: pointer; }
 
 			.sidenav_item:hover {
 				font-size: 3.1em;
 				transition: 0.1 ease-out;
 			}
+			
+			.sidenav_list {}
 
-			.sidenav_item_1 {
-				color: #dbdb64;
+			.align_icon_bottom {
+				bottom: 10px;
+				left: 10px;
+				text-align: center;
+				position: absolute;
 			}
 
-			.sidenav_item_2 {
-				color: #00FFFF;
-			}
-
-			.sidenav_item_3 {
-				color: #00FF00;
-			}
-
-			.sidenav_item_4 {
-				color: #ff6347;
-			}
+			.sidenav_text {}
 		</style>
 		<title>Dashboard</title>
 	</head>
 	<body>
-		
-
 		<div class="wrapper">
 			<!--sidebar-->
 			<nav id="sidebar" class="sidenav_hover_class">
 		        <div class="sidebar-header">
-		            <strong>BS</strong>
-		        </div>
-
-		        <ul class="list-unstyled components" style="text-align: center">
-		            <li id="sidenav_item_1" class="">
-		                <i id="sidenav_icon_1" class="fas fa-3x fa-home sidenav_item"></i>
-		                <p id="sidenav_text_1">&nbsp;</p>
-		            </li>
-		            <li id="sidenav_item_2" class="">
-		            	<i id="sidenav_icon_2" class="fas fa-3x fa-dollar-sign sidenav_item"></i>
-		            	<p id="sidenav_text_2">&nbsp;</p>
-		            </li>
-		            <li id="sidenav_item_3" class="">
-		            	<i id="sidenav_icon_3" class="fas fa-3x fa-user-alt sidenav_item"></i>
-		            	<p id="sidenav_text_3">&nbsp;</p>
-		            </li>
-		            <li id="sidenav_item_4" class="">
-		            	<i id="sidenav_icon_4" class="fas fa-3x fa-cogs sidenav_item"></i>
-		            	<p id="sidenav_text_4">&nbsp;</p>
-		            </li>
-		        </ul>
-		    </nav>
-			<script type="text/javascript">
-				//there's probably a better way to do this. 
-				//the better way to do this would be to do a loop, but for now with only 4 elemen ts this is fine.
-				$(function(){
-					/*
-					This adds the colored classes to each icon to make it look nice when
-					The user hovers over the sidebar. It also fades the text in cus idk 
-					that is nice to do as well lmao
-					*/
-					$("#sidebar").hover(function(){
-						let speed = 10; //the speed of the text fading in 
-						fade_in_text = {
-							none:"&nbsp;",
-							text_1:"Home",
-							text_2:"Score",
-							text_3:"Profile",
-							text_4:"Settings",
-							links: {
-								dashboard:"dashboard.php",
-								score:"score.php",
-								profile:"profile.php",
-								settings:"settings.php"
-							}
-						}; //if I want to change this shit is easiest to change here
-						/*First add the colors*/
-						$("#sidenav_item_1").addClass("sidenav_item_1");
-						$("#sidenav_item_2").addClass("sidenav_item_2");
-						$("#sidenav_item_3").addClass("sidenav_item_3");
-						$("#sidenav_item_4").addClass("sidenav_item_4");
-						/*Now make the text fade in */
-						$("#sidenav_text_1").fadeOut(speed, function( ) {
-							$(this).html(fade_in_text.text_1).fadeIn( );
-						});
-						$("#sidenav_text_2").fadeOut(speed, function( ) {
-							$(this).html(fade_in_text.text_2).fadeIn( );
-						});
-						$("#sidenav_text_3").fadeOut(speed, function( ) {
-							$(this).html(fade_in_text.text_3).fadeIn( );
-						});
-						$("#sidenav_text_4").fadeOut(speed, function( ) {
-							$(this).html(fade_in_text.text_4).fadeIn( );
-						});
-					});
-					/*When the user leaves the sidebar, teardown gracefully*/
-					$("#sidebar").mouseleave(function(){
-						$("#sidenav_item_1").removeClass("sidenav_item_1");
-						$("#sidenav_item_2").removeClass("sidenav_item_2");
-						$("#sidenav_item_3").removeClass("sidenav_item_3");
-						$("#sidenav_item_4").removeClass("sidenav_item_4");
-						$("#sidenav_text_1").fadeOut(50, function(){
-							$(this).html(fade_in_text.none).fadeIn( ); //idk why but this is the only way to make this work
-						});
-						$("#sidenav_text_2").fadeOut(50, function( ) {
-							$(this).html(fade_in_text.none).fadeIn( );
-						})
-						$("#sidenav_text_3").fadeOut(50, function( ) {
-							$(this).html(fade_in_text.none).fadeIn( );
-						});
-						$("#sidenav_text_4").fadeOut(50, function( ) {
-							$(this).html(fade_in_text.none).fadeIn( );
-						});
-					});
-				});
-			</script>
+		            <strong>Search</strong>
+		        </div><!--.sidebar-header-->
+		        <ul class="list-unstyled components" style="text-align: center; vertical-align: middle">
+		        	<li id="sidenav_item_5" class="sidenav_list">
+		        		<div id="showNormal">
+		        			<i id="sidenav_icon_5" class="fas fa-3x fa-search sidenav_item"></i>
+		        			<p class="sidenav_text" id="sidenav_text_5" style="opacity: 0;">&nbsp;</p>
+		        		</div>
+		        		<div id="showSearch" class="hidden">
+		        			<form class="form-inline">
+		        				<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+		        					<div class="input-group-addon"><i class="fas fa-search"></i>
+		        					<input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search">
+		        				</div>
+		        			</form>
+		        			<p class="sidenav_text" id="sidenav_text_5" style="opacity: 0;">Search</p>
+		        		</div>
+		        	</li>
+		        	<li>&nbsp;</li><li>&nbsp;</li>
+		            <li id="sidenav_item_1" class="sidenav_list" style="vertical-align: middle;">
+		                <i id="sidenav_icon_1" class="fas fa-3x fa-home sidenav_item" onclick="window.location.href='#dashboard'"></i>
+		                <p class="sidenav_text" id="sidenav_text_1" style="opacity: 0;">Home</p>
+		            </li><!--.sidenav_item_1-->
+		            <li id="sidenav_item_2" class="sidenav_list">
+		            	<i id="sidenav_icon_2" class="fas fa-3x fa-dollar-sign sidenav_item" onclick="window.location.href='#score'"></i>
+		            	<p class="sidenav_text" id="sidenav_text_2" style="opacity: 0;">Score</p>
+		            </li><!--.sidenav_item_2-->
+		            <li id="sidenav_item_3" class="sidenav_list">
+		            	<i id="sidenav_icon_3" class="fas fa-3x fa-user-alt sidenav_item" onclick="window.location.href='#profile'"></i>
+		            	<p class="sidenav_text" id="sidenav_text_3" style="opacity: 0;">Profile</p>
+		            </li><!--.sidenav_item_3-->
+		            <li id="sidenav_item_4" class="sidenav_list">
+		            	<i id="sidenav_icon_4" class="fas fa-3x fa-cogs sidenav_item" onclick="window.location.href='#settings'"></i>
+		            	<p class="sidenav_text" id="sidenav_text_4" style="opacity: 0;">Settings</p>
+		            </li><!--.sidenav_item_4-->
+		        </ul><!--.list-unstyled components-->
+		    </nav><!--.sidenav_hover_class-->
 			<!--end of sidebar-->
-			<div class="container-fluid">
+			<div id="restOfPage" class="container-fluid">
 				<div class="row" style="height: 100%;">
 					<div class="col-md-6">
 						<div class="row" style="height: 50%;">
@@ -485,7 +389,6 @@
 										</div><!--.input-group mb-3-->
 									</div><!--.form-group-->
 									<div class="form-group">
-
 									</div><!--.form-group-->
 								</div><!--.hidden-->
 							</div><!--.card-body-->
@@ -567,6 +470,61 @@
 			</div><!--.container-fluid-->
 		</div><!--.wrapper-->
 		<div class="overlay"></div>
+		<script type="text/javascript">
+				//there's probably a better way to do this. 
+				//the better way to do this would be to do a loop, but for now with only 4 elemen ts this is fine.
+				$(function(){
+					all_items = document.querySelectorAll(".sidenav_list");
+					all_text_items = document.querySelectorAll(".sidenav_text");
+					fade_speed = 500
+					all_colors = { 
+							sidenav_item_1: "#dbdb64", sidenav_item_2: "#2ab7ca", 
+							sidenav_item_3: "#73f26f", sidenav_item_4: "#ff6347",
+							sidenav_item_5: "#f27b7b"
+					};
+					//these are jsut hashes now because I havent' made the other pages
+					/*
+					This adds the colored classes to each icon to make it look nice when
+					The user hovers over the sidebar. It also fades the text in cus idk 
+					that is nice to do as well lmao
+					*/
+					$("#sidebar").hover(function(){
+						/*First add the colors*/
+						if ($("#sidenav_item_1").is(":animated")) return false; //if its already being animated don't queue another animateion
+						for (var i = 0; i<all_items.length; i++) {
+							$("#"+all_items[i].id).animate({color:all_colors[all_items[i].id]}, fade_speed);
+						}
+						/*Now make the text fade in */
+						for (var i = 0; i<all_text_items.length; i++) {
+							$("#"+all_text_items[i].id).animate({"opacity":1}, fade_speed);
+						}
+					});
+					$("#sidebar").mouseleave(function(){
+						for (var i = 0; i<all_items.length; i++) {
+							$("#"+all_items[i].id).animate({color:"#FFFFFF"}, fade_speed);
+						}
+						for (var i = 0; i<all_text_items.length; i++) {
+							$("#"+all_text_items[i].id).animate({"opacity":0}, fade_speed);
+						}
+					});
+					$("#sidenav_icon_5").click(function( ) {
+						$("#sidebar").toggleClass("active", 1000);
+						$("#showNormal").hide( );
+						$("#showSearch").show("medium");
+						document.getElementById("restOfPage").addEventListener("click", function(){
+							//add an event listener so even if it goes out of this loop then it will still register if the page is clicked
+							$("sidebar").toggleClass("active");
+							document.getElementById("sidebar").classList.remove("active");
+							$("#showSearch").hide( );
+							$("#showNormal").show("medium");
+						})
+					});
+				});
+				//add toolips
+				$("#inlineFormInputGroup").tooltip({"trigger":"focus", "title":"Press enter to search"});
+				//make HREFs
+
+			</script>
 		<script type="text/javascript" src="assets/js/loadingLines.js"></script>
 		<script type="text/javascript">
 			function getRandomLoadingLine( ) {
@@ -602,7 +560,6 @@
 			});
 		</script>
 		<script type="text/javascript">
-
 		</script>
 	</body>
 </html>
