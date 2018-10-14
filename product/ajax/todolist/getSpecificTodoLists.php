@@ -4,8 +4,8 @@ include "../../config/config.php";
 include "../../todolist/todolist.class.php";
 include "../../includes/site-include.inc.php";
 
-Site::init( $connection );
-$Todolist = new Todolist( Site::$userId, $connection );
+//Site::init( $connection );
+$Todolist = new Todolist( 1, $connection );
 
 $date      = !empty($_GET["date"])  ? round((time( ) - strtotime($_GET["date"]))/86400): 0;
 $color     = !empty($_GET["color"]) ? "#".$_GET["color"]: "";
@@ -15,6 +15,8 @@ $completed = $_GET["completed"]=="true" ? 1: 0; //havascript ajax sends as a str
 $date 	   = mysqli_escape_string($connection, $date);
 $col  	   = mysqli_escape_string($connection, $color); //I CBA to keep the # in the URL query
 $items     = $Todolist->get(false, "", $date, $limit=-1, $color=strtoupper($col), $completed); //get all the jobs
+echo json_encode($items);
+/*
 
 $html      = "";
 $counter1  = 0;
@@ -57,3 +59,4 @@ if ($items) {
 	}
 	echo $html;
 }
+*/

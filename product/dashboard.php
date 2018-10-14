@@ -294,9 +294,10 @@
 						<div id="showSearch" class="hidden">
 							<form class="form-inline">
 								<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-									<div class="input-group-addon"><i class="fas fa-search"></i>
+									<div class="input-group-addon">
+										<i class="fas fa-search"></i>
 									<input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search">
-								</div>
+								</div><!--.input-group mb-2 mr-sm-2 mb-sm-0-->
 							</form>
 							<p class="sidenav_text" id="sidenav_text_5" style="opacity: 0;">Search</p>
 						</div>
@@ -365,17 +366,12 @@
 									<div class="form-group">
 										<div class="input-group mb-3">
 											<select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineFormCustomSelect">
-												<option selected disabled>How many items per page?</option>
-												<option value="1">5</option>
-												<option value="2">10</option>
-												<option value="3">20</option>
+												<option value="5" selected disabled>How many items should we display?</option>
+												<option value="5">5</option>
+												<option value="10">10</option>
+												<option value="20">20</option>
 											</select>
-											<label class="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">
-												<input type="checkbox" class="custom-control-input">
-												<span class="custom-control-indicator"></span>
-												<span class="custom-control-description">Remember my preference</span>
-											</label>
-										</div>
+										</div><!--.input-group- mb-3-->
 										<div class="input-group mb-3">
 											<input type="text" class="form-control" id="date" aria-describedby="dateHelp" placeholder="To" disabled required />
 											<input type="text" class="form-control" id="date1" placeholder="From" disabled required />
@@ -432,42 +428,35 @@
 							});
 						</script>
 						<div id="cardContainer" class="cardContainer animateDiv">
-							<div class="card bg-light cardClass">
+							<div id="0" class="card bg-light cardClass">
 								<div class="card-body">
 									<h4 class="card-title">
 										Card Title Here
 									</h4>
 								</div><!--.card-body-->
 							</div><!--.card bg-light cardClass-->
-							<div class="card bg-light cardClass">
+							<div id="1" class="card bg-light cardClass">
 								<div class="card-body">
 									<h4 class="card-title">
 										Card Title Here
 									</h4>
 								</div><!--.card-body-->
 							</div><!--.card bg-light cardClass-->
-							<div class="card bg-light cardClass">
+							<div id="2" class="card bg-light cardClass">
 								<div class="card-body">
 									<h4 class="card-title">
 										Card Title Here
 									</h4>
 								</div><!--.card-body-->
 							</div><!--.card bg-light cardClass-->
-							<div class="card bg-light cardClass">
+							<div id="3" class="card bg-light cardClass">
 								<div class="card-body">
 									<h4 class="card-title">
 										Card Title Here
 									</h4>
 								</div><!--.card-body-->
 							</div><!--.card bg-light cardClass-->
-							<div class="card bg-light cardClass">
-								<div class="card-body">
-									<h4 class="card-title">
-										Card Title Here
-									</h4>
-								</div><!--.card-body-->
-							</div><!--.card bg-light cardClass-->
-							<div class="card bg-light cardClass">
+							<div id="4" class="card bg-light cardClass">
 								<div class="card-body">
 									<h4 class="card-title">
 										Card Title Here
@@ -487,6 +476,8 @@
 								</div>
 							</div>-->
 						</div><!--.cardContainer animateDiv-->
+						<button id="showBackCardsButton" class="hidden btn btn-primary" style="float: left ;">Back</button>
+						<button id="showNextCardsButton" class="hidden btn btn-primary" style="float: right;">Next</button>
 						<div id="loader" class="hidden">
 							<div class="spinner"></div><!--.spinner-->
 							<p class="loading_line" id="loadingLine"></p>
@@ -495,6 +486,61 @@
 				</div><!--.row-->
 			</div><!--.container-fluid-->
 		</div><!--.wrapper-->
+		<script type="text/javascript" src="assets/js/loadingLines.js"></script>
+		<script type="text/javascript">
+			function getRandomLoadingLine( ) {
+				loadingLines = getLoadingLines( );
+				randint = Math.floor(Math.random( )*loadingLines.length);
+				return loadingLines[randint];
+			}
+		</script>
+		<script type="text/javascript">
+			function make_html(start_id, number_of_items ) {
+				let html = "";					
+				for (var i = start_id; i<number_of_items ; i++) {
+					html += "<div id=\""+i+"\" class=\"card bg-light cardClass\">";
+					html += "<div class=\"card-body\">";
+					html += "<h4 Class=\"card-title\">"
+					html += "Card title Here";
+					html += "</h4>";
+					html += "</div>";
+					html += "</div>";
+				}
+				return html;
+			}
+
+			$(function() {
+				$("#filterbutton").click(function( ) {
+					let default_item_number = 5; //the default number of items to show
+					let number_of_items = $("#inlineFormCustomSelect").val( ); //get the number of items that the user wants to show
+					let final_id = $("#cardContainer").last( ).children( ).last( ).attr("id");
+					if (!number_of_items) number_of_items = default_item_number; //if the user hasen't chosen anything, then make the number the default
+					$("#cardContainer").html(""); //make sure we're working with a blank canvas
+					$("#loader").show( ); //show the loading animation
+					document.getElementById("loadingLine").innerHTML = getRandomLoadingLine( ); //this doesn't work with jquery for some reason?
+					//now make the new HTML
+					//ToDo: replace this with аджакс
+					/*
+					This works by getting the id of the final div in the caardContainer div, starting the loop on that number, and then going by that.
+					Thgis means that I will always know what number to go by
+					*/
+					let length_of_json = 4;
+					let html = 	make_html(0, number_of_items);
+					if (length_of_json>number_of_items) $("#showNextCardsButton").show( );
+					//now send that shit
+					$("#cardContainer").html(html);
+					$("loadingLine").html(""); //estar seguro que 2 lineas de cargando no aperecen
+					$("#loader").hide( ); //finalmente, escondo la cosa de cargar
+				});
+
+				$("#showNextCardsButton").click(function( ) {
+
+				});
+
+				$("#showBackCardsButton").click(function( ) {
+				});
+			});
+		</script>
 		<div class="overlay"></div>
 		<script type="text/javascript">
 				$(function(){
@@ -546,14 +592,6 @@
 				//add toolips
 				$("#inlineFormInputGroup").tooltip({"trigger":"focus", "title":"Press enter to search"}); //there is no text on the search so this will be used 
 			</script>
-		<script type="text/javascript" src="assets/js/loadingLines.js"></script>
-		<script type="text/javascript">
-			function getRandomLoadingLine( ) {
-				loadingLines = getLoadingLines( );
-				randint = Math.floor(Math.random( )*loadingLines.length);
-				return loadingLines[randint];
-			}
-		</script>
 		<script type="text/javascript">
 			$("#icon_1_list").tooltip({"trigger":"hover", "title":"Grid layout"});
 			$("#icon_1_list").click(function( ) {
