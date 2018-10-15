@@ -276,6 +276,27 @@
 			}
 
 			.sidenav_text {}
+
+			.tinted {
+			    position: fixed;
+			    top: 0;
+			    left: 0;
+			    width: 100vw;
+			    height: 100vh;
+			    background-color: black;
+			    opacity: 0.7;
+			    z-index: 1000;
+			    display: inline-block;
+			}
+
+			.mainDiv {
+				background-color: blue;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50% );
+				display: inline;
+			}
 		</style>
 		<title>Dashboard</title>
 	</head>
@@ -324,6 +345,17 @@
 			<div id="">
 			</div><!--.overlay-->
 			<div id="restOfPage" class="container-fluid">
+				<div class="text hidden" id="mainDivContainer">
+					<div class="card">
+						<div id="4" class="card bg-light cardClass">
+							<div class="card-body">
+								<h4 class="card-title">
+									Card Title Here
+								</h4>
+							</div><!--.card-body-->
+						</div><!--.card bg-light cardClass-->
+					</div><!--.card-->
+				</div><!--#mainDivContainer-->
 				<div class="row" style="height: 100%;">
 					<div class="col-md-6">
 						<div class="row" style="height: 50%;">
@@ -486,6 +518,23 @@
 				</div><!--.row-->
 			</div><!--.container-fluid-->
 		</div><!--.wrapper-->
+		<div id="tintPage"></div>
+		<script type="text/javascript">
+			function focus_on_card( title, content ) {
+				$("#mainDivContainer").toggleClass("hidden");
+				$("#tintPage").toggleClass("tinted");
+			}
+
+			$(function( ) {
+				let cardContainer = document.getElementById("cardContainer");
+				cardContainer.addEventListener("click", function( e ) {
+					if (e.target && e.target.nodeName=="DIV" || e.target.nodeName=="H4") { 
+						focus_on_card("title","content");
+					}
+				});
+			});
+			$("#cardContainer").tooltip({"trigger":"hover", "title":"Click on a todolist to get more information"})
+		</script>
 		<script type="text/javascript" src="assets/js/loadingLines.js"></script>
 		<script type="text/javascript">
 			function getRandomLoadingLine( ) {
@@ -524,6 +573,10 @@
 					This works by getting the id of the final div in the caardContainer div, starting the loop on that number, and then going by that.
 					Thgis means that I will always know what number to go by
 					*/
+					$.get({
+						url: "ajax/todolist/getSpecificTodolists.php",
+
+					})
 					let length_of_json = 4;
 					let html = 	make_html(0, number_of_items);
 					if (length_of_json>number_of_items) $("#showNextCardsButton").show( );
