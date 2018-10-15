@@ -53,6 +53,10 @@
 
 			.icon_pen:hover { color: lightblue; }
 
+			.icon_trash:hover { color: red; }
+
+			.icon_complete:hover { color: green; }
+
 			.spinner {
 				width: 40px;
 				height: 40px;
@@ -290,18 +294,42 @@
 			}
 
 			.mainDiv {
-				background-color: blue;
+				width: 40%;
+				top: 40%;
+				left: 30%;
+				z-index: 20000; /*aLl ThE wAy To AbSuRdItY*/
 				position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50% );
-				display: inline;
+			}
+
+			.userAlert {
+				z-index: 10000;
+				top: 90%;
+				width: 100%;
+				position: absolute;
+			}
+
+			.childUserAlert {
+				margin: 0 auto;
+				width: 50%;
+				text-align: center;
 			}
 		</style>
 		<title>Dashboard</title>
 	</head>
 	<body>
+		<div class="hidden" id="mainDivContainer"><!--.hidden-->
+		</div><!--used to focus in on the card-->
+		<div class="hidden userAlert" style="opacity: 1;" id="userAlert">
+		</div><!--.userAlter-->
 		<div class="wrapper">
+			<noscript>
+				<h1 style="color: red;">
+					his page isn't ready to be used without javascript yet, if you look through what we have now you'll see that there's nothing malicious
+					there. If you would kindly turn off your noscript, then you can view the full extent of this page's beauty. However, if you want to be 
+					a sTiNgY person, then leave it on and you won't be able to experience the full beauty of what this webpage has to offer. If you have any
+					concenrs, then feel free to email us at ashraf@live.com, where we will try to deal with your complaint as best we can.
+				</h1>
+			</noscript>
 			<nav id="sidebar" class="sidenav_hover_class">
 				<div class="sidebar-header">
 					<strong>Search</strong>
@@ -344,18 +372,9 @@
 			</nav><!--.sidenav_hover_class-->
 			<div id="">
 			</div><!--.overlay-->
+
 			<div id="restOfPage" class="container-fluid">
-				<div class="text hidden" id="mainDivContainer">
-					<div class="card">
-						<div id="4" class="card bg-light cardClass">
-							<div class="card-body">
-								<h4 class="card-title">
-									Card Title Here
-								</h4>
-							</div><!--.card-body-->
-						</div><!--.card bg-light cardClass-->
-					</div><!--.card-->
-				</div><!--#mainDivContainer-->
+
 				<div class="row" style="height: 100%;">
 					<div class="col-md-6">
 						<div class="row" style="height: 50%;">
@@ -385,12 +404,15 @@
 								<div class="form-group">
 									<div class="input-group mb-3">
 										<div style="width: 100%;" class="row">
-											<div class="col-10">
+											<div class="col-8">
 												<button id="filterbutton" class="form-control btn btn-primary">Filter</button>
 											</div><!--.col-10-->
 											<div class="col-2">
 												<button class="btn btn-primary form-control" style="width:100%;" id="advancedOptionsButton"><i class="fas fa-arrow-alt-circle-down rotate" id="adArrow"></i></button>
 											</div><!--.col-2-->
+											<div class="col-2">
+												<button class="bnt btn-primary form-control" style="width:100%;" id="addNewTodoList"><i class="fas fa-plus"></i></button> 
+											</div>
 										</div><!--.row-->
 									</div><!--.input-group mb-3-->
 								</div><!--.form-group-->
@@ -518,22 +540,133 @@
 				</div><!--.row-->
 			</div><!--.container-fluid-->
 		</div><!--.wrapper-->
-		<div id="tintPage"></div>
+		<div id="tintPage"></div><!--.tInTpAgE-->
 		<script type="text/javascript">
 			function focus_on_card( title, content ) {
+				//make the html
+				let html = "";
+
+				html += "<div class=\"mainDiv card\" id=\"insideCard\">";
+				html += "<div class=\"card-body\">";
+				html += "<h4 class=\"card-title\">";
+				html += title;
+				html += "<span style=\"float: right;\">";
+				html += "<i id=\"icon_1_hamburger\" class=\"fas fa-paperclip icon icon_paperclip\"></i>&nbsp;";
+				html += "<i id=\"icon_1_list\" class=\"fas fa-pen icon icon_pen\"></i>&nbsp;";
+				html += "<i id=\"icon_1_trash\" class=\"fas fa-trash-alt icon icon_trash\"></i>&nbsp;";
+				html += "<i id=\"icon_1_complete\" class=\"fas fa-check icon icon_complete\"></i>&nbsp;";
+				html += "</span></h4>";
+				html += content;
+				html += "</div></div>";
+
 				$("#mainDivContainer").toggleClass("hidden");
+				$("#mainDivContainer").html(html);
 				$("#tintPage").toggleClass("tinted");
 			}
 
+			function make_input_html( ) {
+				//this is pretty much completed, but is still missing color and image functionality, which I will add soon
+				let html = "";
+				html += "<div class=\"mainDiv card\" id=\"insideCard\">";
+				html += "<div class=\"card-body\">";
+				html += "<h4 class=\"card-title\">";
+				html += `<div class="input-group mb-3">
+							<input type="text" class="form-control" id="title" placeholder="Title">
+							<input type="text" class="form-control" id="date50" aria-describedby="dateHelp" placeholder="Completed by" disabled required />
+							<input type="hidden" value="" id="hiddenDate5" />
+							<div class="input-group-append icon" id="dateTooltip5">
+								<span class="input-group-text icon" id="basic-addon22"><i id="calender_1" class="far fa-calendar-alt icon"></i></span>
+							</div><!--.input-group-append icon-->
+						</div><!--.input-group mb-3-->`;
+				html += "</h4>";
+				html += "<div class=\"form-group\"><label for=\"exampleFormControlTextarea3\">Rounded corners</label>";
+    			html += "<textarea class=\"form-control\" id=\"textArea3\" rows=\"7\"></textarea></div>";
+				html += "<br /><div style=\"margin-top: 5px;\">";
+				html += "<button id=\"cancelButton\" class=\"btn btn-danger\" style=\"float: left;\"><i class=\"fas fa-times\"></i></button>";
+				html += "<button id=\"submitButton\" class=\"btn btn-success\" style=\"float: right;\"><i class=\"fas fa-check\"></i></button>";
+				html += "</div></div>";
+
+				return html;
+			}
+
+			function tint_page( html ) {
+				$("#mainDivContainer").toggleClass("hidden");
+				$("#mainDivContainer").html(html);
+				$("#tintPage").toggleClass("tinted");
+			}
+
+			function back_to_normal( ) {
+				$("#tintPage").removeClass("tinted");
+				$("#mainDivContainer").addClass("hidden");
+			}
+
+			function alert_user(alert_class, message) {
+				let html = "<div class=\"alert alert-"+alert_class+" childUserAlert\">"+message+"</div>";
+				$("#userAlert").html(html);
+				$("#userAlert").removeClass("hidden");
+				$("#userAlert").animate({"opacity":0}, 5000, function( ) {
+					//make sure that in the callback function everything is returned to how it was before 
+					$("#userAlert").addClass("hidden");
+					$("#userAlert").html("");
+					$("#userAlert").css({"opacity":"1"}); //finally, remove the animation that we previously gave
+				});
+			}
+
 			$(function( ) {
-				let cardContainer = document.getElementById("cardContainer");
+				let cardContainer = document.getElementById("cardContainer"); 
 				cardContainer.addEventListener("click", function( e ) {
 					if (e.target && e.target.nodeName=="DIV" || e.target.nodeName=="H4") { 
 						focus_on_card("title","content");
+						$("#tintPage").click(function(){
+							back_to_normal( );
+						});
 					}
 				});
 			});
-			$("#cardContainer").tooltip({"trigger":"hover", "title":"Click on a todolist to get more information"})
+			let all_cards = document.querySelectorAll(".cardClass");
+			for (var i =0; i < all_cards.length; i++) {
+				$("#"+all_cards[i].id).tooltip({"trigger":"hover", "title":"Click Me!"})
+			}
+			$("#addNewTodoList").click(function( ) {
+				tint_page(make_input_html( ));
+				$("#basic-addon22").daterangepicker({
+					singleDatePicker: true,
+					showDropdowns: true,
+					minYear: 2017,
+					maxYear: 2100,	//this should  be changed in 2099 to avoid confusing xD
+					drops: "up"
+				}, function(start, end, label) {
+					$("#hiddenDate5").val(start.format("YYYY-MM-DD"))
+					$("#date50").val(start.format("YYYY-MM-DD"));
+				});
+			
+				$("#tintPage").click(function(){
+					back_to_normal( );
+				});
+				$("#cancelButton").click(function( ) {
+					back_to_normal( ); //in case the user wants to be extra and actually click on the button
+				});
+				$("#submitButton").click(function( ) {
+					back_to_normal( );
+					$.ajax({
+						url: "ajax/todolist/addTodoList.php",
+						type: "POST",
+						data: {
+							due_by: $("#hiddenDate5").val( ),
+							title:  $("#title").val( ),
+							content: $("#textArea3").val( )
+						},
+						success: function( html ) {
+							alert_user("success", "Todolist has been added");
+							
+						}, 
+						error: function( html ) {
+							alert_user("danger", "There was an error, please try again later");
+						}
+					});
+
+				});
+			});
 		</script>
 		<script type="text/javascript" src="assets/js/loadingLines.js"></script>
 		<script type="text/javascript">
