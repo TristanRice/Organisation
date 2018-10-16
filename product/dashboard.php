@@ -295,7 +295,7 @@
 
 			.mainDiv {
 				width: 40%;
-				top: 40%;
+				top: 20%;
 				left: 30%;
 				z-index: 20000; /*aLl ThE wAy To AbSuRdItY*/
 				position: absolute;
@@ -313,6 +313,8 @@
 				width: 50%;
 				text-align: center;
 			}
+
+			#insideCard:hover { cursor: pointer; }
 		</style>
 		<title>Dashboard</title>
 	</head>
@@ -411,7 +413,7 @@
 												<button class="btn btn-primary form-control" style="width:100%;" id="advancedOptionsButton"><i class="fas fa-arrow-alt-circle-down rotate" id="adArrow"></i></button>
 											</div><!--.col-2-->
 											<div class="col-2">
-												<button class="bnt btn-primary form-control" style="width:100%;" id="addNewTodoList"><i class="fas fa-plus"></i></button> 
+												<button class="btn btn-primary form-control" style="width:100%;" id="addNewTodoList"><i class="fas fa-plus"></i></button> 
 											</div>
 										</div><!--.row-->
 									</div><!--.input-group mb-3-->
@@ -542,6 +544,10 @@
 		</div><!--.wrapper-->
 		<div id="tintPage"></div><!--.tInTpAgE-->
 		<script type="text/javascript">
+			drag_options = {
+				scroll: false,
+				cursor: "pointer"
+			}
 			function focus_on_card( title, content ) {
 				//make the html
 				let html = "";
@@ -551,8 +557,8 @@
 				html += "<h4 class=\"card-title\">";
 				html += title;
 				html += "<span style=\"float: right;\">";
-				html += "<i id=\"icon_1_hamburger\" class=\"fas fa-paperclip icon icon_paperclip\"></i>&nbsp;";
-				html += "<i id=\"icon_1_list\" class=\"fas fa-pen icon icon_pen\"></i>&nbsp;";
+				html += "<i id=\"icon_1_attatch\" class=\"fas fa-paperclip icon icon_paperclip\"></i>&nbsp;";
+				html += "<i id=\"icon_1_edit\" class=\"fas fa-pen icon icon_pen\"></i>&nbsp;";
 				html += "<i id=\"icon_1_trash\" class=\"fas fa-trash-alt icon icon_trash\"></i>&nbsp;";
 				html += "<i id=\"icon_1_complete\" class=\"fas fa-check icon icon_complete\"></i>&nbsp;";
 				html += "</span></h4>";
@@ -579,14 +585,40 @@
 							</div><!--.input-group-append icon-->
 						</div><!--.input-group mb-3-->`;
 				html += "</h4>";
-				html += "<div class=\"form-group\"><label for=\"exampleFormControlTextarea3\">Rounded corners</label>";
-    			html += "<textarea class=\"form-control\" id=\"textArea3\" rows=\"7\"></textarea></div>";
+				html += "<div class=\"form-group\">";
+    			html += "<textarea placeholder=\"content\" class=\"form-control\" id=\"textArea3\" rows=\"7\"></textarea></div>";
 				html += "<br /><div style=\"margin-top: 5px;\">";
 				html += "<button id=\"cancelButton\" class=\"btn btn-danger\" style=\"float: left;\"><i class=\"fas fa-times\"></i></button>";
-				html += "<button id=\"submitButton\" class=\"btn btn-success\" style=\"float: right;\"><i class=\"fas fa-check\"></i></button>";
+				html += "<button id=\"submitTodoList\" class=\"btn btn-success\" style=\"float: right;\"><i class=\"fas fa-check\"></i></button>";
 				html += "</div></div>";
 
 				return html;
+			}
+
+			function make_edit_html( title, content ) {
+				//ToDo: merge this and the above function
+				let html = "";
+
+				html += "<div class=\"card-body\">";
+				html += "<h4 class=\"card-title\">";
+				html += `<div class="input-group mb-3">
+							<input type="text" class="form-control" id="title" placeholder="${title}">
+						</div><!--.input-group mb-3-->`;
+				html += "</h4>";
+				html += "<div class=\"form-group\">";
+    			html += `<textarea placeholder=\"${content}\" class=\"form-control\" id=\"textArea3\" rows=\"7\"></textarea></div>`;
+				html += "<br /><div style=\"margin-top: 5px;\">";
+				html += "<button id=\"cancelButton_edit\" class=\"btn btn-danger\" style=\"float: left;\"><i class=\"fas fa-times\"></i></button>";
+				html += "<button id=\"submitTodoList_edit\" class=\"btn btn-success\" style=\"float: right;\"><i class=\"fas fa-check\"></i></button>";
+				html += "</div>";
+
+				return html;
+			}
+
+			function make_card_edit(title, content ) {
+				$("#insideCard").html("");
+
+				return;
 			}
 
 			function tint_page( html ) {
@@ -612,6 +644,56 @@
 				});
 			}
 
+			function submit_todolist( ) {
+				let title = $("#title").val( );
+				let date  = $("#date50").val( );
+				let content = $("#textArea3").val( );
+				if (title === "" || date === "" || content === "") {
+					alert_user("danger", "Beep Boop evertyhing must be filled in, try again!");
+					if (title==="") { $("#title").addClass("is-invalid"); } else { $("#title").addClass("is-valid"); }
+					if (date==="") { $("#date50").addClass("is-invalid"); } else { $("#date50").addClass("is-valid"); }
+					if (content==="") { $("#textArea3").addClass("is-invalid"); } else { $("#textArea3").addClass("is-valid"); }
+					return;
+				} 
+				back_to_normal( );
+				$.ajax({
+					url: "ajax/todolist/addTodoList.php",
+					type: "POST",
+					data: {
+						due_by: date,
+						title:  title,
+						content: content
+					},
+					success: function( html ) {
+						alert_user("success", "Todolist has been added");						
+					}, 
+					error: function( html ) {
+						alert_user("danger", "There was an error, please try again later");
+					}
+				});
+			}
+
+			function deal_with_keypress( e, submit=false ) {
+				switch(e.keyCode) {
+					case 27: //esc
+						back_to_normal( );
+						break;
+
+					case 13: //enter
+						if (submit && !$("#textArea3").is(":focus") /* make sure that the user isn't just making a newline */) {
+							submit_todolist( );
+						}
+						break;
+
+					default:
+						return;			
+				}
+			}
+			
+			function dragAroundDiv( id, options = {} ) {
+				$("#"+id).draggable(options)
+			}
+
 			$(function( ) {
 				let cardContainer = document.getElementById("cardContainer"); 
 				cardContainer.addEventListener("click", function( e ) {
@@ -620,6 +702,13 @@
 						$("#tintPage").click(function(){
 							back_to_normal( );
 						});
+						$("#icon_1_edit").click(function( ) {
+							make_card_edit( );
+						});
+						$(document).bind("keypress", function( e ) {
+							deal_with_keypress( e );
+						});
+						dragAroundDiv("insideCard", options=drag_options);
 					}
 				});
 			});
@@ -639,32 +728,19 @@
 					$("#hiddenDate5").val(start.format("YYYY-MM-DD"))
 					$("#date50").val(start.format("YYYY-MM-DD"));
 				});
-			
+				dragAroundDiv("insideCard", options=drag_options);
 				$("#tintPage").click(function(){
 					back_to_normal( );
 				});
+				$(document).bind("keypress", function( e ) {
+					deal_with_keypress( e, submit=true );
+				})
 				$("#cancelButton").click(function( ) {
 					back_to_normal( ); //in case the user wants to be extra and actually click on the button
 				});
-				$("#submitButton").click(function( ) {
-					back_to_normal( );
-					$.ajax({
-						url: "ajax/todolist/addTodoList.php",
-						type: "POST",
-						data: {
-							due_by: $("#hiddenDate5").val( ),
-							title:  $("#title").val( ),
-							content: $("#textArea3").val( )
-						},
-						success: function( html ) {
-							alert_user("success", "Todolist has been added");
-							
-						}, 
-						error: function( html ) {
-							alert_user("danger", "There was an error, please try again later");
-						}
-					});
-
+				$("#submitTodoList").click(function( ) {
+					console.log("clicked");
+					submit_todolist( );
 				});
 			});
 		</script>
@@ -777,7 +853,7 @@
 				});
 				//add toolips
 				$("#inlineFormInputGroup").tooltip({"trigger":"focus", "title":"Press enter to search"}); //there is no text on the search so this will be used 
-			</script>
+		</script>
 		<script type="text/javascript">
 			$("#icon_1_list").tooltip({"trigger":"hover", "title":"Grid layout"});
 			$("#icon_1_list").click(function( ) {
