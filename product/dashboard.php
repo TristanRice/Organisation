@@ -544,10 +544,18 @@
 		</div><!--.wrapper-->
 		<div id="tintPage"></div><!--.tInTpAgE-->
 		<script type="text/javascript">
-			drag_options = {
-				scroll: false,
-				cursor: "pointer"
-			}
+			//Todolist for4 16/10/2018
+			/*
+			* merge html functions (or find a better way to do it than what I'm doing rn)
+			* connect the API to the javascript. 
+			*/
+			//global vars
+			drag_options = {	  	 
+				scroll: false,	 	 
+				cursor: "pointer",	 
+				containment: "window"		    
+			}						 			
+
 			function focus_on_card( title, content ) {
 				//make the html
 				let html = "";
@@ -557,7 +565,7 @@
 				html += "<h4 class=\"card-title\">";
 				html += title;
 				html += "<span style=\"float: right;\">";
-				html += "<i id=\"icon_1_attatch\" class=\"fas fa-paperclip icon icon_paperclip\"></i>&nbsp;";
+				html += "<i id=\"icon_1_attatch\" class=\"fas fa-paperclip icon icon_paperclip\" onclick=\"window.location.href='#image'\"></i>&nbsp;";
 				html += "<i id=\"icon_1_edit\" class=\"fas fa-pen icon icon_pen\"></i>&nbsp;";
 				html += "<i id=\"icon_1_trash\" class=\"fas fa-trash-alt icon icon_trash\"></i>&nbsp;";
 				html += "<i id=\"icon_1_complete\" class=\"fas fa-check icon icon_complete\"></i>&nbsp;";
@@ -565,9 +573,29 @@
 				html += content;
 				html += "</div></div>";
 
+		
+				//ToDo: move this to another function
 				$("#mainDivContainer").toggleClass("hidden");
 				$("#mainDivContainer").html(html);
 				$("#tintPage").toggleClass("tinted");
+			} 
+
+			function go_back_to_card( title, content ) {
+				let html = "";
+
+				html += "<div class=\"card-body\">";
+				html += "<h4 class=\"card-title\">";
+				html += title;
+				html += "<span style=\"float: right;\">";
+				html += "<i id=\"icon_1_attatch\" class=\"fas fa-paperclip icon icon_paperclip\" onclick=\"window.location.href='#image'\"></i>&nbsp;";
+				html += "<i id=\"icon_1_edit\" class=\"fas fa-pen icon icon_pen\"></i>&nbsp;";
+				html += "<i id=\"icon_1_trash\" class=\"fas fa-trash-alt icon icon_trash\"></i>&nbsp;";
+				html += "<i id=\"icon_1_complete\" class=\"fas fa-check icon icon_complete\"></i>&nbsp;";
+				html += "</span></h4>";
+				html += content;
+				html += "</div>";
+
+				return html;
 			}
 
 			function make_input_html( ) {
@@ -602,13 +630,13 @@
 				html += "<div class=\"card-body\">";
 				html += "<h4 class=\"card-title\">";
 				html += `<div class="input-group mb-3">
-							<input type="text" class="form-control" id="title" placeholder="${title}">
+							<input type="text" class="form-control" id="title" value="${title}">
 						</div><!--.input-group mb-3-->`;
 				html += "</h4>";
 				html += "<div class=\"form-group\">";
-    			html += `<textarea placeholder=\"${content}\" class=\"form-control\" id=\"textArea3\" rows=\"7\"></textarea></div>`;
+    			html += `<textarea class=\"form-control\" id=\"textArea3\" rows=\"7\">${content}</textarea></div>`;
 				html += "<br /><div style=\"margin-top: 5px;\">";
-				html += "<button id=\"cancelButton_edit\" class=\"btn btn-danger\" style=\"float: left;\"><i class=\"fas fa-times\"></i></button>";
+				html += "<button id=\"cancelButton_edit\" class=\"btn btn-danger\" style=\"float: left;\"><i class=\"fas fa-arrow-left\"></i></button>";
 				html += "<button id=\"submitTodoList_edit\" class=\"btn btn-success\" style=\"float: right;\"><i class=\"fas fa-check\"></i></button>";
 				html += "</div>";
 
@@ -617,6 +645,10 @@
 
 			function make_card_edit(title, content ) {
 				$("#insideCard").html("");
+				$("#insideCard").html(make_edit_html("aaa", "bbb"));
+				$("#cancelButton_edit").click(function( ) {
+					$("#insideCard").html(go_back_to_card("aaa", "bbb"));
+				});
 
 				return;
 			}
@@ -644,6 +676,59 @@
 				});
 			}
 
+			function make_api_call( type, data={}, callback=function(){} ) {
+				let ajax_config = {
+					url: "ajax/todolist/",
+					data: data,
+					method: "GET" //almost all API calls will be GET, so that'll be the default 
+				};
+				let data_config = {
+					message_success: "",
+					message_danger: ""
+				};
+				switch (type) {
+					case "delete":
+						ajax_config.url+="deleteTodoList.php";
+						data_config.message_success+="Todolist deleted";
+						dat_config.messaGE_danger+="Failed to delete todolist"
+						break;
+					case "complete":
+						ajax_config.url+="completeTodolist.php";
+						data_config.message_success+="Completed successfully";
+						data_config.message_danger+="Failed to complete todolist";
+						break;
+					case "submit":
+						ajax_config.url+="addTodoList.php";
+						ajax_config.method = "POST";
+						data_config.message_success+="Todolist has been added!";
+						data_config.message_danger+="There was an error, please try again later";
+						break;
+					default: 
+						return; //if there is a typo or something
+				}
+				$.ajax({
+					url: ajax_config.url,
+					type: ajax_config.method,
+					data: ajax_config.data,
+					success: function( html ) {
+						console.log(html);
+						switch (html) {
+							case "":
+								alert_user("success", data_config.message_success);
+								back_to_normal( );
+								break
+							default:
+								alert_user("danger", data_connfig.message_danger);
+								break;
+						}
+					},
+					error: function( ) {
+						alert_user("danger", data_config.message_danger)
+					}
+				});
+				callback( ); //this could be used to like dynamically add a new todolist item
+			}
+
 			function submit_todolist( ) {
 				let title = $("#title").val( );
 				let date  = $("#date50").val( );
@@ -656,22 +741,34 @@
 					return;
 				} 
 				back_to_normal( );
+				make_api_call("submit", data={due_by: date, title: title, content: content}, function( ){});
+			}
+
+			/*
+			function delete_todo_list( card_id ) {
 				$.ajax({
-					url: "ajax/todolist/addTodoList.php",
-					type: "POST",
+					url: "ajax/todolist/deleteTodoList.php",
+					type: "GET",
 					data: {
-						due_by: date,
-						title:  title,
-						content: content
+						id: card_id
 					},
 					success: function( html ) {
-						alert_user("success", "Todolist has been added");						
-					}, 
-					error: function( html ) {
-						alert_user("danger", "There was an error, please try again later");
+						switch(html) {
+							case "":
+								alert_user("success", "Todolist deleted");
+								back_to_normal( );
+								break;
+							default:
+								alert_user("danger", "Failed to delete todolist");
+								break;
+						}
+					},
+					error:  function( ) {
+						alert_user("danger", "Failed to delete todolist");
 					}
 				});
 			}
+			*/
 
 			function deal_with_keypress( e, submit=false ) {
 				switch(e.keyCode) {
@@ -690,8 +787,8 @@
 				}
 			}
 			
-			function dragAroundDiv( id, options = {} ) {
-				$("#"+id).draggable(options)
+			function dragAroundDiv( id, options_drag = {}, options_resize = {} ) {
+				$("#"+id).draggable(options_drag)
 			}
 
 			$(function( ) {
@@ -705,10 +802,16 @@
 						$("#icon_1_edit").click(function( ) {
 							make_card_edit( );
 						});
+						$("#icon_1_trash").click(function( ) {
+							make_api_call("delete", data={id:5}, function(){} /*dynamically delete todolist*/);
+						});
+						$("#icon_1_complete").click(function( ) {
+							make_api_call("complete", data={id:5}, function(){} /*dynamically remove todolist item */);
+						})
 						$(document).bind("keypress", function( e ) {
 							deal_with_keypress( e );
 						});
-						dragAroundDiv("insideCard", options=drag_options);
+						dragAroundDiv("insideCard", options_drag=drag_options);
 					}
 				});
 			});
@@ -728,7 +831,7 @@
 					$("#hiddenDate5").val(start.format("YYYY-MM-DD"))
 					$("#date50").val(start.format("YYYY-MM-DD"));
 				});
-				dragAroundDiv("insideCard", options=drag_options);
+				dragAroundDiv("insideCard", options_drag=drag_options);
 				$("#tintPage").click(function(){
 					back_to_normal( );
 				});
