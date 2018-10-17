@@ -547,7 +547,7 @@
 			//Todolist for4 16/10/2018
 			/*
 			* merge html functions (or find a better way to do it than what I'm doing rn)
-			* connect the API to the javascript. 
+			* connect the API to the javascript.
 			*/
 			//global vars
 			drag_options = {	  	 
@@ -648,9 +648,11 @@
 				$("#insideCard").html(make_edit_html("aaa", "bbb"));
 				$("#cancelButton_edit").click(function( ) {
 					$("#insideCard").html(go_back_to_card("aaa", "bbb"));
+					return add_event_listeners( );
 				});
-
-				return;
+				$("#submitTodoList_edit").click(function( ) {
+					make_api_call( );
+				});
 			}
 
 			function tint_page( html ) {
@@ -666,13 +668,35 @@
 
 			function alert_user(alert_class, message) {
 				let html = "<div class=\"alert alert-"+alert_class+" childUserAlert\">"+message+"</div>";
+				if ($("#userAlert").is(":animated")) return; //don't let the name randomly change.
+				/*
+				Code to be used if I decide that creatign a new thing while it is animated is a good idea
+				if ($("#userAlert").is(":animated")) {
+					$("#userAlert").css({"opacity":"1"});
+				}
+				Code to be used if I decide to queue animations
+				let animation_queue = [ ];
+				if ($("#userAlert").is(":animated")) {
+					animation_queue.push({
+						alert_class: alert_class,
+						message: message
+					});
+				}
+				//we're gonna have to replace the whole code below for this to work
+				if (animation_queue.length) { //make sure that there is something in the animation queue to animate
+					for (var i = 0; i<animation_queue.length; i++) {
+						let html = "<div class=\"alert alert-"+animation_queue[i].alert_class+" childUserAlert\">"+animation_queue[i].message+"</div>";
+						
+					}
+				}
+				*/
 				$("#userAlert").html(html);
 				$("#userAlert").removeClass("hidden");
 				$("#userAlert").animate({"opacity":0}, 5000, function( ) {
 					//make sure that in the callback function everything is returned to how it was before 
-					$("#userAlert").addClass("hidden");
-					$("#userAlert").html("");
-					$("#userAlert").css({"opacity":"1"}); //finally, remove the animation that we previously gave
+					$("#userAlert").addClass("hidden");	//hide so we can put it back to opacity 1 without the user seeing it
+					$("#userAlert").html(""); //make sure that nothing fucky happens with this
+					$("#userAlert").css({"opacity":"1"}); //finally, remove the animation that we previously gave, so that it can be animated again, (we can't animate to opacity 0 something that already was animated to opacity 0)
 				});
 			}
 
@@ -690,7 +714,7 @@
 					case "delete":
 						ajax_config.url+="deleteTodoList.php";
 						data_config.message_success+="Todolist deleted";
-						dat_config.messaGE_danger+="Failed to delete todolist"
+						data_config.message_danger+="Failed to delete todolist"
 						break;
 					case "complete":
 						ajax_config.url+="completeTodolist.php";
@@ -718,7 +742,7 @@
 								back_to_normal( );
 								break
 							default:
-								alert_user("danger", data_connfig.message_danger);
+								alert_user("danger", data_config.message_danger);
 								break;
 						}
 					},
@@ -744,32 +768,6 @@
 				make_api_call("submit", data={due_by: date, title: title, content: content}, function( ){});
 			}
 
-			/*
-			function delete_todo_list( card_id ) {
-				$.ajax({
-					url: "ajax/todolist/deleteTodoList.php",
-					type: "GET",
-					data: {
-						id: card_id
-					},
-					success: function( html ) {
-						switch(html) {
-							case "":
-								alert_user("success", "Todolist deleted");
-								back_to_normal( );
-								break;
-							default:
-								alert_user("danger", "Failed to delete todolist");
-								break;
-						}
-					},
-					error:  function( ) {
-						alert_user("danger", "Failed to delete todolist");
-					}
-				});
-			}
-			*/
-
 			function deal_with_keypress( e, submit=false ) {
 				switch(e.keyCode) {
 					case 27: //esc
@@ -787,34 +785,44 @@
 				}
 			}
 			
-			function dragAroundDiv( id, options_drag = {}, options_resize = {} ) {
+			function dragAroundDiv( id, options_drag = {} ) {
 				$("#"+id).draggable(options_drag)
 			}
 
-			$(function( ) {
-				let cardContainer = document.getElementById("cardContainer"); 
+			function add_event_listeners( ) {
+				/*
+				* this cannot be in the main event listener because I need to return to this
+				* functionality after the user goes back from editing the card 
+				*/
+				$("#tintPage").click(function(){
+					back_to_normal( );
+				});
+				$("#icon_1_edit").click(function( ) {
+					make_card_edit( );
+				});
+				$("#icon_1_trash").click(function( ) {
+					make_api_call("delete", data={id:5}, function(){} /*dynamically delete todolist*/);
+				});
+				$("#icon_1_complete").click(function( ) {
+					make_api_call("complete", data={id:5}, function(){} /*dynamically remove todolist item */);
+				});
+				$(document).bind("keypress", function( e ) {
+					deal_with_keypress( e );
+				});
+				dragAroundDiv("insideCard", options_drag=drag_options);
+			}
+
+			$(function() {
+				console.log("aaa");
+				let cardContainer = document.getElementById("cardContainer");
 				cardContainer.addEventListener("click", function( e ) {
-					if (e.target && e.target.nodeName=="DIV" || e.target.nodeName=="H4") { 
+					if (e.target && e.target.nodeName=="DIV" || e.target.nodeName=="H4") {
 						focus_on_card("title","content");
-						$("#tintPage").click(function(){
-							back_to_normal( );
-						});
-						$("#icon_1_edit").click(function( ) {
-							make_card_edit( );
-						});
-						$("#icon_1_trash").click(function( ) {
-							make_api_call("delete", data={id:5}, function(){} /*dynamically delete todolist*/);
-						});
-						$("#icon_1_complete").click(function( ) {
-							make_api_call("complete", data={id:5}, function(){} /*dynamically remove todolist item */);
-						})
-						$(document).bind("keypress", function( e ) {
-							deal_with_keypress( e );
-						});
-						dragAroundDiv("insideCard", options_drag=drag_options);
+						add_event_listeners( );
 					}
 				});
 			});
+			//add tooltips 
 			let all_cards = document.querySelectorAll(".cardClass");
 			for (var i =0; i < all_cards.length; i++) {
 				$("#"+all_cards[i].id).tooltip({"trigger":"hover", "title":"Click Me!"})
