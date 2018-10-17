@@ -63,7 +63,7 @@ class Todolist implements ToDoListInterFace {
 
 		$result = mysqli_query($this->con, $baseQuery);
 		
-		echo $baseQuery;
+		//echo $baseQuery;
 		if (!$result)
 		{   $this->aError = "There was an error communicating with the database, please try again later";
 			return false;

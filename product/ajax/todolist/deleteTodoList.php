@@ -2,18 +2,19 @@
 session_start( );
 include "../../includes/site-include.inc.php";
 include "../../config/config.php";
+
 if (!array_key_exists("username", $_SESSION)) //make sure that the user is logged in before doing anything else
 {   echo "user not logged in";
 	die( );
-} else if (!array_key_exists("id", $_GET))
+} else if (!array_key_exists("id", $_POST))
 {   echo "ID not provided";
 	die( );
-} else if (!is_numeric($_GET["id"]))
+} else if (!is_numeric($_POST["id"]))
 {   echo "Invalid id provided";
 	die( );
 }
 $userId = Site::getIdFromUsername( $connection, $_SESSION["username"] );
-$listId = mysqli_escape_string( $connection, $_GET["id"]);
+$listId = mysqli_escape_string( $connection, $_POST["id"]);
 $userId = mysqli_escape_string( $connection, $userId );
 $query  = "UPDATE todo_list SET deleted=1 WHERE user_id=$userId AND id=$listId;";
 $result = mysqli_query($connection, $query);

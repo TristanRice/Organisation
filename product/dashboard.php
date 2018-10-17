@@ -1,3 +1,8 @@
+<?php
+include "config/config.php";
+include "includes/site-include.inc.php";
+Site::init( $connection );
+?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -117,6 +122,7 @@
 				margin-top: 5px;
 				flex: 1 0 40%;
 				height: 150px;
+				margin-right: 5px;
 			}
 
 			.cardClass:hover { cursor: pointer; }
@@ -280,7 +286,7 @@
 			}
 
 			.sidenav_text {}
-
+			/*tints the whole page*/
 			.tinted {
 			    position: fixed;
 			    top: 0;
@@ -292,7 +298,7 @@
 			    z-index: 1000;
 			    display: inline-block;
 			}
-
+			/*container div for the thing that is being focused on*/
 			.mainDiv {
 				width: 40%;
 				top: 20%;
@@ -300,14 +306,14 @@
 				z-index: 20000; /*aLl ThE wAy To AbSuRdItY*/
 				position: absolute;
 			}
-
+			/*Container div for the alert*/
 			.userAlert {
 				z-index: 10000;
 				top: 90%;
 				width: 100%;
 				position: absolute;
 			}
-
+			/*the actual alert div*/
 			.childUserAlert {
 				margin: 0 auto;
 				width: 50%;
@@ -315,6 +321,14 @@
 			}
 
 			#insideCard:hover { cursor: pointer; }
+
+			.skeleton {
+				position: relative;
+				background-color: gray;
+				border-radius: .25rem;
+				opacity: 0.2;
+				margin-right: 5px;
+			}
 		</style>
 		<title>Dashboard</title>
 	</head>
@@ -422,7 +436,7 @@
 									<div class="form-group">
 										<div class="input-group mb-3">
 											<select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="inlineFormCustomSelect">
-												<option value="5" selected disabled>How many items should we display?</option>
+												<option value="5" selected disabled>How many items should we display per page?</option>
 												<option value="5">5</option>
 												<option value="10">10</option>
 												<option value="20">20</option>
@@ -484,53 +498,6 @@
 							});
 						</script>
 						<div id="cardContainer" class="cardContainer animateDiv">
-							<div id="0" class="card bg-light cardClass">
-								<div class="card-body">
-									<h4 class="card-title">
-										Card Title Here
-									</h4>
-								</div><!--.card-body-->
-							</div><!--.card bg-light cardClass-->
-							<div id="1" class="card bg-light cardClass">
-								<div class="card-body">
-									<h4 class="card-title">
-										Card Title Here
-									</h4>
-								</div><!--.card-body-->
-							</div><!--.card bg-light cardClass-->
-							<div id="2" class="card bg-light cardClass">
-								<div class="card-body">
-									<h4 class="card-title">
-										Card Title Here
-									</h4>
-								</div><!--.card-body-->
-							</div><!--.card bg-light cardClass-->
-							<div id="3" class="card bg-light cardClass">
-								<div class="card-body">
-									<h4 class="card-title">
-										Card Title Here
-									</h4>
-								</div><!--.card-body-->
-							</div><!--.card bg-light cardClass-->
-							<div id="4" class="card bg-light cardClass">
-								<div class="card-body">
-									<h4 class="card-title">
-										Card Title Here
-									</h4>
-								</div><!--.card-body-->
-							</div><!--.card bg-light cardClass-->
-							<!--EXAMPLE_CARD
-							<div class="card bg-light" style="margin-top: 5px; ">
-								<div class="card-body">
-									<h4 class="card-title">
-										Card Title Here
-										<span style="float: right;">
-											<i id="icon_1_hamburger" class="fas fa-paperclip icon icon_paperclip"></i>
-											<i id="icon_1_list" class="fas fa-pen icon icon_pen"></i>
-										</span>
-									</h4>
-								</div>
-							</div>-->
 						</div><!--.cardContainer animateDiv-->
 						<button id="showBackCardsButton" class="hidden btn btn-primary" style="float: left ;">Back</button>
 						<button id="showNextCardsButton" class="hidden btn btn-primary" style="float: right;">Next</button>
@@ -543,6 +510,71 @@
 			</div><!--.container-fluid-->
 		</div><!--.wrapper-->
 		<div id="tintPage"></div><!--.tInTpAgE-->
+		<script type="text/javascript">
+			function escapeHtml(text) {
+				var map = {
+					'&': '&amp;',
+					'<': '&lt;',
+					'>': '&gt;',
+					'"': '&quot;',
+					"'": '&#039;'
+				};
+
+				return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+			}
+		</script>
+		<script type="text/javascript">
+			function deal_with_json( output ) {
+				cards = JSON.parse(output);
+				if (cards.error) {
+					console.log("error");
+					return;
+				} //show error here
+				let html = "";
+				let id_counter = 0;
+				for (var card = 0; card<cards.length; card++){
+					if (!cards.hasOwnProperty(card)) continue;
+					if (cards[card].data==null) cards[card].data = "";
+					if (cards[card].title==null) cards[card].title = ""; //make sure that it won't say null in the div lmao.
+					html += `<div id="${id_counter}" class="card bg-light cardClass">
+								<div class="card-body">
+									<h4 class="card-title">
+										${cards[card].title}
+									</h4>
+								</div><!--.card-body-->
+								<p class="hidden" id="cardContent${id_counter}">${cards[card].data}</p>
+								<p class="hidden" id="cardTitle${id_counter}">${cards[card].title}</p>
+								<p id="card_id${id_counter}" class="hidden">${cards[card].id}</p>
+							</div><!--.card bg-light cardClass-->`;
+					++id_counter;
+				}
+				return html;
+			}
+
+			$(function( ) {
+				$("#cardContainer").html(`							
+							<div class="skeleton cardClass"></div>
+							<div class="skeleton cardClass"></div>
+							<div class="skeleton cardClass"></div>
+							<div class="skeleton cardClass"></div>
+							<div class="skeleton cardClass"></div>`); //create SPOOKY SKELETON KEY AAAAAAAAAAAA
+				$.ajax({
+					url: "ajax/todolist/getSpecificTodolists.php",
+					type: "GET",
+					data: {
+						completed: "true"
+					},
+					success: function( html ) {
+						console.log(html);
+						$("#cardContainer").html(deal_with_json(html));
+					},
+					error: function( ) {
+						deal_with_json("{\"error\":\"Could not get information\"}"); //I'm SO fucking retarded
+					}
+				});
+				
+			});
+		</script>
 		<script type="text/javascript">
 			//Todolist for4 16/10/2018
 			/*
@@ -643,12 +675,12 @@
 				return html;
 			}
 
-			function make_card_edit(title, content ) {
+			function make_card_edit( title, content ) {
 				$("#insideCard").html("");
-				$("#insideCard").html(make_edit_html("aaa", "bbb"));
+				$("#insideCard").html(make_edit_html(title, content));
 				$("#cancelButton_edit").click(function( ) {
-					$("#insideCard").html(go_back_to_card("aaa", "bbb"));
-					return add_event_listeners( );
+					$("#insideCard").html(go_back_to_card(title, content));
+					return add_event_listeners( title, content );
 				});
 				$("#submitTodoList_edit").click(function( ) {
 					make_api_call( );
@@ -667,7 +699,7 @@
 			}
 
 			function alert_user(alert_class, message) {
-				let html = "<div class=\"alert alert-"+alert_class+" childUserAlert\">"+message+"</div>";
+				let html = `<div class="alert alert-${alert_class} childUserAlert">${message}</div>`; //create the html for the alert
 				if ($("#userAlert").is(":animated")) return; //don't let the name randomly change.
 				/*
 				Code to be used if I decide that creatign a new thing while it is animated is a good idea
@@ -715,6 +747,7 @@
 						ajax_config.url+="deleteTodoList.php";
 						data_config.message_success+="Todolist deleted";
 						data_config.message_danger+="Failed to delete todolist"
+						ajax_config.method = "POST";
 						break;
 					case "complete":
 						ajax_config.url+="completeTodolist.php";
@@ -730,6 +763,7 @@
 					default: 
 						return; //if there is a typo or something
 				}
+				console.log(ajax_config);
 				$.ajax({
 					url: ajax_config.url,
 					type: ajax_config.method,
@@ -765,7 +799,20 @@
 					return;
 				} 
 				back_to_normal( );
-				make_api_call("submit", data={due_by: date, title: title, content: content}, function( ){});
+				make_api_call("submit", data={due_by: date, title: title, content: content}, function( ){
+					$("#cardContainer").append(
+						`<div class="card bg-light cardClass">
+								<div class="card-body">
+									<h4 class="card-title">
+										${title}
+									</h4>
+								</div><!--.card-body-->
+								<p class="hidden">${date}</p>
+								<p class="hidden">${title}</p>
+							</div><!--.card bg-light cardClass-->
+					`);
+
+				});
 			}
 
 			function deal_with_keypress( e, submit=false ) {
@@ -789,7 +836,7 @@
 				$("#"+id).draggable(options_drag)
 			}
 
-			function add_event_listeners( ) {
+			function add_event_listeners( title, content, card_id, id ) {
 				/*
 				* this cannot be in the main event listener because I need to return to this
 				* functionality after the user goes back from editing the card 
@@ -798,13 +845,15 @@
 					back_to_normal( );
 				});
 				$("#icon_1_edit").click(function( ) {
-					make_card_edit( );
+					make_card_edit( title, content );
 				});
 				$("#icon_1_trash").click(function( ) {
-					make_api_call("delete", data={id:5}, function(){} /*dynamically delete todolist*/);
+					make_api_call("delete", data={"id":card_id}, function(){
+						$("#"+id).remove( );
+					});
 				});
 				$("#icon_1_complete").click(function( ) {
-					make_api_call("complete", data={id:5}, function(){} /*dynamically remove todolist item */);
+					make_api_call("complete", data={id:card_id}, function(){} /*dynamically remove todolist item */);
 				});
 				$(document).bind("keypress", function( e ) {
 					deal_with_keypress( e );
@@ -817,8 +866,16 @@
 				let cardContainer = document.getElementById("cardContainer");
 				cardContainer.addEventListener("click", function( e ) {
 					if (e.target && e.target.nodeName=="DIV" || e.target.nodeName=="H4") {
-						focus_on_card("title","content");
-						add_event_listeners( );
+						let target = e.target;
+						while ( !target.classList.contains("cardClass") ) {
+							target = target.parentNode;
+						}
+						let title = $("#cardTitle"+target.id).html( );
+						let content = $("#cardContent"+target.id).html( );
+						let id = $("#card_id"+target.id).html( );
+						console.log(id);
+						focus_on_card(title, content, id);
+						add_event_listeners( title, content, id, target.id);
 					}
 				});
 			});
