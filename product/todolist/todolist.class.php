@@ -111,12 +111,6 @@ class Todolist implements ToDoListInterFace {
 	private function getAssocFromQuery( $result, $cleanHTML=false ) {
 		$assoc = array( );
 		while ($row = mysqli_fetch_assoc( $result )) {
-			$newRow = [];
-			if ($cleanHTML) {
-				foreach ($row as $old_row) {
-					$newRow[] = htmlspecialchars($old_row);
-				}
-			}
 			array_push( $assoc, $row );
 		}
 		return $assoc;

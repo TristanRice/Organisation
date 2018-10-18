@@ -16,6 +16,7 @@ Site::init( $connection );
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 		<script src="//cdn.jsdelivr.net/jquery.color-animation/1/mainfile"></script>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap-confirmation2/dist/bootstrap-confirmation.min.js"></script>
 		<style>
 			* {
 				margin: 0;
@@ -560,14 +561,12 @@ Site::init( $connection );
 			function deal_with_json( output ) {
 				cards = JSON.parse(output);
 				if (cards.error) {
-					console.log(cards.error);
 					alert_user(cards.error);
 					return;
 				} //show error here
 				let html = "";
 				let id_counter = 0;
 				for (var card = 0; card<cards.length; card++){
-					console.log(cards[card]);
 					if (!cards.hasOwnProperty(card)) continue;
 					if (cards[card].data==null) cards[card].data = "";
 					if (cards[card].title==null) cards[card].title = ""; //make sure that it won't say null in the div lmao.
@@ -582,18 +581,25 @@ Site::init( $connection );
 								<p class="hidden" id="cardTitle${id_counter}">${cards[card].title}</p>
 								<p id="card_id${id_counter}" class="hidden">${cards[card].id}</p>
 							</div><!--.card bg-light cardClass-->`;
+
 					++id_counter;
 				}
 				return html;
 			}
 
+			function add_tooltips( ) {
+				let all_cards = document.querySelectorAll(".cardClass");
+				for (var i =0; i < all_cards.length; i++) {
+					$("#"+all_cards[i].id).tooltip({"trigger":"hover", "title":"Click Me!"})
+				}
+			}
+
+			function make_skeleton_cards( amount ) {
+				return "<div class=\"skeleton cardClass\"></div>".repeat(amount); //ToDo, replace this with somethging that works in IE. 
+			}
+
 			$(function( ) {
-				$("#cardContainer").html(`
-							<div class="skeleton cardClass"></div>
-							<div class="skeleton cardClass"></div>
-							<div class="skeleton cardClass"></div>
-							<div class="skeleton cardClass"></div>
-							<div class="skeleton cardClass"></div>`); //create SPOOKY SKELETON KEY AAAAAAAAAAAA
+				$("#cardContainer").html(make_skeleton_cards(5)); //create SPOOKY SKELETON KEY AAAAAAAAAAAA
 				$.ajax({
 					url: "ajax/todolist/getSpecificTodoLists.php",
 					type: "GET",
@@ -602,6 +608,7 @@ Site::init( $connection );
 					},
 					success: function( html ) {
 						$("#cardContainer").html(deal_with_json(html));
+						add_tooltips( );
 					},
 					error: function( e ) {
 						deal_with_json("{\"error\":\"Failed to get information, please try again later\"}"); //I'm SO fucking retarded
@@ -721,7 +728,6 @@ Site::init( $connection );
 
 			function make_card_edit( title, content, id, maskCard ) {
 				$("#insideCard").html("");
-				console.log("title: "+title)
 				$("#insideCard").html(make_edit_html(escapeHtml(title), escapeHtml(content)));
 				$("#cancelButton_edit").click(function( ) {
 					$("#insideCard").html(go_back_to_card(title, content));
@@ -731,7 +737,6 @@ Site::init( $connection );
 					make_api_call( "edit", data={
 						title: $("#title").val( ), newData: $("#textArea4").val( ), id: id
 					}, function( ) { //in the callback remember to change the html of the card. 
-						console.log($("#card-title"+maskCard).html( ));
 						$("#card-title"+maskCard).html(`${title} &nbsp;`);
 					});
 				});
@@ -790,7 +795,6 @@ Site::init( $connection );
 					default: edit
 						return; //if there is a typo or something
 				}
-				console.log(ajax_config);
 				$.ajax({
 					url: ajax_config.url,
 					type: ajax_config.method,
@@ -815,7 +819,7 @@ Site::init( $connection );
 						alert_user("danger", data_config.message_danger)
 					}
 				});
-				callback( ); //this could be used to like dynamically add a new todolist item
+				callback( );
 			}
 
 			function submit_todolist( ) {
@@ -831,8 +835,8 @@ Site::init( $connection );
 				} 
 				back_to_normal( );
 				make_api_call("submit", data={due_by: date, title: title, content: content}, function( ){
-					$("#cardContainer").append(
-						`<div class="card bg-light cardClass">
+					$("#cardContainer").append(`
+						<div class="card bg-light cardClass">
 								<div class="card-body">
 									<h4 class="card-title">
 										${title}
@@ -847,7 +851,6 @@ Site::init( $connection );
 			}
 
 			function deal_with_keypress( e, submit=false ) {
-				console.log("hello world");
 				switch(e.keyCode) {
 					case 27: //esc
 						back_to_normal( );
@@ -894,31 +897,21 @@ Site::init( $connection );
 			}
 
 			$(function() {
-				console.log("aaa");
 				let cardContainer = document.getElementById("cardContainer");
 				cardContainer.addEventListener("click", function( e ) {
 					if (e.target && e.target.nodeName=="DIV" || e.target.nodeName=="H4") {
 						let target = e.target;
-						if (target.classList.contains("skeleton")) {
-							return;
-						}
-						while ( !target.classList.contains("cardClass") ) {
-							target = target.parentNode;
-						}
+						if (target.classList.contains("cardContainer") || target.classList.contains("skeleton")) return;
+						while ( !target.classList.contains("cardClass") ) target = target.parentNode;
 						let title = $("#cardTitle"+target.id).html( );
 						let content = $("#cardContent"+target.id).html( );
 						let id = $("#card_id"+target.id).html( );
-						console.log(id);
 						focus_on_card(title, content, id);
 						add_event_listeners( title, content, id, target.id);
 					}
 				});
 			});
-			//add tooltips 
-			let all_cards = document.querySelectorAll(".cardClass");
-			for (var i =0; i < all_cards.length; i++) {
-				$("#"+all_cards[i].id).tooltip({"trigger":"hover", "title":"Click Me!"})
-			}
+
 			$("#addNewTodoList").click(function( ) {
 				tint_page(make_input_html( ));
 				$("#basic-addon22").daterangepicker({
@@ -942,7 +935,6 @@ Site::init( $connection );
 					back_to_normal( ); //in case the user wants to be extra and actually click on the button
 				});
 				$("#submitTodoList").click(function( ) {
-					console.log("clicked");
 					submit_todolist( );
 				});
 			});
@@ -961,7 +953,7 @@ Site::init( $connection );
 				for (var i = start_id; i<number_of_items ; i++) {
 					html += "<div id=\""+i+"\" class=\"card bg-light cardClass\">";
 					html += "<div class=\"card-body\">";
-					html += "<h4 Class=\"card-title\">"
+					html += "<h4 Class=\"card-title\">";
 					html += "Card title Here";
 					html += "</h4>";
 					html += "</div>";
@@ -985,10 +977,20 @@ Site::init( $connection );
 					This works by getting the id of the final div in the caardContainer div, starting the loop on that number, and then going by that.
 					Thgis means that I will always know what number to go by
 					*/
-					$.get({
-						url: "ajax/todolist/getSpecificTodolists.php",
-
-					})
+					$.ajax({
+						url: "ajax/todolist/getSpecificTodoLists.php",
+						type: "GET",
+						data: {
+							completed: "true"
+						},
+						success: function( html ) {
+							$("#cardContainer").html(deal_with_json(html));
+							add_tooltips( );
+						},
+						error: function( e ) {
+							deal_with_json("{\"error\":\"Failed to get information, please try again later\"}"); //I'm SO fucking retarded
+						}
+					});
 					let length_of_json = 4;
 					let html = 	make_html(0, number_of_items);
 					if (length_of_json>number_of_items) $("#showNextCardsButton").show( );
@@ -1070,36 +1072,20 @@ Site::init( $connection );
 						})
 					});
 				});
-				//add toolips
 				$("#inlineFormInputGroup").tooltip({"trigger":"focus", "title":"Press enter to search"}); //there is no text on the search so this will be used 
 		</script>
 		<script type="text/javascript">
 			$("#icon_1_list").tooltip({"trigger":"hover", "title":"Grid layout"});
+			$("#icon_1_hamburger").tooltip({"trigger":"hover", "title":"List layout"});
 			$("#icon_1_list").click(function( ) {
-				if (!document.getElementById("cardContainer").classList.contains("cardContainer")) {
-					$(this).toggleClass("down");
-				}
+				$(this).toggleClass("down");
 				$("#cardContainer").addClass("cardContainer");
 			});
-		</script>
-		<script type="text/javascript">
-			$("#icon_1_hamburger").tooltip({"trigger":"hover", "title":"List layout"});
 			$("#icon_1_hamburger").click(function(){
-				if (document.getElementById("cardContainer").classList.contains("cardContainer")) {
-					$(this).toggleClass("down");
-				}
+				$(this).toggleClass("down");
 				$("#cardContainer").removeClass("cardContainer");
 
 			});
-		</script>
-		<script type="text/javascript">
-			$(function( ) {
-				$("advancedOptions").click(function( ) {
-
-				});
-			});
-		</script>
-		<script type="text/javascript">
 		</script>
 	</body>
 </html>
