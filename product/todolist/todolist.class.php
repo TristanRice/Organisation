@@ -73,7 +73,7 @@ class Todolist implements ToDoListInterFace {
 			return false;
 		}
 		
-		return $this->getAssocFromQuery( $result );
+		return $this->getAssocFromQuery( $result , true );
 	}
 
 	public function remove( $todolistId ) {
@@ -108,9 +108,17 @@ class Todolist implements ToDoListInterFace {
 		return true;
 	}
 
-	private function getAssocFromQuery( $result ) {
+	private function getAssocFromQuery( $result, $cleanHTML=false ) {
 		$assoc = array( );
-		while ($row = mysqli_fetch_assoc( $result )) array_push( $assoc, $row );
+		while ($row = mysqli_fetch_assoc( $result )) {
+			$newRow = [];
+			if ($cleanHTML) {
+				foreach ($row as $old_row) {
+					$newRow[] = htmlspecialchars($old_row);
+				}
+			}
+			array_push( $assoc, $row );
+		}
 		return $assoc;
 	}
 }

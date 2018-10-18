@@ -22,7 +22,8 @@ $col  	   = mysqli_escape_string($connection, $color); //I CBA to keep the # in 
 $items     = $Todolist->get(false, "", $date, $limit=-1, $color=strtoupper($col), $completed); //get all the jobs
 
 if (!empty($Todolist->aError)) {
-	echo json_encode(array("error"=>"We could not get the todolists, please try again later"));
+	echo $Todolist->aError;
+	echo json_encode(array("error"=>"Failed to retrieve information from database, please try again later")); //todo, move this to $Todolist->aError
 	die ( );
 }
 array_walk_recursive($items, "filter");

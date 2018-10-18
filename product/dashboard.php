@@ -83,20 +83,20 @@ Site::init( $connection );
 
 			@keyframes sk-rotateplane {
 
-  				0% { 
+				0% { 
 					transform: perspective(120px) rotateX(0deg) rotateY(0deg);
 					-webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg) 
-  				}
-  				
-  				50% { 
+				}
+				
+				50% { 
 					transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
 					-webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg) 
- 				}
- 				
- 				100% { 
+				}
+				
+				100% { 
 					transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
 					-webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-  				}
+				}
 			}
 
 			.loading_line {
@@ -132,7 +132,7 @@ Site::init( $connection );
 			.animateDiv {
 				-webkit-transition: all 0.5s ease;
 				-moz-transition: all 0.5s ease;
-   			 	-o-transition: all 0.5s ease;
+			 	-o-transition: all 0.5s ease;
 				transition: all 0.5s ease;
 			}
 
@@ -156,22 +156,22 @@ Site::init( $connection );
 			}
 
 			.wrapper {
-			    display: flex;
-			    align-items: stretch;
+				display: flex;
+				align-items: stretch;
 			}
 
 			#sidebar {
-			    min-width: 80px;
-			    max-width: 80px;
-			    background: #343a40;
-			    height: 100vh;
-			    color: #FFF;
-			    transition: all 0.3s;
+				min-width: 80px;
+				max-width: 80px;
+				background: #343a40;
+				height: 100vh;
+				color: #FFF;
+				transition: all 0.3s;
 			}
 
 			#sidebar.active {
-			    min-width: 300px;
-			    max-width: 300px;
+				min-width: 300px;
+				max-width: 300px;
 			}
 
 			#sidebar.active .sidebar-header h3,
@@ -182,52 +182,52 @@ Site::init( $connection );
 			#sidebar ul li a { text-align: left; }
 
 			#sidebar.active ul li a {
-			    padding: 20px 10px;
-			    font-size: 0.85em;
+				padding: 20px 10px;
+				font-size: 0.85em;
 			}
 
 			#sidebar.active ul li a i {
-			    margin-right: 0;
-			    display: block;
-			    font-size: 1.8em;
-			    margin-bottom: 5px;
+				margin-right: 0;
+				display: block;
+				font-size: 1.8em;
+				margin-bottom: 5px;
 			}
 
 			#sidebar.active ul ul a { padding: 10px !important; }
 
 			#sidebar.active .dropdown-toggle::after {
-			    top: auto;
-			    bottom: 10px;
-			    right: 50%;
-			    -webkit-transform: translateX(50%);
-			    -ms-transform: translateX(50%);
-			    transform: translateX(50%);
+				top: auto;
+				bottom: 10px;
+				right: 50%;
+				-webkit-transform: translateX(50%);
+				-ms-transform: translateX(50%);
+				transform: translateX(50%);
 			}
 
 			#sidebar .sidebar-header { padding: 20px; }
 
 			#sidebar .sidebar-header strong {
-			    display: none;
-			    font-size: 1.8em;
+				display: none;
+				font-size: 1.8em;
 			}
 
 			#sidebar ul.components {
-			    padding: 20px 0;
+				padding: 20px 0;
 			}
 
 			#sidebar ul li a {
-			    padding: 10px;
-			    font-size: 1.1em;
-			    display: block;
+				padding: 10px;
+				font-size: 1.1em;
+				display: block;
 			}
 
 			#sidebar ul li a:hover {
-			    color: #7386D5;
-			    background: #fff;
+				color: #7386D5;
+				background: #fff;
 			}
 
 			#sidebar ul li a i {
-			    margin-right: 10px;
+				margin-right: 10px;
 			}
 
 			#sidebar ul li.active>a,
@@ -236,37 +236,37 @@ Site::init( $connection );
 			a[data-toggle="collapse"] { position: relative; }
 
 			.dropdown-toggle::after {
-			    display: block;
-			    position: absolute;
-			    top: 50%;
-			    right: 20px;
-			    transform: translateY(-50%);
+				display: block;
+				position: absolute;
+				top: 50%;
+				right: 20px;
+				transform: translateY(-50%);
 			}
 
 			ul ul a {
-			    font-size: 0.9em !important;
-			    padding-left: 30px !important;
+				font-size: 0.9em !important;
+				padding-left: 30px !important;
 			}
 
 			ul.CTAs { padding: 20px; }
 
 			ul.CTAs a {
-			    text-align: center;
-			    font-size: 0.9em !important;
-			    display: block;
-			    border-radius: 5px;
-			    margin-bottom: 5px;
+				text-align: center;
+				font-size: 0.9em !important;
+				display: block;
+				border-radius: 5px;
+				margin-bottom: 5px;
 			}
 
 			a.download {
-			    background: #fff;
-			    color: #7386D5;
+				background: #fff;
+				color: #7386D5;
 			}
 
 			a.article,
 			a.article:hover {
-			    background: #6d7fcc !important;
-			    color: #fff !important;
+				background: #6d7fcc !important;
+				color: #fff !important;
 			}
 
 			.sidenav_hover_class:hover { cursor: pointer; }
@@ -288,15 +288,15 @@ Site::init( $connection );
 			.sidenav_text {}
 			/*tints the whole page*/
 			.tinted {
-			    position: fixed;
-			    top: 0;
-			    left: 0;
-			    width: 100vw;
-			    height: 100vh;
-			    background-color: black;
-			    opacity: 0.7;
-			    z-index: 1000;
-			    display: inline-block;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100vw;
+				height: 100vh;
+				background-color: black;
+				opacity: 0.7;
+				z-index: 1000;
+				display: inline-block;
 			}
 			/*container div for the thing that is being focused on*/
 			.mainDiv {
@@ -351,39 +351,49 @@ Site::init( $connection );
 					<strong>Search</strong>
 				</div><!--.sidebar-header-->
 				<ul class="list-unstyled components" style="text-align: center; vertical-align: middle">
-					<li id="sidenav_item_5" class="sidenav_list">
-						<div id="showNormal">
+					<li id="sidenav_item_5_back" class="sidenav_list">
+						<!--<div id="showNormal">
 							<i id="sidenav_icon_5" class="fas fa-3x fa-search sidenav_item"></i>
 							<p class="sidenav_text" id="sidenav_text_5" style="opacity: 0;">&nbsp;</p>
-						</div>
+						</div>-->
 						<div id="showSearch" class="hidden">
-							<form class="form-inline">
+							<form class="form-inline" onsubmit="return false;">
 								<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 									<div class="input-group-addon">
 										<i class="fas fa-search"></i>
-									<input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search">
+										<input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search">
+									</div>
 								</div><!--.input-group mb-2 mr-sm-2 mb-sm-0-->
 							</form>
-							<p class="sidenav_text" id="sidenav_text_5" style="opacity: 0;">Search</p>
+							
 						</div>
 					</li>
-					<li>&nbsp;</li><li>&nbsp;</li>
-					<li id="sidenav_item_1" class="sidenav_list" style="vertical-align: middle;">
-						<i id="sidenav_icon_1" class="fas fa-3x fa-home sidenav_item" onclick="window.location.href='#dashboard'"></i>
-						<p class="sidenav_text" id="sidenav_text_1" style="opacity: 0;">Home</p>
-					</li><!--.sidenav_item_1-->
-					<li id="sidenav_item_2" class="sidenav_list">
-						<i id="sidenav_icon_2" class="fas fa-3x fa-dollar-sign sidenav_item" onclick="window.location.href='#score'"></i>
-						<p class="sidenav_text" id="sidenav_text_2" style="opacity: 0;">Score</p>
-					</li><!--.sidenav_item_2-->
-					<li id="sidenav_item_3" class="sidenav_list">
-						<i id="sidenav_icon_3" class="fas fa-3x fa-user-alt sidenav_item" onclick="window.location.href='#profile'"></i>
-						<p class="sidenav_text" id="sidenav_text_3" style="opacity: 0;">Profile</p>
-					</li><!--.sidenav_item_3-->
-					<li id="sidenav_item_4" class="sidenav_list">
-						<i id="sidenav_icon_4" class="fas fa-3x fa-cogs sidenav_item" onclick="window.location.href='#settings'"></i>
-						<p class="sidenav_text" id="sidenav_text_4" style="opacity: 0;">Settings</p>
-					</li><!--.sidenav_item_4-->
+
+					<div id="hideInSearch">
+						<li id="sidenav_item_5" class="sidenav_list">
+							<i id="sidenav_icon_5" class="fas fa-3x fa-search sidenav_item"></i>
+							<p class="sidenav_text" id="sidenav_text_5" style="opacity: 0;">Search</p>
+						</li>
+						<li>&nbsp;</li>
+
+						<li id="sidenav_item_1" class="sidenav_list" style="vertical-align: middle;">
+							<i id="sidenav_icon_1" class="fas fa-3x fa-home sidenav_item" onclick="window.location.href='#dashboard'"></i>
+							<p class="sidenav_text" id="sidenav_text_1" style="opacity: 0;">Home</p>
+						</li><!--.sidenav_item_1-->
+
+						<li id="sidenav_item_2" class="sidenav_list">
+							<i id="sidenav_icon_2" class="fas fa-3x fa-dollar-sign sidenav_item" onclick="window.location.href='#score'"></i>
+							<p class="sidenav_text" id="sidenav_text_2" style="opacity: 0;">Score</p>
+						</li><!--.sidenav_item_2-->
+						<li id="sidenav_item_3" class="sidenav_list">
+							<i id="sidenav_icon_3" class="fas fa-3x fa-user-alt sidenav_item" onclick="window.location.href='#profile'"></i>
+							<p class="sidenav_text" id="sidenav_text_3" style="opacity: 0;">Profile</p>
+						</li><!--.sidenav_item_3-->
+						<li id="sidenav_item_4" class="sidenav_list">
+							<i id="sidenav_icon_4" class="fas fa-3x fa-cogs sidenav_item" onclick="window.location.href='#settings'"></i>
+							<p class="sidenav_text" id="sidenav_text_4" style="opacity: 0;">Settings</p>
+						</li><!--.sidenav_item_4-->
+					</div>
 				</ul><!--.list-unstyled components-->
 			</nav><!--.sidenav_hover_class-->
 			<div id="">
@@ -456,12 +466,12 @@ Site::init( $connection );
 													<div class="custom-control custom-checkbox mb-3">
 	 													<input type="checkbox" class="custom-control-input" id="customControlValidation1" required>
 														<label class="custom-control-label" for="customControlValidation1">Show Completed?</label>
-	  												</div><!--.custom-control custom-checkbox mb-3-->
+													</div><!--.custom-control custom-checkbox mb-3-->
 												</div><!--.row-->
 												<div class="col-md-6">
 													<div clasS="custom-control custom-checkbox mb-3">
 														<input type="checkbox" class="custom-control-input" id="customControlValidation2" required>
-														<label class="custom-control-label" for="customControlValidation2">Show something else?</label>
+														<label class="custom-control-label" for="customControlValidation2">Show Delted?</label>
 													</div><!--.custom-control custom-checkbox mb-3-->
 												</div><!--.col-md-6-->
 											</div><!--.row-->
@@ -505,41 +515,67 @@ Site::init( $connection );
 							<div class="spinner"></div><!--.spinner-->
 							<p class="loading_line" id="loadingLine"></p>
 						</div><!--.hidden-->
-					</div><!--.col-md-6-->	
+					</div><!--.col-md-6-->
 				</div><!--.row-->
 			</div><!--.container-fluid-->
 		</div><!--.wrapper-->
 		<div id="tintPage"></div><!--.tInTpAgE-->
 		<script type="text/javascript">
-			function escapeHtml(text) {
-				var map = {
-					'&': '&amp;',
-					'<': '&lt;',
-					'>': '&gt;',
-					'"': '&quot;',
-					"'": '&#039;'
-				};
 
-				return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+			function alert_user(alert_class, message) {
+				let html = `<div class="alert alert-${alert_class} childUserAlert">${message}</div>`; //create the html for the alert
+				if ($("#userAlert").is(":animated")) return; //don't let the name randomly change.
+				/*
+				Code to be used if I decide that creatign a new thing while it is animated is a good idea
+				if ($("#userAlert").is(":animated")) {
+					$("#userAlert").css({"opacity":"1"});
+				}
+				Code to be used if I decide to queue animations
+				let animation_queue = [ ];
+				if ($("#userAlert").is(":animated")) {
+					animation_queue.push({
+						alert_class: alert_class,
+						message: message
+					});
+				}
+				//we're gonna have to replace the whole code below for this to work
+				if (animation_queue.length) { //make sure that there is something in the animation queue to animate
+					for (var i = 0; i<animation_queue.length; i++) {
+						let html = "<div class=\"alert alert-"+animation_queue[i].alert_class+" childUserAlert\">"+animation_queue[i].message+"</div>";
+						
+					}
+				}
+				*/
+				$("#userAlert").html(html);
+				$("#userAlert").removeClass("hidden");
+				$("#userAlert").animate({"opacity":0}, 5000, function( ) {
+					//make sure that in the callback function everything is returned to how it was before 
+					$("#userAlert").addClass("hidden");	//hide so we can put it back to opacity 1 without the user seeing it
+					$("#userAlert").html(""); //make sure that nothing fucky happens with this
+					$("#userAlert").css({"opacity":"1"}); //finally, remove the animation that we previously gave, so that it can be animated again, (we can't animate to opacity 0 something that already was animated to opacity 0)
+				});
 			}
 		</script>
 		<script type="text/javascript">
 			function deal_with_json( output ) {
 				cards = JSON.parse(output);
 				if (cards.error) {
-					console.log("error");
+					console.log(cards.error);
+					alert_user(cards.error);
 					return;
 				} //show error here
 				let html = "";
 				let id_counter = 0;
 				for (var card = 0; card<cards.length; card++){
+					console.log(cards[card]);
 					if (!cards.hasOwnProperty(card)) continue;
 					if (cards[card].data==null) cards[card].data = "";
 					if (cards[card].title==null) cards[card].title = ""; //make sure that it won't say null in the div lmao.
 					html += `<div id="${id_counter}" class="card bg-light cardClass">
 								<div class="card-body">
-									<h4 class="card-title">
+									<h4 class="card-title" id="card-title${id_counter}">
 										${cards[card].title}
+										&nbsp;
 									</h4>
 								</div><!--.card-body-->
 								<p class="hidden" id="cardContent${id_counter}">${cards[card].data}</p>
@@ -552,41 +588,49 @@ Site::init( $connection );
 			}
 
 			$(function( ) {
-				$("#cardContainer").html(`							
+				$("#cardContainer").html(`
 							<div class="skeleton cardClass"></div>
 							<div class="skeleton cardClass"></div>
 							<div class="skeleton cardClass"></div>
 							<div class="skeleton cardClass"></div>
 							<div class="skeleton cardClass"></div>`); //create SPOOKY SKELETON KEY AAAAAAAAAAAA
 				$.ajax({
-					url: "ajax/todolist/getSpecificTodolists.php",
+					url: "ajax/todolist/getSpecificTodoLists.php",
 					type: "GET",
 					data: {
 						completed: "true"
 					},
 					success: function( html ) {
-						console.log(html);
 						$("#cardContainer").html(deal_with_json(html));
 					},
-					error: function( ) {
-						deal_with_json("{\"error\":\"Could not get information\"}"); //I'm SO fucking retarded
+					error: function( e ) {
+						deal_with_json("{\"error\":\"Failed to get information, please try again later\"}"); //I'm SO fucking retarded
 					}
 				});
 				
 			});
 		</script>
 		<script type="text/javascript">
-			//Todolist for4 16/10/2018
+			//Todolist for4 19/10/2018
 			/*
 			* merge html functions (or find a better way to do it than what I'm doing rn)
-			* connect the API to the javascript.
+			* 
 			*/
-			//global vars
-			drag_options = {	  	 
-				scroll: false,	 	 
-				cursor: "pointer",	 
-				containment: "window"		    
-			}						 			
+			drag_options = {
+				scroll: false, 
+				cursor: "pointer",
+				containment: "window"
+			}
+
+			function escapeHtml(text) {
+				//for some reason its changing &quot back to " just for make_card_edit, so this is a temporary solution
+				var map = {
+					'"': '&quot;',
+					"'": '&#039;'
+				};
+
+				return text.replace(/["']/g, function(m) { return map[m]; });
+			}
 
 			function focus_on_card( title, content ) {
 				//make the html
@@ -646,7 +690,7 @@ Site::init( $connection );
 						</div><!--.input-group mb-3-->`;
 				html += "</h4>";
 				html += "<div class=\"form-group\">";
-    			html += "<textarea placeholder=\"content\" class=\"form-control\" id=\"textArea3\" rows=\"7\"></textarea></div>";
+				html += "<textarea placeholder=\"content\" class=\"form-control\" id=\"textArea3\" rows=\"7\"></textarea></div>";
 				html += "<br /><div style=\"margin-top: 5px;\">";
 				html += "<button id=\"cancelButton\" class=\"btn btn-danger\" style=\"float: left;\"><i class=\"fas fa-times\"></i></button>";
 				html += "<button id=\"submitTodoList\" class=\"btn btn-success\" style=\"float: right;\"><i class=\"fas fa-check\"></i></button>";
@@ -661,12 +705,12 @@ Site::init( $connection );
 
 				html += "<div class=\"card-body\">";
 				html += "<h4 class=\"card-title\">";
-				html += `<div class="input-group mb-3">
+				html += `<div class="input-group mb-3" id="title_3">
 							<input type="text" class="form-control" id="title" value="${title}">
 						</div><!--.input-group mb-3-->`;
 				html += "</h4>";
 				html += "<div class=\"form-group\">";
-    			html += `<textarea class=\"form-control\" id=\"textArea3\" rows=\"7\">${content}</textarea></div>`;
+				html += `<textarea class=\"form-control\" id=\"textArea4\" rows=\"7\">${content}</textarea></div>`;
 				html += "<br /><div style=\"margin-top: 5px;\">";
 				html += "<button id=\"cancelButton_edit\" class=\"btn btn-danger\" style=\"float: left;\"><i class=\"fas fa-arrow-left\"></i></button>";
 				html += "<button id=\"submitTodoList_edit\" class=\"btn btn-success\" style=\"float: right;\"><i class=\"fas fa-check\"></i></button>";
@@ -675,15 +719,21 @@ Site::init( $connection );
 				return html;
 			}
 
-			function make_card_edit( title, content ) {
+			function make_card_edit( title, content, id, maskCard ) {
 				$("#insideCard").html("");
-				$("#insideCard").html(make_edit_html(title, content));
+				console.log("title: "+title)
+				$("#insideCard").html(make_edit_html(escapeHtml(title), escapeHtml(content)));
 				$("#cancelButton_edit").click(function( ) {
 					$("#insideCard").html(go_back_to_card(title, content));
 					return add_event_listeners( title, content );
 				});
 				$("#submitTodoList_edit").click(function( ) {
-					make_api_call( );
+					make_api_call( "edit", data={
+						title: $("#title").val( ), newData: $("#textArea4").val( ), id: id
+					}, function( ) { //in the callback remember to change the html of the card. 
+						console.log($("#card-title"+maskCard).html( ));
+						$("#card-title"+maskCard).html(`${title} &nbsp;`);
+					});
 				});
 			}
 
@@ -698,41 +748,7 @@ Site::init( $connection );
 				$("#mainDivContainer").addClass("hidden");
 			}
 
-			function alert_user(alert_class, message) {
-				let html = `<div class="alert alert-${alert_class} childUserAlert">${message}</div>`; //create the html for the alert
-				if ($("#userAlert").is(":animated")) return; //don't let the name randomly change.
-				/*
-				Code to be used if I decide that creatign a new thing while it is animated is a good idea
-				if ($("#userAlert").is(":animated")) {
-					$("#userAlert").css({"opacity":"1"});
-				}
-				Code to be used if I decide to queue animations
-				let animation_queue = [ ];
-				if ($("#userAlert").is(":animated")) {
-					animation_queue.push({
-						alert_class: alert_class,
-						message: message
-					});
-				}
-				//we're gonna have to replace the whole code below for this to work
-				if (animation_queue.length) { //make sure that there is something in the animation queue to animate
-					for (var i = 0; i<animation_queue.length; i++) {
-						let html = "<div class=\"alert alert-"+animation_queue[i].alert_class+" childUserAlert\">"+animation_queue[i].message+"</div>";
-						
-					}
-				}
-				*/
-				$("#userAlert").html(html);
-				$("#userAlert").removeClass("hidden");
-				$("#userAlert").animate({"opacity":0}, 5000, function( ) {
-					//make sure that in the callback function everything is returned to how it was before 
-					$("#userAlert").addClass("hidden");	//hide so we can put it back to opacity 1 without the user seeing it
-					$("#userAlert").html(""); //make sure that nothing fucky happens with this
-					$("#userAlert").css({"opacity":"1"}); //finally, remove the animation that we previously gave, so that it can be animated again, (we can't animate to opacity 0 something that already was animated to opacity 0)
-				});
-			}
-
-			function make_api_call( type, data={}, callback=function(){} ) {
+			function make_api_call( type, data={}, callback=function(){}, go_back_to_normal=true ) {
 				let ajax_config = {
 					url: "ajax/todolist/",
 					data: data,
@@ -746,7 +762,7 @@ Site::init( $connection );
 					case "delete":
 						ajax_config.url+="deleteTodoList.php";
 						data_config.message_success+="Todolist deleted";
-						data_config.message_danger+="Failed to delete todolist"
+						data_config.message_danger+="Failed to delete todolist";
 						ajax_config.method = "POST";
 						break;
 					case "complete":
@@ -760,7 +776,18 @@ Site::init( $connection );
 						data_config.message_success+="Todolist has been added!";
 						data_config.message_danger+="There was an error, please try again later";
 						break;
-					default: 
+					case "filter":
+						ajax_config.url+="getSpecificTodoLists.php";
+						go_back_to_normal = false;
+						data_config.message_success+="Filtered successfully";
+						data_config.message_danger+="Failed to filter, please try again later";
+						break;
+					case "edit":
+						ajax_config.url+="editTodoList.php";
+						data_config.message_success+="Edited successfully";
+						data_config.message_danger+="Failed to edit, please try again later";
+						break;
+					default: edit
 						return; //if there is a typo or something
 				}
 				console.log(ajax_config);
@@ -773,14 +800,18 @@ Site::init( $connection );
 						switch (html) {
 							case "":
 								alert_user("success", data_config.message_success);
-								back_to_normal( );
+								if (go_back_to_normal) {
+									back_to_normal( );
+								}
 								break
 							default:
+								console.log(html);
 								alert_user("danger", data_config.message_danger);
 								break;
 						}
 					},
-					error: function( ) {
+					error: function( e ) {
+						console.log(e);
 						alert_user("danger", data_config.message_danger)
 					}
 				});
@@ -816,6 +847,7 @@ Site::init( $connection );
 			}
 
 			function deal_with_keypress( e, submit=false ) {
+				console.log("hello world");
 				switch(e.keyCode) {
 					case 27: //esc
 						back_to_normal( );
@@ -845,7 +877,7 @@ Site::init( $connection );
 					back_to_normal( );
 				});
 				$("#icon_1_edit").click(function( ) {
-					make_card_edit( title, content );
+					make_card_edit( title, content, card_id, id );
 				});
 				$("#icon_1_trash").click(function( ) {
 					make_api_call("delete", data={"id":card_id}, function(){
@@ -856,7 +888,7 @@ Site::init( $connection );
 					make_api_call("complete", data={id:card_id}, function(){} /*dynamically remove todolist item */);
 				});
 				$(document).bind("keypress", function( e ) {
-					deal_with_keypress( e );
+					deal_with_keypress( e, submit=true );
 				});
 				dragAroundDiv("insideCard", options_drag=drag_options);
 			}
@@ -867,6 +899,9 @@ Site::init( $connection );
 				cardContainer.addEventListener("click", function( e ) {
 					if (e.target && e.target.nodeName=="DIV" || e.target.nodeName=="H4") {
 						let target = e.target;
+						if (target.classList.contains("skeleton")) {
+							return;
+						}
 						while ( !target.classList.contains("cardClass") ) {
 							target = target.parentNode;
 						}
@@ -922,7 +957,7 @@ Site::init( $connection );
 		</script>
 		<script type="text/javascript">
 			function make_html(start_id, number_of_items ) {
-				let html = "";					
+				let html = "";
 				for (var i = start_id; i<number_of_items ; i++) {
 					html += "<div id=\""+i+"\" class=\"card bg-light cardClass\">";
 					html += "<div class=\"card-body\">";
@@ -1006,16 +1041,32 @@ Site::init( $connection );
 							$("#"+all_text_items[i].id).animate({"opacity":0}, fade_speed);
 						}
 					});
+
+					function leave_search( ) {
+						$("#sidebar").removeClass("active");
+						$("#showSearch").hide( );
+						$("#showNormal").show("medium");
+						$("#hideInSearch").animate({"opacity":"1"});
+					}
+
 					$("#sidenav_icon_5").click(function( ) {
-						$("#sidebar").toggleClass("active", 1000);
+						$("#sidebar").toggleClass("active", 1000, function( ) {
+							$("#showSearch").show("fast");
+						});
 						$("#showNormal").hide( );
-						$("#showSearch").show("medium");
-						document.getElementById("restOfPage").addEventListener("click", function(){
-							//add an event listener so even if it goes out of this loop then it will still register if the page is clicked
-							$("sidebar").toggleClass("active");
-							document.getElementById("sidebar").classList.remove("active"); //$().removeClass didn't work for this? 
-							$("#showSearch").hide( );
-							$("#showNormal").show("medium");
+						$("#hideInSearch").animate({"opacity":"0"}, 50);
+						$(document).bind("keypress", function( e ) {
+							switch (e.keyCode) {
+								case 27:
+									leave_search( );
+									break;
+
+								default:
+									return;
+							}
+						});
+						$("#restOfPage").click(function( ) {
+							leave_search( );
 						})
 					});
 				});
