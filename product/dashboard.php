@@ -67,7 +67,6 @@ Site::init( $connection );
 				width: 40px;
 				height: 40px;
 				background-color: #333;
-
 				margin: 10px auto;
 				-webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
 				animation: sk-rotateplane 1.2s infinite ease-in-out;
@@ -330,6 +329,11 @@ Site::init( $connection );
 				opacity: 0.2;
 				margin-right: 5px;
 			}
+
+			.cancelAlert {
+				float: right;
+				top: 0px;
+			}
 		</style>
 		<title>Dashboard</title>
 	</head>
@@ -524,29 +528,8 @@ Site::init( $connection );
 		<script type="text/javascript">
 
 			function alert_user(alert_class, message) {
-				let html = `<div class="alert alert-${alert_class} childUserAlert">${message}</div>`; //create the html for the alert
+				let html = `<div class="alert alert-${alert_class} childUserAlert">${message} <div class="cancelAlert" id="cancelAlertButton"><i class="fas fa-times icon"></i></div></div>`; //create the html for the alert
 				if ($("#userAlert").is(":animated")) return; //don't let the name randomly change.
-				/*
-				Code to be used if I decide that creatign a new thing while it is animated is a good idea
-				if ($("#userAlert").is(":animated")) {
-					$("#userAlert").css({"opacity":"1"});
-				}
-				Code to be used if I decide to queue animations
-				let animation_queue = [ ];
-				if ($("#userAlert").is(":animated")) {
-					animation_queue.push({
-						alert_class: alert_class,
-						message: message
-					});
-				}
-				//we're gonna have to replace the whole code below for this to work
-				if (animation_queue.length) { //make sure that there is something in the animation queue to animate
-					for (var i = 0; i<animation_queue.length; i++) {
-						let html = "<div class=\"alert alert-"+animation_queue[i].alert_class+" childUserAlert\">"+animation_queue[i].message+"</div>";
-						
-					}
-				}
-				*/
 				$("#userAlert").html(html);
 				$("#userAlert").removeClass("hidden");
 				$("#userAlert").animate({"opacity":0}, 5000, function( ) {
@@ -588,14 +571,11 @@ Site::init( $connection );
 			}
 
 			function add_tooltips( ) {
-				let all_cards = document.querySelectorAll(".cardClass");
-				for (var i =0; i < all_cards.length; i++) {
-					$("#"+all_cards[i].id).tooltip({"trigger":"hover", "title":"Click Me!"})
-				}
+				$(".cardClass").tooltip({"trigger": "hover", "title": "Click Me!", "placement": "top"});
 			}
 
 			function make_skeleton_cards( amount ) {
-				return "<div class=\"skeleton cardClass\"></div>".repeat(amount); //ToDo, replace this with somethging that works in IE. 
+				return "<div class=\"skeleton cardClass\"></div>".repeat(amount);
 			}
 
 			$(function( ) {
@@ -683,47 +663,42 @@ Site::init( $connection );
 
 			function make_input_html( ) {
 				//this is pretty much completed, but is still missing color and image functionality, which I will add soon
-				let html = "";
-				html += "<div class=\"mainDiv card\" id=\"insideCard\">";
-				html += "<div class=\"card-body\">";
-				html += "<h4 class=\"card-title\">";
-				html += `<div class="input-group mb-3">
+				return `<div class="mainDiv card" id="insideCard">
+						<div class=\"card-body\">
+						<h4 class=\"card-title\">
+						<div class="input-group mb-3">
 							<input type="text" class="form-control" id="title" placeholder="Title">
 							<input type="text" class="form-control" id="date50" aria-describedby="dateHelp" placeholder="Completed by" disabled required />
 							<input type="hidden" value="" id="hiddenDate5" />
 							<div class="input-group-append icon" id="dateTooltip5">
 								<span class="input-group-text icon" id="basic-addon22"><i id="calender_1" class="far fa-calendar-alt icon"></i></span>
 							</div><!--.input-group-append icon-->
-						</div><!--.input-group mb-3-->`;
-				html += "</h4>";
-				html += "<div class=\"form-group\">";
-				html += "<textarea placeholder=\"content\" class=\"form-control\" id=\"textArea3\" rows=\"7\"></textarea></div>";
-				html += "<br /><div style=\"margin-top: 5px;\">";
-				html += "<button id=\"cancelButton\" class=\"btn btn-danger\" style=\"float: left;\"><i class=\"fas fa-times\"></i></button>";
-				html += "<button id=\"submitTodoList\" class=\"btn btn-success\" style=\"float: right;\"><i class=\"fas fa-check\"></i></button>";
-				html += "</div></div>";
-
-				return html;
+						</div><!--.input-group mb-3-->
+						</h4>
+						<div class=\"form-group\">
+						<textarea placeholder=\"content\" class=\"form-control\" id=\"textArea3\" rows=\"7\"></textarea></div>
+						<br /><div style=\"margin-top: 5px;\">
+						<button id=\"cancelButton\" class=\"btn btn-danger\" style=\"float: left;\"><i class=\"fas fa-times\"></i></button>
+						<button id=\"submitTodoList\" class=\"btn btn-success\" style=\"float: right;\"><i class=\"fas fa-check\"></i></button>
+						</div></div>`;
 			}
 
 			function make_edit_html( title, content ) {
 				//ToDo: merge this and the above function
-				let html = "";
+				return  `<div class="card-body">
+						 	<h4 class="card-title">
+							<div class="input-group mb-3" id="title_3">
+								<input type="text" class="form-control" id="title" value="${title}">
+							</div><!--.input-group mb-3-->
+					     	</h4>
+						 	<div class="form-group">
+						 		<textarea class="form-control" id="textArea4" rows="7">${content}</textarea>
+						 	</div>
+						 	<br /><div style="margin-top: 5px;">
+						 	<button id="cancelButton_edit" class="btn btn-danger" style="float: left;"><i class="fas fa-arrow-left"></i></button>
+						 	<button id="submitTodoList_edit" class="btn btn-success" style="float: right;"><i class="fas fa-check"></i></button>
+						 	</div>`;
 
-				html += "<div class=\"card-body\">";
-				html += "<h4 class=\"card-title\">";
-				html += `<div class="input-group mb-3" id="title_3">
-							<input type="text" class="form-control" id="title" value="${title}">
-						</div><!--.input-group mb-3-->`;
-				html += "</h4>";
-				html += "<div class=\"form-group\">";
-				html += `<textarea class=\"form-control\" id=\"textArea4\" rows=\"7\">${content}</textarea></div>`;
-				html += "<br /><div style=\"margin-top: 5px;\">";
-				html += "<button id=\"cancelButton_edit\" class=\"btn btn-danger\" style=\"float: left;\"><i class=\"fas fa-arrow-left\"></i></button>";
-				html += "<button id=\"submitTodoList_edit\" class=\"btn btn-success\" style=\"float: right;\"><i class=\"fas fa-check\"></i></button>";
-				html += "</div>";
-
-				return html;
 			}
 
 			function make_card_edit( title, content, id, maskCard ) {
@@ -733,13 +708,24 @@ Site::init( $connection );
 					$("#insideCard").html(go_back_to_card(title, content));
 					return add_event_listeners( title, content );
 				});
+				$(document).keyup(function( e ) {
+					if (e.key=="Enter") {
+						submit_edit(title, content, id, maskCard);
+					}
+				});
 				$("#submitTodoList_edit").click(function( ) {
-					make_api_call( "edit", data={
+					submit_edit(title, content, id, maskCard);
+				});
+			}
+
+			function submit_edit( content, title, id, maskCard ) { 
+				if ($("#textArea4").val( ) === content || $("#title").val( ) === title ) return;
+				make_api_call( "edit", data={
 						title: $("#title").val( ), newData: $("#textArea4").val( ), id: id
 					}, function( ) { //in the callback remember to change the html of the card. 
+						$("#card-title"+maskCard).html("");
 						$("#card-title"+maskCard).html(`${title} &nbsp;`);
 					});
-				});
 			}
 
 			function tint_page( html ) {
@@ -792,7 +778,7 @@ Site::init( $connection );
 						data_config.message_success+="Edited successfully";
 						data_config.message_danger+="Failed to edit, please try again later";
 						break;
-					default: edit
+					default:
 						return; //if there is a typo or something
 				}
 				$.ajax({
@@ -851,12 +837,12 @@ Site::init( $connection );
 			}
 
 			function deal_with_keypress( e, submit=false ) {
-				switch(e.keyCode) {
-					case 27: //esc
+				switch(e.key) {
+					case "Escape":
 						back_to_normal( );
 						break;
 
-					case 13: //enter
+					case "Enter":
 						if (submit && !$("#textArea3").is(":focus") /* make sure that the user isn't just making a newline */) {
 							submit_todolist( );
 						}
@@ -890,24 +876,21 @@ Site::init( $connection );
 				$("#icon_1_complete").click(function( ) {
 					make_api_call("complete", data={id:card_id}, function(){} /*dynamically remove todolist item */);
 				});
-				$(document).bind("keypress", function( e ) {
-					deal_with_keypress( e, submit=true );
-				});
+				$(document).keyup(function(e){
+					deal_with_keypress( e, submit=false );
+				})
 				dragAroundDiv("insideCard", options_drag=drag_options);
 			}
 
 			$(function() {
-				let cardContainer = document.getElementById("cardContainer");
-				cardContainer.addEventListener("click", function( e ) {
+				$("#cardContainer").click(function( e ) {
 					if (e.target && e.target.nodeName=="DIV" || e.target.nodeName=="H4") {
 						let target = e.target;
 						if (target.classList.contains("cardContainer") || target.classList.contains("skeleton")) return;
 						while ( !target.classList.contains("cardClass") ) target = target.parentNode;
-						let title = $("#cardTitle"+target.id).html( );
-						let content = $("#cardContent"+target.id).html( );
-						let id = $("#card_id"+target.id).html( );
-						focus_on_card(title, content, id);
-						add_event_listeners( title, content, id, target.id);
+						let childNodes = target.childNodes; //I don't really feel bad about this since because they're hidden divs they're unlikely to change position
+						focus_on_card(childNodes[6].innerHTML, childNodes[4].innerHTML, childNodes[8].innerHTML);
+						add_event_listeners( childNodes[6].innerHTML, childNodes[4].innerHTML, childNodes[8].innerHTML, target.id);
 					}
 				});
 			});
@@ -928,9 +911,9 @@ Site::init( $connection );
 				$("#tintPage").click(function(){
 					back_to_normal( );
 				});
-				$(document).bind("keypress", function( e ) {
-					deal_with_keypress( e, submit=true );
-				})
+				$(document).keyup(function(e) {
+					deal_with_keypress(e, submit=true);
+				});
 				$("#cancelButton").click(function( ) {
 					back_to_normal( ); //in case the user wants to be extra and actually click on the button
 				});
@@ -1001,7 +984,6 @@ Site::init( $connection );
 				});
 
 				$("#showNextCardsButton").click(function( ) {
-
 				});
 
 				$("#showBackCardsButton").click(function( ) {
@@ -1009,71 +991,7 @@ Site::init( $connection );
 			});
 		</script>
 		<div class="overlay"></div>
-		<script type="text/javascript">
-				$(function(){
-					all_items = document.querySelectorAll(".sidenav_list");
-					all_text_items = document.querySelectorAll(".sidenav_text");
-					fade_speed = 500
-					all_colors = { 
-							sidenav_item_1: "#dbdb64", sidenav_item_2: "#2ab7ca", 
-							sidenav_item_3: "#73f26f", sidenav_item_4: "#ff6347",
-							sidenav_item_5: "#f27b7b"
-					};
-					/*
-					This adds the colored classes to each icon to make it look nice when
-					The user hovers over the sidebar. It also fades the text in cus idk 
-					that is nice to do as well lmao
-					*/
-					$("#sidebar").hover(function(){
-						/*First add the colors*/
-						//if ($("#sidenav_item_1").is(":animated")) return false; //if its already being animated don't queue another animateion
-						for (var i = 0; i<all_items.length; i++) {
-							$("#"+all_items[i].id).animate({color:all_colors[all_items[i].id]}, fade_speed);
-						}
-						/*Now make the text fade in */
-						for (var i = 0; i<all_text_items.length; i++) {
-							$("#"+all_text_items[i].id).animate({"opacity":1}, fade_speed);
-						}
-					});
-					$("#sidebar").mouseleave(function(){
-						for (var i = 0; i<all_items.length; i++) {
-							$("#"+all_items[i].id).animate({color:"#FFFFFF"}, fade_speed);
-						}
-						for (var i = 0; i<all_text_items.length; i++) {
-							$("#"+all_text_items[i].id).animate({"opacity":0}, fade_speed);
-						}
-					});
-
-					function leave_search( ) {
-						$("#sidebar").removeClass("active");
-						$("#showSearch").hide( );
-						$("#showNormal").show("medium");
-						$("#hideInSearch").animate({"opacity":"1"});
-					}
-
-					$("#sidenav_icon_5").click(function( ) {
-						$("#sidebar").toggleClass("active", 1000, function( ) {
-							$("#showSearch").show("fast");
-						});
-						$("#showNormal").hide( );
-						$("#hideInSearch").animate({"opacity":"0"}, 50);
-						$(document).bind("keypress", function( e ) {
-							switch (e.keyCode) {
-								case 27:
-									leave_search( );
-									break;
-
-								default:
-									return;
-							}
-						});
-						$("#restOfPage").click(function( ) {
-							leave_search( );
-						})
-					});
-				});
-				$("#inlineFormInputGroup").tooltip({"trigger":"focus", "title":"Press enter to search"}); //there is no text on the search so this will be used 
-		</script>
+		<script type="text/javascript" src="assets/js/sidebar.js"></script>
 		<script type="text/javascript">
 			$("#icon_1_list").tooltip({"trigger":"hover", "title":"Grid layout"});
 			$("#icon_1_hamburger").tooltip({"trigger":"hover", "title":"List layout"});
