@@ -209,29 +209,34 @@ Site::init( $connection );
 		</div><!--.wrapper-->
 		<div id="tintPage"></div><!--.tInTpAgE-->
 		<script type="text/javascript">
-
 			function alert_user(alert_class, message) {
-				let html = `<div class="alert alert-${alert_class} childUserAlert">${message} <div class="cancelAlert" id="cancelAlertButton"><i class="fas fa-times icon"></i></div></div>`; //create the html for the alert
-				if ($("#userAlert").is(":animated")) return; //don't let the name randomly change.
+				function end_animation(user_alert) {
+					$(user_alert).addClass("hidden");
+					$(user_alert).html("");
+					$(user_alert).css({"opacity":"1"});
+				}
+				let html = `<div class="alert alert-${alert_class} childUserAlert" id="theAlert">${message}
+								<div class="cancelAlert" id="cancelAlertButton">
+								<i class="fas fa-times icon" id="closeAlert"></i></div></div>`; //create the html for the alert
 				$("#userAlert").html(html);
 				$("#userAlert").removeClass("hidden");
 				$("#userAlert").animate({"opacity":0}, 5000, function( ) {
-					//make sure that in the callback function everything is returned to how it was before 
-					$("#userAlert").addClass("hidden");	//hide so we can put it back to opacity 1 without the user seeing it
-					$("#userAlert").html(""); //make sure that nothing fucky happens with this
-					$("#userAlert").css({"opacity":"1"}); //finally, remove the animation that we previously gave, so that it can be animated again, (we can't animate to opacity 0 something that already was animated to opacity 0)
+					end_animation("#userAlert");
 					return;
 				});
 				
-				$("#userAlert").mouseenter(function( ) {
-					console.log("hello")
-					$(this).stop( ).css({"opacity":"1"});
-					return alert_user(alert_class, message);
-				}); //reset
 				
-			}/*
-				return alert_user(alert_class, message); 
-			}*/
+				$("#theAlert").hover(function( ) {
+					console.log("test");
+					$("#userAlert").stop( ).css({"opacity":"1"});
+					return alert_user(alert_class, message);
+				});
+				$("#closeAlert").click(function( ) {
+					console.log("Here");
+					end_animation("#userAlert");
+					return;
+				})
+			}
 		</script>
 		<script type="text/javascript">
 			function deal_with_json( output ) {
