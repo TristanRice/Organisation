@@ -209,33 +209,44 @@ Site::init( $connection );
 		</div><!--.wrapper-->
 		<div id="tintPage"></div><!--.tInTpAgE-->
 		<script type="text/javascript">
-			function alert_user(alert_class, message) {
+			function alert_user(alert_class, message, add=true) {
 				function end_animation(user_alert) {
 					$(user_alert).addClass("hidden");
 					$(user_alert).html("");
 					$(user_alert).css({"opacity":"1"});
 				}
+				function test( ) {
+					console.log("h");
+				}
+				$("#advancedOptions").click(function( ) {
+					console.log("hello world");
+				})
 				let html = `<div class="alert alert-${alert_class} childUserAlert" id="theAlert">${message}
 								<div class="cancelAlert" id="cancelAlertButton">
-								<i class="fas fa-times icon" id="closeAlert"></i></div></div>`; //create the html for the alert
+								<i class="fas fa-times icon cancelIcon" id="closeAlert"></i></div></div>`; //create the html for the alert
 				$("#userAlert").html(html);
 				$("#userAlert").removeClass("hidden");
-				$("#userAlert").animate({"opacity":0}, 5000, function( ) {
+				//console.log($("#closeAlert").click());
+				console.log($(".cancelIcon"));
+				
+				$(".cancelIcon").bind("click", function(){
+					console.log("Here");
+				});
+				
+				$(document).click(function( ) {
+					console.log("aa");
+				})
+/*				
+$("#userAlert").animate({"opacity":0}, 5000, function( ) {
 					end_animation("#userAlert");
 					return;
 				});
-				
+*/				
 				
 				$("#theAlert").hover(function( ) {
-					console.log("test");
 					$("#userAlert").stop( ).css({"opacity":"1"});
-					return alert_user(alert_class, message);
+					return alert_user(alert_class, message, add=false);
 				});
-				$("#closeAlert").click(function( ) {
-					console.log("Here");
-					end_animation("#userAlert");
-					return;
-				})
 			}
 		</script>
 		<script type="text/javascript">

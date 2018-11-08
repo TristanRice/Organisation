@@ -314,3 +314,7 @@ a.article:hover {
 	float: right;
 	top: 0px;
 }
+
+.cancelIcon:hover {
+	size: 1.1em;
+}
